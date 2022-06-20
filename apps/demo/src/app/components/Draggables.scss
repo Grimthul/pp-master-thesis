@@ -1,0 +1,13 @@
+.draggables {
+  display: flex;
+}
+.draggable {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__svg {
+    max-height: 42px;
+    max-width: 42px;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "sourceRoot": "libs/zoomable/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/zoomable/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/zoomable"],
+      "options": {
+        "jestConfig": "libs/zoomable/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

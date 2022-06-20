@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "projects": {
+    "constants": "libs/constants",
+    "demo": "apps/demo",
+    "draggable": "libs/draggable",
+    "droppable": "libs/droppable",
+    "enums": "libs/enums",
+    "matrix": "libs/matrix",
+    "svg-editor": "libs/svg-editor",
+    "types": "libs/types",
+    "utils": "libs/utils",
+    "zoomable": "libs/zoomable"
+  }
+}

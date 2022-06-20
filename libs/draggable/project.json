@@ -1,0 +1,22 @@
+{
+  "sourceRoot": "libs/draggable/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/draggable/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/draggable"],
+      "options": {
+        "jestConfig": "libs/draggable/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
