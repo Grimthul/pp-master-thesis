@@ -20,5 +20,5 @@ export const useDragImageResetOnDragExit = (
 
     document.addEventListener('drag', resetDragImageTransform);
     return () => document.removeEventListener('drag', resetDragImageTransform);
-  });
+  }, [dragImageRef, droppableRef]);
 };
