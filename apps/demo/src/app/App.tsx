@@ -2,42 +2,85 @@ import React from 'react';
 import { Draggables } from './components/';
 
 import { SvgEditor } from '@pp-master-thesis/svg-editor';
+import { SvgEditorOptions, ZoomOptions } from '@pp-master-thesis/types';
+
+import type { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './App.scss';
 
 const App = () => {
   const dragImageRef = React.useRef<HTMLDivElement>(null);
+  const svgEditorRef = React.useRef<SvgEditorRef>(null);
+  const [guideLinesGap, setGuideLinesGap] = React.useState(10);
+  const [guideLinesColor, setGuideLinesColor] = React.useState('#ccc');
+  const [editorBackgroundColor, setEditorBackgroundColor] = React.useState(
+    'rgba(170, 170, 30, 0.1)'
+  );
+  const [zoom, setZoom] = React.useState(1);
+
+  const zoomOptions: ZoomOptions = React.useMemo(
+    () => ({
+      onZoomChange: (zoom: number) => setZoom(zoom),
+      // onToolChange: React.useCallback((tool: Tool) => setTool(tool), []),
+    }),
+    []
+  );
+
+  const editorOptions: SvgEditorOptions = React.useMemo(
+    () => ({
+      backgroundColor: editorBackgroundColor,
+      guideLines: {
+        gap: guideLinesGap,
+        color: guideLinesColor,
+      },
+      zoomOptions,
+    }),
+    [guideLinesGap, guideLinesColor, zoomOptions, editorBackgroundColor]
+  );
+
   return (
     <>
-      {/*<div>{zoom * 100}%</div>*/}
-      {/*<div>Tool: {tool}</div>*/}
-      {/*<div>*/}
-      {/*  SVG moved to: {svgStart.x},{svgStart.y}*/}
-      {/*</div>*/}
-
-      {/*<button onClick={() => zoomableRef.current?.resetZoom()}>*/}
-      {/*  Reset zoom*/}
-      {/*</button>*/}
-      {/*<button onClick={() => zoomableRef.current?.resetView()}>*/}
-      {/*  Reset view*/}
-      {/*</button>*/}
-      {/*<button onClick={() => zoomableRef.current?.zoomIn()}>Zoom in</button>*/}
-      {/*<button onClick={() => zoomableRef.current?.zoomOut()}>Zoom out</button>*/}
-      {/*<button*/}
-      {/*  onClick={() => {*/}
-      {/*    zoomableRef.current?.zoomTo(5);*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  Zoom to 500%*/}
-      {/*</button>*/}
+      <div>{zoom * 100}%</div>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.resetZoom()}>
+        Reset zoom
+      </button>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.resetView()}>
+        Reset view
+      </button>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
+        Zoom in
+      </button>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
+        Zoom out
+      </button>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(2)}>
+        Zoom to 200%
+      </button>
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
+        Zoom to 500%
+      </button>
+      <input
+        type="number"
+        value={guideLinesGap || ''}
+        onChange={(e) => setGuideLinesGap(Number(e.target.value))}
+      />
+      <input
+        type="color"
+        value={guideLinesColor}
+        onChange={(e) => setGuideLinesColor(e.target.value)}
+      />
+      <input
+        type="color"
+        value={editorBackgroundColor}
+        onChange={(e) => setEditorBackgroundColor(e.target.value)}
+      />
+      <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
+        Zoom to 500%
+      </button>
       <Draggables dragImageRef={dragImageRef} />
       <SvgEditor
-        options={{
-          editorBackgroundColor: 'rgba(170, 170, 30, 0.1)',
-          guideLines: {
-            gap: 10,
-          },
-        }}
+        ref={svgEditorRef}
+        options={editorOptions}
         dragImageRef={dragImageRef}
       />
     </>

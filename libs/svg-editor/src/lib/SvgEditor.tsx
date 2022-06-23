@@ -1,9 +1,12 @@
 import * as React from 'react';
 
-import { onDragEnter } from './handlers/onDragEnter';
-import { onDrop } from './handlers/onDrop';
+import { onDragEnter, onDrop } from './handlers';
 import { mergeWithDefaultOptions } from './utils/options';
-import { useDragImageResetOnDragExit } from './hooks/useDragImageResetOnDragExit';
+import {
+  useBackgroundImageGrid,
+  useDragImageResetOnDragExit,
+  useRefHandlers,
+} from './hooks';
 import { elementSnapTranslate } from './utils/elementSnapTranslate';
 
 import { ID_DROPPABLE, ID_EDITOR } from '@pp-master-thesis/constants';
@@ -13,6 +16,7 @@ import { Tool } from '@pp-master-thesis/enums';
 
 import type {
   SvgEditorOptions,
+  SvgEditorRef,
   ZoomableRef,
   ZoomOptions,
 } from '@pp-master-thesis/types';
@@ -26,105 +30,125 @@ interface Props {
 
 // TODO: Forward ref for zoom with buttons - zoomIn, zoomOut, zoomTo, resetZoom, resetView, newSVG
 
-export const SvgEditor = (props: Props) => {
-  const zoomableRef = React.useRef<ZoomableRef>(null);
-  const droppableRef = React.useRef<HTMLDivElement>(null);
-  const [tool, setTool] = React.useState(Tool.NONE);
-  const [zoom, setZoom] = React.useState(0);
-  const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
-  const zoomOptions: ZoomOptions = {
-    onZoomChange: React.useCallback((zoom: number) => setZoom(zoom), []),
-    onToolChange: React.useCallback((tool: Tool) => setTool(tool), []),
-  };
-  const options = React.useMemo(
-    () => mergeWithDefaultOptions(props.options),
-    [props.options]
-  );
-  const [svgSize, setSvgSize] = React.useState<DOMRectReadOnly>();
+export const SvgEditor = React.forwardRef(
+  (props: Props, ref: React.ForwardedRef<SvgEditorRef>) => {
+    const zoomableRef = React.useRef<ZoomableRef>(null);
+    const droppableRef = React.useRef<HTMLDivElement>(null);
+    const [backgroundImage, setBackgroundImage] = React.useState('');
+    const [tool, setTool] = React.useState(Tool.NONE);
+    const [zoom, setZoom] = React.useState(1);
+    const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
+    const options = React.useMemo(
+      () => mergeWithDefaultOptions(props.options),
+      [props.options]
+    );
+    const zoomOptions: ZoomOptions = {
+      onZoomChange: React.useCallback(
+        (zoom: number) => {
+          setZoom(zoom);
+          if (options.zoomOptions?.onZoomChange)
+            options.zoomOptions.onZoomChange(zoom);
+        },
+        [options.zoomOptions]
+      ),
+      onToolChange: React.useCallback((tool: Tool) => setTool(tool), []),
+      onPanChange: React.useCallback(
+        (p: DOMPointReadOnly) => {
+          if (options.zoomOptions?.onPanChange)
+            options.zoomOptions.onPanChange(p);
+        },
+        [options.zoomOptions]
+      ),
+    };
+    const [svgSize, setSvgSize] = React.useState<DOMRectReadOnly>();
 
-  // update svg size when it's updated from outside
-  React.useEffect(() => {
-    setSvgSize(options.size);
-  }, [options.size]);
+    // update svg size when it's updated from outside
+    React.useEffect(() => {
+      setSvgSize(options.size);
+    }, [options.size]);
 
-  useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
+    useBackgroundImageGrid(options, zoom, setBackgroundImage);
+    useRefHandlers(ref, zoomableRef.current);
+    useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
 
-  return (
-    <Droppable
-      id={ID_DROPPABLE}
-      droppableRef={droppableRef}
-      onDrop={(event) =>
-        onDrop({
-          event,
-          zoomableRef,
-          svg,
-          zoom,
-          setSvgSize,
-        })
-      }
-      onDragEnter={() => {
-        const dragImage = props.dragImageRef?.current;
-        if (dragImage) onDragEnter(dragImage, zoom);
-      }}
-      onDragOver={(event: React.DragEvent) => {
-        const dragImage = props.dragImageRef?.current;
-        const zoomable = zoomableRef?.current;
-        if (dragImage && zoomable) {
-          const { tx, ty } = elementSnapTranslate(event, options, zoomable);
-
-          dragImage.style.left = `${event.clientX + tx}px`;
-          dragImage.style.top = `${event.clientY + ty}px`;
+    return (
+      <Droppable
+        id={ID_DROPPABLE}
+        droppableRef={droppableRef}
+        onDrop={(event) =>
+          onDrop({
+            event,
+            zoomableRef,
+            svg,
+            zoom,
+            setSvgSize,
+          })
         }
-      }}
-    >
-      <Zoomable
-        ref={zoomableRef}
-        options={zoomOptions}
-        style={{ cursor: tool }}
+        onDragEnter={() => {
+          const dragImage = props.dragImageRef?.current;
+          if (dragImage) onDragEnter(dragImage, zoom);
+        }}
+        onDragOver={(event: React.DragEvent) => {
+          const dragImage = props.dragImageRef?.current;
+          const zoomable = zoomableRef?.current;
+          if (dragImage && zoomable) {
+            const { tx, ty } = elementSnapTranslate(event, options, zoomable);
+
+            dragImage.style.left = `${event.clientX + tx}px`;
+            dragImage.style.top = `${event.clientY + ty}px`;
+          }
+        }}
       >
-        <svg
-          id={ID_EDITOR}
-          xmlns="http://www.w3.org/2000/svg"
-          width={svgSize?.width}
-          height={svgSize?.height}
-          style={{
-            width: svgSize?.width,
-            height: svgSize?.height,
-            background: options.editorBackgroundColor,
-          }}
+        <Zoomable
+          ref={zoomableRef}
+          options={zoomOptions}
+          style={{ cursor: tool }}
         >
-          <rect
-            width="600"
-            height="300"
-            fill="#EDE29F"
-            // transform="matrix(0.5, 0, 0, 0.5, 0, 50)"
-          />
-          <circle
-            cx="150"
-            cy="100"
-            r="90"
-            fill="#48440E"
-            // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
-          />
-          <circle cx="50" cy="50" r="1" fill="#ff0000" />
-          <circle cx="400" cy="300" r="1" fill="#ff0000" />
-          <text
-            x="75"
-            y="130"
-            fontSize="77"
-            fill="#ffffff"
-            // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
+          <svg
+            id={ID_EDITOR}
+            xmlns="http://www.w3.org/2000/svg"
+            width={svgSize?.width}
+            height={svgSize?.height}
+            style={{
+              width: svgSize?.width,
+              height: svgSize?.height,
+              backgroundImage: backgroundImage,
+              backgroundColor: options.backgroundColor,
+            }}
           >
-            SVG
-          </text>
-          <text x="150" y="500" fontSize="77" fill="#ff0000">
-            Text
-            <tspan fill="#000000" fontFamily="sans-serif">
-              test
-            </tspan>
-          </text>
-        </svg>
-      </Zoomable>
-    </Droppable>
-  );
-};
+            <rect
+              width="600"
+              height="300"
+              fill="#EDE29F"
+              // transform="matrix(0.5, 0, 0, 0.5, 0, 50)"
+            />
+            <circle
+              cx="150"
+              cy="100"
+              r="90"
+              fill="#48440E"
+              // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
+            />
+            <circle cx="50" cy="50" r="1" fill="#ff0000" />
+            <circle cx="400" cy="300" r="1" fill="#ff0000" />
+            <text
+              x="75"
+              y="130"
+              fontSize="77"
+              fill="#ffffff"
+              // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
+            >
+              SVG
+            </text>
+            <text x="150" y="500" fontSize="77" fill="#ff0000">
+              Text
+              <tspan fill="#000000" fontFamily="sans-serif">
+                test
+              </tspan>
+            </text>
+          </svg>
+        </Zoomable>
+      </Droppable>
+    );
+  }
+);

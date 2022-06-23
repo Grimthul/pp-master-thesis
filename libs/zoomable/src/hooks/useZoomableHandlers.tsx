@@ -101,7 +101,6 @@ export const useZoomableHandlers = ({
   const handleWheel = (event: React.WheelEvent) => {
     const direction = zoomDirection(event);
     const child = childRef.current;
-    console.log(child);
     if (
       !allowZoom ||
       !shouldZoom(matrix, direction, minZoom, maxZoom) ||
