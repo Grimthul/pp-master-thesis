@@ -7,15 +7,19 @@ import { SvgEditorOptions, ZoomOptions } from '@pp-master-thesis/types';
 import type { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './App.scss';
+import { hexToRgb } from '@pp-master-thesis/utils';
 
 const App = () => {
   const dragImageRef = React.useRef<HTMLDivElement>(null);
   const svgEditorRef = React.useRef<SvgEditorRef>(null);
   const [guideLinesGap, setGuideLinesGap] = React.useState(10);
-  const [guideLinesColor, setGuideLinesColor] = React.useState('#ccc');
+  const [guideLinesColor, setGuideLinesColor] = React.useState('#cccccc');
+  const [editorBackgroundColorPicker, setEditorBackgroundColorPicker] =
+    React.useState('#aaaa1e');
   const [editorBackgroundColor, setEditorBackgroundColor] = React.useState(
-    'rgba(170, 170, 30, 0.1)'
+    editorBackgroundColorPicker
   );
+  const [backgroundOpacity, setBackgroundOpacity] = React.useState('0.1');
   const [zoom, setZoom] = React.useState(1);
 
   const zoomOptions: ZoomOptions = React.useMemo(
@@ -37,6 +41,13 @@ const App = () => {
     }),
     [guideLinesGap, guideLinesColor, zoomOptions, editorBackgroundColor]
   );
+
+  React.useEffect(() => {
+    const rgb = hexToRgb(editorBackgroundColorPicker);
+    setEditorBackgroundColor(
+      `rgba(${rgb?.r},${rgb?.g},${rgb?.b},${backgroundOpacity})`
+    );
+  }, [editorBackgroundColorPicker, backgroundOpacity]);
 
   return (
     <>
@@ -71,8 +82,16 @@ const App = () => {
       />
       <input
         type="color"
-        value={editorBackgroundColor}
-        onChange={(e) => setEditorBackgroundColor(e.target.value)}
+        value={editorBackgroundColorPicker}
+        onChange={(e) => setEditorBackgroundColorPicker(e.target.value)}
+      />
+      <input
+        type="number"
+        step="0.1"
+        max="1"
+        min="0"
+        value={backgroundOpacity}
+        onChange={(e) => setBackgroundOpacity(e.target.value)}
       />
       <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
         Zoom to 500%
