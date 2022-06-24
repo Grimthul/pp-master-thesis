@@ -24,3 +24,5 @@ export const hexToRgb = (hex: string) => {
       }
     : null;
 };
+
+export const roundToMultiple = (n: number, m: number) => Math.round(n / m) * m;

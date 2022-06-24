@@ -3,11 +3,11 @@ import { Draggables } from './components/';
 
 import { SvgEditor } from '@pp-master-thesis/svg-editor';
 import { SvgEditorOptions, ZoomOptions } from '@pp-master-thesis/types';
+import { hexToRgb } from '@pp-master-thesis/utils';
 
 import type { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './App.scss';
-import { hexToRgb } from '@pp-master-thesis/utils';
 
 const App = () => {
   const dragImageRef = React.useRef<HTMLDivElement>(null);

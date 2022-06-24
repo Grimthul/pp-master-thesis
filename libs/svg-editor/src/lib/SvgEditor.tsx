@@ -35,6 +35,10 @@ export const SvgEditor = React.forwardRef(
     const zoomableRef = React.useRef<ZoomableRef>(null);
     const droppableRef = React.useRef<HTMLDivElement>(null);
     const [backgroundImage, setBackgroundImage] = React.useState('');
+    const [dragOffset, setDragOffset] = React.useState({
+      tx: 0,
+      ty: 0,
+    });
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
@@ -81,6 +85,7 @@ export const SvgEditor = React.forwardRef(
             zoomableRef,
             svg,
             zoom,
+            dragOffset,
             setSvgSize,
           })
         }
@@ -94,8 +99,9 @@ export const SvgEditor = React.forwardRef(
           if (dragImage && zoomable) {
             const { tx, ty } = elementSnapTranslate(event, options, zoomable);
 
-            dragImage.style.left = `${event.clientX + tx}px`;
-            dragImage.style.top = `${event.clientY + ty}px`;
+            dragImage.style.left = `${event.clientX + tx * zoom}px`;
+            dragImage.style.top = `${event.clientY + ty * zoom}px`;
+            setDragOffset({ tx, ty });
           }
         }}
       >
