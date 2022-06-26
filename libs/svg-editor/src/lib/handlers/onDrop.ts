@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { resizeSvg } from '../utils/svg';
+import { resizeSvg, nodeCoords } from '../utils/';
 
 import {
   ADD_ELEMENT_SIZE,
@@ -7,7 +7,6 @@ import {
   EDITOR_WIDTH_ADD,
 } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
-import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 
 const resizeDimensions = (
   x: number,
@@ -48,9 +47,9 @@ export const onDrop = ({
   if (!element || !editor || !svg) return;
   const elementCopy = element.cloneNode(true) as SVGElement;
   const { x, y } = editor.getMousePoint(event);
-  const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[elementCopy.nodeName];
-  const newX = x + Number(elementCopy.getAttribute(xName)) + dragOffset.tx;
-  const newY = y + Number(elementCopy.getAttribute(yName)) + dragOffset.ty;
+  const { xName, yName, x: elementX, y: elementY } = nodeCoords(elementCopy);
+  const newX = x + elementX + dragOffset.tx;
+  const newY = y + elementY + dragOffset.ty;
   elementCopy.setAttribute(xName, newX.toString());
   elementCopy.setAttribute(yName, newY.toString());
   svg.appendChild(elementCopy);
