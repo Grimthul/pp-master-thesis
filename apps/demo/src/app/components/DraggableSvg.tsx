@@ -16,6 +16,7 @@ export const DraggableSvg = ({
     () => ({
       position: 'fixed',
       outline: '1px dashed #000',
+      outlineOffset: '-1px',
       pointerEvents: 'none',
       zIndex: 999,
       transition: 'transform 500ms',
