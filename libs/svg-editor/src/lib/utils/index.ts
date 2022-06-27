@@ -1,4 +1,4 @@
 export * from './dragImage';
-export * from './elementSnapTranslate';
+export * from './dragImageTranslate';
 export * from './utils';
 export * from './svg';

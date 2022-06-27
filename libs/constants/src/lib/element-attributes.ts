@@ -1,8 +1,5 @@
 import { SvgElementAttribute } from '@pp-master-thesis/enums';
 
-export const pathElement = 'path';
-export const textElement = 'text';
-
 interface ElementSizeAttributes {
   [key: string]: {
     xName: string;

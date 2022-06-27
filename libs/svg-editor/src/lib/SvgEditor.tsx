@@ -1,13 +1,12 @@
 import * as React from 'react';
 
 import { onDragEnter, onDrop } from './handlers';
-import { mergeWithDefaultOptions } from './utils/options';
+import { mergeWithDefaultOptions, dragImageTranslate } from './utils/';
 import {
   useBackgroundImageGrid,
   useDragImageResetOnDragExit,
   useRefHandlers,
 } from './hooks';
-import { elementSnapTranslate } from './utils/elementSnapTranslate';
 
 import { ID_DROPPABLE, ID_EDITOR } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
@@ -97,7 +96,12 @@ export const SvgEditor = React.forwardRef(
           const dragImage = props.dragImageRef?.current;
           const zoomable = zoomableRef?.current;
           if (dragImage && zoomable) {
-            const { tx, ty } = elementSnapTranslate(event, options, zoomable);
+            const { tx, ty } = dragImageTranslate(
+              event,
+              dragImage,
+              options,
+              zoomable
+            );
 
             dragImage.style.left = `${event.clientX + tx * zoom}px`;
             dragImage.style.top = `${event.clientY + ty * zoom}px`;
@@ -122,7 +126,13 @@ export const SvgEditor = React.forwardRef(
               backgroundColor: options.backgroundColor,
             }}
           >
-            <rect
+            {/* <rect
+              width="100"
+              height="100"
+              fill="#EDE29F"
+              // transform="matrix(0.5, 0, 0, 0.5, 0, 50)"
+            /> */}
+            {/* <rect
               width="600"
               height="300"
               fill="#EDE29F"
@@ -151,7 +161,7 @@ export const SvgEditor = React.forwardRef(
               <tspan fill="#000000" fontFamily="sans-serif">
                 test
               </tspan>
-            </text>
+            </text> */}
           </svg>
         </Zoomable>
       </Droppable>

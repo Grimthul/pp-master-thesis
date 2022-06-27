@@ -48,8 +48,8 @@ export const onDrop = ({
   const elementCopy = element.cloneNode(true) as SVGElement;
   const { x, y } = editor.getMousePoint(event);
   const { xName, yName, x: elementX, y: elementY } = nodeCoords(elementCopy);
-  const newX = x + elementX + dragOffset.tx;
-  const newY = y + elementY + dragOffset.ty;
+  const newX = Math.round(x + elementX + dragOffset.tx);
+  const newY = Math.round(y + elementY + dragOffset.ty);
   elementCopy.setAttribute(xName, newX.toString());
   elementCopy.setAttribute(yName, newY.toString());
   svg.appendChild(elementCopy);
