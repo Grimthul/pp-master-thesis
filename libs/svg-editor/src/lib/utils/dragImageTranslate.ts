@@ -1,25 +1,10 @@
 import type { MouseEvent } from 'react';
 
-import { nodeCoords, nodeCoordsInEditor, nodeSize } from './utils';
+import { nodeCoordsInEditor, nodeSize } from './utils';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
 
 import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
-
-// interface ElementGuideLinesLength {
-//   leftUp?: Element;
-//   leftDown?: Element;
-//   middleXUp?: Element;
-//   middleXDown?: Element;
-//   rightUp?: Element;
-//   rightDown?: Element;
-//   topLeft?: Element;
-//   topRight?: Element;
-//   middleYLeft?: Element;
-//   middleYRight?: Element;
-//   bottomLeft?: Element;
-//   bottomRight?: Element;
-// }
 
 interface GuideLineCoords {
   start: DOMPointReadOnly;
@@ -35,18 +20,39 @@ interface ElementGuideLines {
   bottom: GuideLineCoords;
 }
 
-const INITIAL_GUIDE_LINES_COORDS: GuideLineCoords = {
+interface AlignedElements {
+  left: boolean;
+  middleX: boolean;
+  right: boolean;
+  top: boolean;
+  middleY: boolean;
+  bottom: boolean;
+}
+
+const INITIAL_GUIDE_LINES_COORDS = () => ({
   start: new DOMPointReadOnly(Infinity, Infinity),
   end: new DOMPointReadOnly(-Infinity, -Infinity),
-};
-const INITIAL_ELEMENT_GUIDE_LINES: ElementGuideLines = {
-  left: INITIAL_GUIDE_LINES_COORDS,
-  middleX: INITIAL_GUIDE_LINES_COORDS,
-  right: INITIAL_GUIDE_LINES_COORDS,
-  bottom: INITIAL_GUIDE_LINES_COORDS,
-  middleY: INITIAL_GUIDE_LINES_COORDS,
-  top: INITIAL_GUIDE_LINES_COORDS,
-};
+});
+const INITIAL_ELEMENT_GUIDE_LINES = () => ({
+  left: INITIAL_GUIDE_LINES_COORDS(),
+  middleX: INITIAL_GUIDE_LINES_COORDS(),
+  right: INITIAL_GUIDE_LINES_COORDS(),
+  top: INITIAL_GUIDE_LINES_COORDS(),
+  middleY: INITIAL_GUIDE_LINES_COORDS(),
+  bottom: INITIAL_GUIDE_LINES_COORDS(),
+});
+
+enum SidesX {
+  LEFT = 'left',
+  MIDDLEX = 'middleX',
+  RIGHT = 'right',
+}
+
+enum SidesY {
+  TOP = 'top',
+  MIDDLEY = 'middleY',
+  BOTTOM = 'bottom',
+}
 
 const isInBounds = (bound: number) => (coord: number) =>
   coord >= -bound && coord <= bound;
@@ -70,40 +76,6 @@ const isAligned =
     );
   };
 
-// const asdasd = (
-//   diff: number,
-//   elementSize: number,
-//   dragImageSize: number,
-//   snapRadius: number
-// ): ElementGuideLinesLength => {
-//   const isInSnapRadius = isInBounds(snapRadius);
-
-//   if (
-//     isInSnapRadius(diff) ||
-//     isInSnapRadius(diff - elementSize / 2) ||
-//     isInSnapRadius(diff - elementSize)
-//   ) {
-//     console.log('left');
-//   }
-
-//   if (
-//     isInSnapRadius(diff + dragImageSize / 2) ||
-//     isInSnapRadius(diff + dragImageSize / 2 - elementSize / 2) ||
-//     isInSnapRadius(diff + dragImageSize / 2 - elementSize)
-//   ) {
-//     console.log('middleX');
-//   }
-
-//   if (
-//     isInSnapRadius(diff + dragImageSize) ||
-//     isInSnapRadius(diff + dragImageSize - elementSize / 2) ||
-//     isInSnapRadius(diff + dragImageSize - elementSize)
-//   ) {
-//     console.log('right');
-//   }
-//   return {};
-// };
-
 const getAlignedElements = ({
   xDiff,
   yDiff,
@@ -120,7 +92,7 @@ const getAlignedElements = ({
   dragImageWidth: number;
   dragImageHeight: number;
   snapRadius: number;
-}) => {
+}): AlignedElements => {
   const isAlignedX = isAligned({
     diff: xDiff,
     elementSize: elementWidth,
@@ -143,21 +115,17 @@ const getAlignedElements = ({
 
 const furtherGuideLineCoords = (
   current: GuideLineCoords,
-  {
-    elementWidth = 0,
-    elementHeight = 0,
-  }: { elementWidth?: number; elementHeight?: number },
+  { addWidth = 0, addHeight = 0 }: { addWidth?: number; addHeight?: number },
   { valX, valY }: { valX: number; valY: number }
 ): GuideLineCoords => {
   const { x: startX, y: startY } = current.start;
   const { x: endX, y: endY } = current.end;
-  const newStartX = Math.min(startX, valX);
-  const newStartY = Math.min(startY, valY);
-  const newEndX = Math.max(endX, valX + elementWidth);
-  const newEndY = Math.max(endY, valY + elementHeight);
   return {
-    start: new DOMPointReadOnly(newStartX, newStartY),
-    end: new DOMPointReadOnly(newEndX, newEndY),
+    start: new DOMPointReadOnly(Math.min(startX, valX), Math.min(startY, valY)),
+    end: new DOMPointReadOnly(
+      Math.max(endX, valX + addWidth),
+      Math.max(endY, valY + addHeight)
+    ),
   };
 };
 
@@ -175,93 +143,52 @@ const farthestElementsInAxes = (
 
   return svgElements
     .filter((element) => {
-      const { width: elementWidth, height: elementHeight } =
-        element.getBoundingClientRect();
-      console.dir(element);
+      const { width: elementWidth, height: elementHeight } = nodeSize(element);
       return elementWidth || elementHeight;
     })
     .reduce((acc: ElementGuideLines, element) => {
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
-      console.log(elementHeight);
+      const alignedElements: AlignedElements = getAlignedElements({
+        xDiff: mouse.x - elementX,
+        yDiff: mouse.y - elementY,
+        dragImageWidth,
+        dragImageHeight,
+        elementWidth,
+        elementHeight,
+        snapRadius,
+      });
+      const alignedElementsKeys = Object.keys(alignedElements) as Array<
+        keyof AlignedElements
+      >;
 
-      const { left, middleX, right, bottom, middleY, top } = getAlignedElements(
-        {
-          xDiff: mouse.x - elementX,
-          yDiff: mouse.y - elementY,
-          dragImageWidth,
-          dragImageHeight,
-          elementWidth,
-          elementHeight,
-          snapRadius,
+      return alignedElementsKeys.reduce((acc2: ElementGuideLines, key) => {
+        if (alignedElements[key]) {
+          const isX = Object.values(SidesX).includes(key as SidesX);
+          const isY = Object.values(SidesY).includes(key as SidesY);
+          const offsetX = {
+            [SidesX.LEFT]: 0,
+            [SidesX.MIDDLEX]: dragImageWidth / 2,
+            [SidesX.RIGHT]: dragImageWidth,
+          };
+          const offsetY = {
+            [SidesY.TOP]: 0,
+            [SidesY.MIDDLEY]: dragImageHeight / 2,
+            [SidesY.BOTTOM]: dragImageHeight,
+          };
+          const addHeight = isX ? elementHeight || elementWidth : 0;
+          const addWidth = isY ? elementWidth : 0;
+          const valX = isX ? mouse.x + offsetX[key as SidesX] : elementX;
+          const valY = isY ? mouse.y + offsetY[key as SidesY] : elementY;
+          acc2[key] = furtherGuideLineCoords(
+            acc[key],
+            { addHeight, addWidth },
+            { valX, valY }
+          );
         }
-      );
-      console.log(left, middleX, right);
-      return {
-        left: left
-          ? {
-              ...furtherGuideLineCoords(
-                acc.left,
-                { elementHeight: elementHeight || elementWidth },
-                {
-                  valX: mouse.x,
-                  valY: elementY,
-                }
-              ),
-            }
-          : acc.left,
-        middleX: middleX
-          ? furtherGuideLineCoords(
-              acc.middleX,
-              { elementHeight: elementHeight || elementWidth },
-              {
-                valX: mouse.x + dragImageWidth / 2,
-                valY: elementY,
-              }
-            )
-          : acc.middleX,
-        right: right
-          ? furtherGuideLineCoords(
-              acc.right,
-              { elementHeight: elementHeight || elementWidth },
-              {
-                valX: mouse.x + dragImageWidth,
-                valY: elementY,
-              }
-            )
-          : acc.right,
-        top: top
-          ? furtherGuideLineCoords(
-              acc.top,
-              { elementWidth },
-              {
-                valX: elementX,
-                valY: mouse.y,
-              }
-            )
-          : acc.top,
-        middleY: middleY
-          ? furtherGuideLineCoords(
-              acc.middleY,
-              { elementWidth },
-              {
-                valX: elementX,
-                valY: mouse.y + dragImageHeight / 2,
-              }
-            )
-          : acc.middleY,
-        bottom: bottom
-          ? furtherGuideLineCoords(
-              acc.bottom,
-              { elementWidth },
-              {
-                valX: elementX,
-                valY: mouse.y + dragImageHeight,
-              }
-            )
-          : acc.bottom,
-      };
-    }, INITIAL_ELEMENT_GUIDE_LINES);
+        return acc2;
+      }, acc);
+    }, INITIAL_ELEMENT_GUIDE_LINES());
 };
 
 /**
