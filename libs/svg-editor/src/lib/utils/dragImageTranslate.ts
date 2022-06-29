@@ -179,6 +179,7 @@ const elementsSnapTranslate = (
     const { left, middleX, right, top, middleY, bottom } =
       farthestElementsInAxes(mouse, snapRadius, dragImage, elements);
     console.log(left, middleX, right, top, middleY, bottom);
+    console.log(mouse);
   }
   return zeroTranslate();
 };
@@ -207,7 +208,7 @@ export const dragImageTranslate = (
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(
         mouse,
-        (zoomable?.getChild()?.children || []) as SVGElement[],
+        Array.from(zoomable?.getChild()?.children || []) as SVGElement[],
         dragImage,
         options?.elements?.snapRadius
       )
@@ -221,6 +222,6 @@ export const dragImageTranslate = (
 
   return {
     tx: elementsTranslate.tx || gridTranslate.tx,
-    ty: elementsTranslate.ty || elementsTranslate.ty,
+    ty: elementsTranslate.ty || gridTranslate.ty,
   };
 };
