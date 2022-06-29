@@ -27,7 +27,7 @@ export const mergeWithDefaultOptions = (
   },
   elements: {
     snap: true,
-    snapRadius: GAP_DEFAULT_SIZE / 2,
+    snapRadius: (options?.guideLines?.gap || GAP_DEFAULT_SIZE) / 2,
     ...options?.elements,
   },
 });

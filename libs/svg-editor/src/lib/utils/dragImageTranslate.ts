@@ -154,8 +154,20 @@ const farthestElementsInAxes = (
           };
           const addHeight = isX ? elementHeight || elementWidth : 0;
           const addWidth = isY ? elementWidth : 0;
-          const valX = isX ? mouse.x + offsetX[key as SidesX] : elementX;
-          const valY = isY ? mouse.y + offsetY[key as SidesY] : elementY;
+          const valX = isX
+            ? roundToMultiple(
+                mouse.x + offsetX[key as SidesX],
+                elementWidth / 2,
+                elementX
+              )
+            : elementX;
+          const valY = isY
+            ? roundToMultiple(
+                mouse.y + offsetY[key as SidesY],
+                (elementHeight || elementWidth) / 2,
+                elementY
+              )
+            : elementY;
           updatedGuideLines[key] = furtherGuideLineCoords(
             acc[key],
             { addHeight, addWidth },
@@ -176,10 +188,28 @@ const elementsSnapTranslate = (
   snapRadius = 0
 ) => {
   if (elements?.length) {
+    const dragImageWidth = dragImage.clientWidth;
+    const dragImageHeight = dragImage.clientHeight;
     const { left, middleX, right, top, middleY, bottom } =
       farthestElementsInAxes(mouse, snapRadius, dragImage, elements);
-    console.log(left, middleX, right, top, middleY, bottom);
-    console.log(mouse);
+
+    console.log({ left, middleX, right, top, middleY, bottom }, snapRadius);
+    return {
+      tx: isFinite(left.start.x)
+        ? left.start.x - mouse.x
+        : isFinite(middleX.start.x)
+        ? middleX.start.x - mouse.x - dragImageWidth / 2
+        : isFinite(right.start.x)
+        ? right.start.x - mouse.x - dragImageWidth
+        : 0,
+      ty: isFinite(top.start.y)
+        ? top.start.y - mouse.y
+        : isFinite(middleY.start.y)
+        ? middleY.start.y - mouse.y
+        : isFinite(bottom.start.y)
+        ? bottom.start.y - mouse.y
+        : 0,
+    };
   }
   return zeroTranslate();
 };
