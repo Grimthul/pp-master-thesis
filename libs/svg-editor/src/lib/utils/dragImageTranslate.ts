@@ -205,9 +205,9 @@ const elementsSnapTranslate = (
       ty: isFinite(top.start.y)
         ? top.start.y - mouse.y
         : isFinite(middleY.start.y)
-        ? middleY.start.y - mouse.y
+        ? middleY.start.y - mouse.y - dragImageHeight / 2
         : isFinite(bottom.start.y)
-        ? bottom.start.y - mouse.y
+        ? bottom.start.y - mouse.y - dragImageHeight
         : 0,
     };
   }
