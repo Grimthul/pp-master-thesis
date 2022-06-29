@@ -6,67 +6,50 @@ import { roundToMultiple } from '@pp-master-thesis/utils';
 
 import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
 
+enum SidesX {
+  left = 'left',
+  middleX = 'middleX',
+  right = 'right',
+}
+
+enum SidesY {
+  top = 'top',
+  middleY = 'middleY',
+  bottom = 'bottom',
+}
+
+const ElementSide = { ...SidesX, ...SidesY };
+type ElementSide = typeof ElementSide;
+
 interface GuideLineCoords {
   start: DOMPointReadOnly;
   end: DOMPointReadOnly;
 }
+type ElementGuideLines = {
+  [key in keyof ElementSide]: GuideLineCoords;
+};
+type AlignedElements = {
+  [key in keyof ElementSide]: boolean;
+};
 
-interface ElementGuideLines {
-  left: GuideLineCoords;
-  middleX: GuideLineCoords;
-  right: GuideLineCoords;
-  top: GuideLineCoords;
-  middleY: GuideLineCoords;
-  bottom: GuideLineCoords;
-}
-
-interface AlignedElements {
-  left: boolean;
-  middleX: boolean;
-  right: boolean;
-  top: boolean;
-  middleY: boolean;
-  bottom: boolean;
-}
-
-const INITIAL_GUIDE_LINES_COORDS = () => ({
+const getInitialGuideLinesCoords = () => ({
   start: new DOMPointReadOnly(Infinity, Infinity),
   end: new DOMPointReadOnly(-Infinity, -Infinity),
 });
-const INITIAL_ELEMENT_GUIDE_LINES = () => ({
-  left: INITIAL_GUIDE_LINES_COORDS(),
-  middleX: INITIAL_GUIDE_LINES_COORDS(),
-  right: INITIAL_GUIDE_LINES_COORDS(),
-  top: INITIAL_GUIDE_LINES_COORDS(),
-  middleY: INITIAL_GUIDE_LINES_COORDS(),
-  bottom: INITIAL_GUIDE_LINES_COORDS(),
+const getInitialElementGuideLines = () => ({
+  left: getInitialGuideLinesCoords(),
+  middleX: getInitialGuideLinesCoords(),
+  right: getInitialGuideLinesCoords(),
+  top: getInitialGuideLinesCoords(),
+  middleY: getInitialGuideLinesCoords(),
+  bottom: getInitialGuideLinesCoords(),
 });
-
-enum SidesX {
-  LEFT = 'left',
-  MIDDLEX = 'middleX',
-  RIGHT = 'right',
-}
-
-enum SidesY {
-  TOP = 'top',
-  MIDDLEY = 'middleY',
-  BOTTOM = 'bottom',
-}
 
 const isInBounds = (bound: number) => (coord: number) =>
   coord >= -bound && coord <= bound;
 
 const isAligned =
-  ({
-    diff,
-    elementSize,
-    snapRadius,
-  }: {
-    diff: number;
-    elementSize: number;
-    snapRadius: number;
-  }) =>
+  (diff: number, elementSize: number, snapRadius: number) =>
   (offset = 0) => {
     const isInSnapRadius = isInBounds(snapRadius);
     return (
@@ -76,33 +59,24 @@ const isAligned =
     );
   };
 
-const getAlignedElements = ({
-  xDiff,
-  yDiff,
-  elementWidth,
-  elementHeight,
-  dragImageWidth,
-  dragImageHeight,
-  snapRadius,
-}: {
-  xDiff: number;
-  yDiff: number;
-  elementWidth: number;
-  elementHeight: number | undefined;
-  dragImageWidth: number;
-  dragImageHeight: number;
-  snapRadius: number;
-}): AlignedElements => {
-  const isAlignedX = isAligned({
-    diff: xDiff,
-    elementSize: elementWidth,
-    snapRadius,
-  });
-  const isAlignedY = isAligned({
-    diff: yDiff,
-    elementSize: elementHeight ?? elementWidth,
-    snapRadius,
-  });
+/**
+ * Returns boolean for each side of dragImage that is aligned with some element in svg.
+ */
+const getAlignedElements = (
+  xDiff: number,
+  yDiff: number,
+  elementWidth: number,
+  elementHeight: number | undefined,
+  dragImageWidth: number,
+  dragImageHeight: number,
+  snapRadius: number
+): AlignedElements => {
+  const isAlignedX = isAligned(xDiff, elementWidth, snapRadius);
+  const isAlignedY = isAligned(
+    yDiff,
+    elementHeight ?? elementWidth,
+    snapRadius
+  );
   return {
     left: isAlignedX(),
     middleX: isAlignedX(dragImageWidth / 2),
@@ -149,46 +123,70 @@ const farthestElementsInAxes = (
     .reduce((acc: ElementGuideLines, element) => {
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
-      const alignedElements: AlignedElements = getAlignedElements({
-        xDiff: mouse.x - elementX,
-        yDiff: mouse.y - elementY,
+      const alignedElements = getAlignedElements(
+        mouse.x - elementX,
+        mouse.y - elementY,
         dragImageWidth,
         dragImageHeight,
         elementWidth,
-        elementHeight,
-        snapRadius,
-      });
+        elementHeight || elementWidth,
+        snapRadius
+      );
       const alignedElementsKeys = Object.keys(alignedElements) as Array<
         keyof AlignedElements
       >;
-
-      return alignedElementsKeys.reduce((acc2: ElementGuideLines, key) => {
+      /**
+       * Processes alignedElements, for each side of dragImage chooses the farthest one.
+       */
+      return alignedElementsKeys.reduce((updatedGuideLines, key) => {
         if (alignedElements[key]) {
           const isX = Object.values(SidesX).includes(key as SidesX);
           const isY = Object.values(SidesY).includes(key as SidesY);
           const offsetX = {
-            [SidesX.LEFT]: 0,
-            [SidesX.MIDDLEX]: dragImageWidth / 2,
-            [SidesX.RIGHT]: dragImageWidth,
+            [SidesX.left]: 0,
+            [SidesX.middleX]: dragImageWidth / 2,
+            [SidesX.right]: dragImageWidth,
           };
           const offsetY = {
-            [SidesY.TOP]: 0,
-            [SidesY.MIDDLEY]: dragImageHeight / 2,
-            [SidesY.BOTTOM]: dragImageHeight,
+            [SidesY.top]: 0,
+            [SidesY.middleY]: dragImageHeight / 2,
+            [SidesY.bottom]: dragImageHeight,
           };
           const addHeight = isX ? elementHeight || elementWidth : 0;
           const addWidth = isY ? elementWidth : 0;
           const valX = isX ? mouse.x + offsetX[key as SidesX] : elementX;
           const valY = isY ? mouse.y + offsetY[key as SidesY] : elementY;
-          acc2[key] = furtherGuideLineCoords(
+          updatedGuideLines[key] = furtherGuideLineCoords(
             acc[key],
             { addHeight, addWidth },
             { valX, valY }
           );
         }
-        return acc2;
+        return updatedGuideLines;
       }, acc);
-    }, INITIAL_ELEMENT_GUIDE_LINES());
+    }, getInitialElementGuideLines());
+};
+
+const zeroTranslate = () => ({ tx: 0, ty: 0 });
+
+const elementsSnapTranslate = (
+  mouse: DOMPointReadOnly,
+  elements: SVGElement[],
+  dragImage: Element,
+  snapRadius = 0
+) => {
+  if (elements?.length) {
+    const { left, middleX, right, top, middleY, bottom } =
+      farthestElementsInAxes(mouse, snapRadius, dragImage, elements);
+    console.log(left, middleX, right, top, middleY, bottom);
+  }
+  return zeroTranslate();
+};
+
+const gridSnapTranslate = (mouse: DOMPointReadOnly, gap: number) => {
+  const tx = roundToMultiple(mouse.x, gap) - mouse.x;
+  const ty = roundToMultiple(mouse.y, gap) - mouse.y;
+  return { tx, ty };
 };
 
 /**
@@ -205,35 +203,24 @@ export const dragImageTranslate = (
   zoomable: ZoomableRef
 ): { tx: number; ty: number } => {
   const mouse = zoomable.getMousePoint(event);
-  if (options.elements?.snap) {
-    const snapRadius = options.elements?.snapRadius || 0;
-    const svgElements = Array.from(
-      zoomable?.getChild()?.children || []
-    ) as SVGElement[];
-    if (svgElements) {
-      const farthestElements = farthestElementsInAxes(
+
+  const elementsTranslate = options.elements?.snap
+    ? elementsSnapTranslate(
         mouse,
-        snapRadius,
+        (zoomable?.getChild()?.children || []) as SVGElement[],
         dragImage,
-        svgElements
-      );
+        options?.elements?.snapRadius
+      )
+    : zeroTranslate();
 
-      const { left, middleX, right, top, middleY, bottom } = farthestElements;
-      console.log(farthestElements);
-
-      // const tx = elX ? nodeCoords(elX).x - mouse.x : 0;
-      // const ty = elY ? nodeCoords(elY).y - mouse.y : 0;
-      // if (tx || ty) {
-      // return { tx, ty };
-      // }
-    }
-  }
   const gap = options.guideLines?.gap;
-  if (options.guideLines?.snap && gap) {
-    const tx = roundToMultiple(mouse.x, gap) - mouse.x;
-    const ty = roundToMultiple(mouse.y, gap) - mouse.y;
-    return { tx, ty };
-  }
+  const gridTranslate =
+    options.guideLines?.snap && gap
+      ? gridSnapTranslate(mouse, gap)
+      : zeroTranslate();
 
-  return { tx: 0, ty: 0 };
+  return {
+    tx: elementsTranslate.tx || gridTranslate.tx,
+    ty: elementsTranslate.ty || elementsTranslate.ty,
+  };
 };
