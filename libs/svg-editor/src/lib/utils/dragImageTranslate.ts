@@ -25,10 +25,10 @@ interface GuideLineCoords {
   start: DOMPointReadOnly;
   end: DOMPointReadOnly;
 }
-type ElementGuideLines = {
+type ElementGuideLine = {
   [key in keyof ElementSide]: GuideLineCoords;
 };
-type AlignedElements = {
+type AlignedElement = {
   [key in keyof ElementSide]: boolean;
 };
 
@@ -70,7 +70,7 @@ const getAlignedElements = (
   dragImageWidth: number,
   dragImageHeight: number,
   snapRadius: number
-): AlignedElements => {
+): AlignedElement => {
   const isAlignedX = isAligned(xDiff, elementWidth, snapRadius);
   const isAlignedY = isAligned(
     yDiff,
@@ -103,6 +103,20 @@ const furtherGuideLineCoords = (
   };
 };
 
+const offsetX = (width: number) => ({
+  [SidesX.left]: 0,
+  [SidesX.middleX]: width / 2,
+  [SidesX.right]: width,
+});
+const offsetY = (height: number) => ({
+  [SidesY.top]: 0,
+  [SidesY.middleY]: height / 2,
+  [SidesY.bottom]: height,
+});
+
+const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
+  key in SidesX ? { isX: true } : { isY: true };
+
 /**
  * Returns the farthest elements for each side of given element.
  */
@@ -111,7 +125,7 @@ const farthestElementsInAxes = (
   snapRadius: number,
   dragImage: Element,
   svgElements: SVGElement[]
-): ElementGuideLines => {
+): ElementGuideLine => {
   const dragImageWidth = dragImage.clientWidth;
   const dragImageHeight = dragImage.clientHeight;
 
@@ -120,7 +134,7 @@ const farthestElementsInAxes = (
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       return elementWidth || elementHeight;
     })
-    .reduce((acc: ElementGuideLines, element) => {
+    .reduce((acc: ElementGuideLine, element) => {
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       const alignedElements = getAlignedElements(
@@ -133,37 +147,26 @@ const farthestElementsInAxes = (
         snapRadius
       );
       const alignedElementsKeys = Object.keys(alignedElements) as Array<
-        keyof AlignedElements
+        keyof AlignedElement
       >;
       /**
        * Processes alignedElements, for each side of dragImage chooses the farthest one.
        */
       return alignedElementsKeys.reduce((updatedGuideLines, key) => {
         if (alignedElements[key]) {
-          const isX = Object.values(SidesX).includes(key as SidesX);
-          const isY = Object.values(SidesY).includes(key as SidesY);
-          const offsetX = {
-            [SidesX.left]: 0,
-            [SidesX.middleX]: dragImageWidth / 2,
-            [SidesX.right]: dragImageWidth,
-          };
-          const offsetY = {
-            [SidesY.top]: 0,
-            [SidesY.middleY]: dragImageHeight / 2,
-            [SidesY.bottom]: dragImageHeight,
-          };
+          const { isX, isY } = keyCoords(key);
           const addHeight = isX ? elementHeight || elementWidth : 0;
           const addWidth = isY ? elementWidth : 0;
           const valX = isX
             ? roundToMultiple(
-                mouse.x + offsetX[key as SidesX],
+                mouse.x + offsetX(dragImageWidth)[key as SidesX],
                 elementWidth / 2,
                 elementX
               )
             : elementX;
           const valY = isY
             ? roundToMultiple(
-                mouse.y + offsetY[key as SidesY],
+                mouse.y + offsetY(dragImageHeight)[key as SidesY],
                 (elementHeight || elementWidth) / 2,
                 elementY
               )
@@ -180,6 +183,12 @@ const farthestElementsInAxes = (
 };
 
 const zeroTranslate = () => ({ tx: 0, ty: 0 });
+const infiniteTranslate = () => ({ tx: Infinity, ty: Infinity });
+const isGuideLineFinite = (guideLine: GuideLineCoords) =>
+  isFinite(guideLine.start.x) &&
+  isFinite(guideLine.start.y) &&
+  isFinite(guideLine.end.x) &&
+  isFinite(guideLine.end.y);
 
 const elementsSnapTranslate = (
   mouse: DOMPointReadOnly,
@@ -190,28 +199,38 @@ const elementsSnapTranslate = (
   if (elements?.length) {
     const dragImageWidth = dragImage.clientWidth;
     const dragImageHeight = dragImage.clientHeight;
-    const { left, middleX, right, top, middleY, bottom } =
-      farthestElementsInAxes(mouse, snapRadius, dragImage, elements);
-
-    console.log({ left, middleX, right, top, middleY, bottom }, snapRadius);
-    return {
-      tx: isFinite(left.start.x)
-        ? left.start.x - mouse.x
-        : isFinite(middleX.start.x)
-        ? middleX.start.x - mouse.x - dragImageWidth / 2
-        : isFinite(right.start.x)
-        ? right.start.x - mouse.x - dragImageWidth
-        : 0,
-      ty: isFinite(top.start.y)
-        ? top.start.y - mouse.y
-        : isFinite(middleY.start.y)
-        ? middleY.start.y - mouse.y - dragImageHeight / 2
-        : isFinite(bottom.start.y)
-        ? bottom.start.y - mouse.y - dragImageHeight
-        : 0,
-    };
+    const farthestElements = farthestElementsInAxes(
+      mouse,
+      snapRadius,
+      dragImage,
+      elements
+    );
+    const farthestElementsKeys = Object.keys(farthestElements) as Array<
+      keyof AlignedElement
+    >;
+    return farthestElementsKeys.reduce((acc, key) => {
+      const guideLine: GuideLineCoords = farthestElements[key];
+      if (isGuideLineFinite(guideLine)) {
+        const { isX, isY } = keyCoords(key);
+        return {
+          tx:
+            isX && !isFinite(acc.tx)
+              ? guideLine.start.x -
+                mouse.x -
+                offsetX(dragImageWidth)[key as SidesX]
+              : acc.tx,
+          ty:
+            isY && !isFinite(acc.ty)
+              ? guideLine.start.y -
+                mouse.y -
+                offsetY(dragImageHeight)[key as SidesY]
+              : acc.ty,
+        };
+      }
+      return acc;
+    }, infiniteTranslate());
   }
-  return zeroTranslate();
+  return infiniteTranslate();
 };
 
 const gridSnapTranslate = (mouse: DOMPointReadOnly, gap: number) => {
@@ -249,9 +268,12 @@ export const dragImageTranslate = (
     options.guideLines?.snap && gap
       ? gridSnapTranslate(mouse, gap)
       : zeroTranslate();
-
   return {
-    tx: elementsTranslate.tx || gridTranslate.tx,
-    ty: elementsTranslate.ty || gridTranslate.ty,
+    tx: isFinite(elementsTranslate.tx)
+      ? elementsTranslate.tx
+      : gridTranslate.tx,
+    ty: isFinite(elementsTranslate.ty)
+      ? elementsTranslate.ty
+      : gridTranslate.ty,
   };
 };
