@@ -96,7 +96,7 @@ export const SvgEditor = React.forwardRef(
           const dragImage = props.dragImageRef?.current;
           const zoomable = zoomableRef?.current;
           if (dragImage && zoomable) {
-            const { tx, ty } = dragImageTranslate(
+            const { tx, ty, guideLines } = dragImageTranslate(
               event,
               dragImage,
               options,

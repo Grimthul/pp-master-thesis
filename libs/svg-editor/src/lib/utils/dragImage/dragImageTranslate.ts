@@ -1,121 +1,29 @@
 import type { MouseEvent } from 'react';
 
-import { nodeCoordsInEditor, nodeSize } from './utils';
+import { nodeCoordsInEditor, nodeSize } from '../utils';
+import {
+  furtherGuideLineCoords,
+  getInitialElementGuideLines,
+  isGuideLineFinite,
+} from './guideLines';
+import { SidesX, SidesY } from '../../enums/dragImage';
+import { getAlignedElements } from './alignedElements';
+import {
+  keyCoords,
+  offsetX,
+  offsetY,
+  infiniteTranslate,
+  zeroTranslate,
+} from './generators';
+import type {
+  AlignedElement,
+  DragImageTranslate,
+  ElementGuideLine,
+  GuideLineCoords,
+} from '../../types/dragImage';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
-
 import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
-
-enum SidesX {
-  left = 'left',
-  middleX = 'middleX',
-  right = 'right',
-}
-
-enum SidesY {
-  top = 'top',
-  middleY = 'middleY',
-  bottom = 'bottom',
-}
-
-const ElementSide = { ...SidesX, ...SidesY };
-type ElementSide = typeof ElementSide;
-
-interface GuideLineCoords {
-  start: DOMPointReadOnly;
-  end: DOMPointReadOnly;
-}
-type ElementGuideLine = {
-  [key in keyof ElementSide]: GuideLineCoords;
-};
-type AlignedElement = {
-  [key in keyof ElementSide]: boolean;
-};
-
-const getInitialGuideLinesCoords = () => ({
-  start: new DOMPointReadOnly(Infinity, Infinity),
-  end: new DOMPointReadOnly(-Infinity, -Infinity),
-});
-const getInitialElementGuideLines = () => ({
-  left: getInitialGuideLinesCoords(),
-  middleX: getInitialGuideLinesCoords(),
-  right: getInitialGuideLinesCoords(),
-  top: getInitialGuideLinesCoords(),
-  middleY: getInitialGuideLinesCoords(),
-  bottom: getInitialGuideLinesCoords(),
-});
-
-const isInBounds = (bound: number) => (coord: number) =>
-  coord >= -bound && coord <= bound;
-
-const isAligned =
-  (diff: number, elementSize: number, snapRadius: number) =>
-  (offset = 0) => {
-    const isInSnapRadius = isInBounds(snapRadius);
-    return (
-      isInSnapRadius(diff + offset) ||
-      isInSnapRadius(diff + offset - elementSize / 2) ||
-      isInSnapRadius(diff + offset - elementSize)
-    );
-  };
-
-/**
- * Returns boolean for each side of dragImage that is aligned with some element in svg.
- */
-const getAlignedElements = (
-  xDiff: number,
-  yDiff: number,
-  elementWidth: number,
-  elementHeight: number | undefined,
-  dragImageWidth: number,
-  dragImageHeight: number,
-  snapRadius: number
-): AlignedElement => {
-  const isAlignedX = isAligned(xDiff, elementWidth, snapRadius);
-  const isAlignedY = isAligned(
-    yDiff,
-    elementHeight ?? elementWidth,
-    snapRadius
-  );
-  return {
-    left: isAlignedX(),
-    middleX: isAlignedX(dragImageWidth / 2),
-    right: isAlignedX(dragImageWidth),
-    top: isAlignedY(),
-    middleY: isAlignedY(dragImageHeight / 2),
-    bottom: isAlignedY(dragImageHeight),
-  };
-};
-
-const furtherGuideLineCoords = (
-  current: GuideLineCoords,
-  { addWidth = 0, addHeight = 0 }: { addWidth?: number; addHeight?: number },
-  { valX, valY }: { valX: number; valY: number }
-): GuideLineCoords => {
-  const { x: startX, y: startY } = current.start;
-  const { x: endX, y: endY } = current.end;
-  return {
-    start: new DOMPointReadOnly(Math.min(startX, valX), Math.min(startY, valY)),
-    end: new DOMPointReadOnly(
-      Math.max(endX, valX + addWidth),
-      Math.max(endY, valY + addHeight)
-    ),
-  };
-};
-
-const offsetX = (width: number) => ({
-  [SidesX.left]: 0,
-  [SidesX.middleX]: width / 2,
-  [SidesX.right]: width,
-});
-const offsetY = (height: number) => ({
-  [SidesY.top]: 0,
-  [SidesY.middleY]: height / 2,
-  [SidesY.bottom]: height,
-});
-
-const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
-  key in SidesX ? { isX: true } : { isY: true };
 
 /**
  * Returns the farthest elements for each side of given element.
@@ -140,10 +48,10 @@ const farthestElementsInAxes = (
       const alignedElements = getAlignedElements(
         mouse.x - elementX,
         mouse.y - elementY,
-        dragImageWidth,
-        dragImageHeight,
         elementWidth,
         elementHeight || elementWidth,
+        dragImageWidth,
+        dragImageHeight,
         snapRadius
       );
       const alignedElementsKeys = Object.keys(alignedElements) as Array<
@@ -182,20 +90,12 @@ const farthestElementsInAxes = (
     }, getInitialElementGuideLines());
 };
 
-const zeroTranslate = () => ({ tx: 0, ty: 0 });
-const infiniteTranslate = () => ({ tx: Infinity, ty: Infinity });
-const isGuideLineFinite = (guideLine: GuideLineCoords) =>
-  isFinite(guideLine.start.x) &&
-  isFinite(guideLine.start.y) &&
-  isFinite(guideLine.end.x) &&
-  isFinite(guideLine.end.y);
-
 const elementsSnapTranslate = (
   mouse: DOMPointReadOnly,
   elements: SVGElement[],
   dragImage: Element,
   snapRadius = 0
-) => {
+): DragImageTranslate => {
   if (elements?.length) {
     const dragImageWidth = dragImage.clientWidth;
     const dragImageHeight = dragImage.clientHeight;
@@ -209,9 +109,11 @@ const elementsSnapTranslate = (
       keyof AlignedElement
     >;
     return farthestElementsKeys.reduce((acc, key) => {
-      const guideLine: GuideLineCoords = farthestElements[key];
-      if (isGuideLineFinite(guideLine)) {
+      const guideLine = farthestElements[key];
+      if (guideLine) {
         const { isX, isY } = keyCoords(key);
+        if (acc.guideLines && isGuideLineFinite(guideLine))
+          acc.guideLines[key] = guideLine;
         return {
           tx:
             isX && !isFinite(acc.tx)
@@ -225,6 +127,7 @@ const elementsSnapTranslate = (
                 mouse.y -
                 offsetY(dragImageHeight)[key as SidesY]
               : acc.ty,
+          guideLines: acc.guideLines,
         };
       }
       return acc;
@@ -245,13 +148,14 @@ const gridSnapTranslate = (mouse: DOMPointReadOnly, gap: number) => {
  * Snap is controlled by SvgEditorOptions - it can be either to
  * already present Element in SvgEditor or guideLines.
  * Element snapping has priority.
+ * Also returns guide lines coords, if there are any.
  */
 export const dragImageTranslate = (
   event: MouseEvent,
   dragImage: Element,
   options: SvgEditorOptions,
   zoomable: ZoomableRef
-): { tx: number; ty: number } => {
+): DragImageTranslate => {
   const mouse = zoomable.getMousePoint(event);
 
   const elementsTranslate = options.elements?.snap
@@ -275,5 +179,6 @@ export const dragImageTranslate = (
     ty: isFinite(elementsTranslate.ty)
       ? elementsTranslate.ty
       : gridTranslate.ty,
+    guideLines: elementsTranslate.guideLines,
   };
 };
