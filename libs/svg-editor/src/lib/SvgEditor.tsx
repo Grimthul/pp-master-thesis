@@ -7,6 +7,7 @@ import {
   useDragImageResetOnDragExit,
   useRefHandlers,
 } from './hooks';
+import type { ElementGuideLines } from './types/dragImage';
 
 import { ID_DROPPABLE, ID_EDITOR } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
@@ -21,11 +22,17 @@ import type {
 } from '@pp-master-thesis/types';
 
 import './SvgEditor.scss';
+import { GuideLines } from './components/GuideLines';
 
 interface Props {
   options?: SvgEditorOptions;
   dragImageRef?: React.RefObject<HTMLDivElement>;
 }
+
+const defaultGuideLines = () => ({
+  mouse: new DOMPointReadOnly(),
+  guideLines: {},
+});
 
 // TODO: Forward ref for zoom with buttons - zoomIn, zoomOut, zoomTo, resetZoom, resetView, newSVG
 
@@ -33,6 +40,7 @@ export const SvgEditor = React.forwardRef(
   (props: Props, ref: React.ForwardedRef<SvgEditorRef>) => {
     const zoomableRef = React.useRef<ZoomableRef>(null);
     const droppableRef = React.useRef<HTMLDivElement>(null);
+    const elementsWrapperRef = React.useRef<SVGGraphicsElement>(null);
     const [backgroundImage, setBackgroundImage] = React.useState('');
     const [dragOffset, setDragOffset] = React.useState({
       tx: 0,
@@ -41,6 +49,10 @@ export const SvgEditor = React.forwardRef(
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
+    const [guideLines, setGuideLines] = React.useState<{
+      mouse: DOMPointReadOnly;
+      guideLines: ElementGuideLines;
+    }>(defaultGuideLines());
     const options = React.useMemo(
       () => mergeWithDefaultOptions(props.options),
       [props.options]
@@ -74,37 +86,49 @@ export const SvgEditor = React.forwardRef(
     useRefHandlers(ref, zoomableRef.current);
     useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
 
+    //   <GuideLines
+    //   mouse={guideLines.mouse}
+    //   guideLines={guideLines.guideLines}
+    //   zoom={zoom}
+    // />
     return (
       <Droppable
         id={ID_DROPPABLE}
         droppableRef={droppableRef}
-        onDrop={(event) =>
+        onDrop={(event) => {
           onDrop({
             event,
             zoomableRef,
             svg,
+            elementsWrapper: elementsWrapperRef?.current,
             zoom,
             dragOffset,
             setSvgSize,
-          })
-        }
+          });
+          setGuideLines(defaultGuideLines());
+        }}
         onDragEnter={() => {
           const dragImage = props.dragImageRef?.current;
           if (dragImage) onDragEnter(dragImage, zoom);
         }}
         onDragOver={(event: React.DragEvent) => {
           const dragImage = props.dragImageRef?.current;
-          const zoomable = zoomableRef?.current;
-          if (dragImage && zoomable) {
+          const zoomable = zoomableRef.current;
+          const elementsWrapper = elementsWrapperRef?.current;
+          if (dragImage && zoomable && elementsWrapper) {
+            const mouse = zoomable.getMousePoint(event);
             const { tx, ty, guideLines } = dragImageTranslate(
-              event,
+              mouse,
               dragImage,
               options,
-              zoomable
+              elementsWrapper
             );
 
             dragImage.style.left = `${event.clientX + tx * zoom}px`;
             dragImage.style.top = `${event.clientY + ty * zoom}px`;
+            if (guideLines) {
+              setGuideLines({ mouse, guideLines });
+            }
             setDragOffset({ tx, ty });
           }
         }}
@@ -126,6 +150,12 @@ export const SvgEditor = React.forwardRef(
               backgroundColor: options.backgroundColor,
             }}
           >
+            <g ref={elementsWrapperRef} />
+            <GuideLines
+              mouse={guideLines.mouse}
+              guideLines={guideLines.guideLines}
+              zoom={zoom}
+            />
             {/* <rect
               width="100"
               height="100"

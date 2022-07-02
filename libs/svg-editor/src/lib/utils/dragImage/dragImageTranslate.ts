@@ -1,5 +1,3 @@
-import type { MouseEvent } from 'react';
-
 import { nodeCoordsInEditor, nodeSize } from '../utils';
 import {
   furtherGuideLineCoords,
@@ -18,8 +16,7 @@ import {
 import type {
   AlignedElement,
   DragImageTranslate,
-  ElementGuideLine,
-  GuideLineCoords,
+  ElementGuideLines,
 } from '../../types/dragImage';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
@@ -33,7 +30,7 @@ const farthestElementsInAxes = (
   snapRadius: number,
   dragImage: Element,
   svgElements: SVGElement[]
-): ElementGuideLine => {
+): ElementGuideLines => {
   const dragImageWidth = dragImage.clientWidth;
   const dragImageHeight = dragImage.clientHeight;
 
@@ -42,7 +39,7 @@ const farthestElementsInAxes = (
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       return elementWidth || elementHeight;
     })
-    .reduce((acc: ElementGuideLine, element) => {
+    .reduce((acc: ElementGuideLines, element) => {
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       const alignedElements = getAlignedElements(
@@ -151,17 +148,15 @@ const gridSnapTranslate = (mouse: DOMPointReadOnly, gap: number) => {
  * Also returns guide lines coords, if there are any.
  */
 export const dragImageTranslate = (
-  event: MouseEvent,
+  mouse: DOMPointReadOnly,
   dragImage: Element,
   options: SvgEditorOptions,
-  zoomable: ZoomableRef
+  elementsWrapper: SVGGraphicsElement
 ): DragImageTranslate => {
-  const mouse = zoomable.getMousePoint(event);
-
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(
         mouse,
-        Array.from(zoomable?.getChild()?.children || []) as SVGElement[],
+        Array.from(elementsWrapper?.children || []) as SVGElement[],
         dragImage,
         options?.elements?.snapRadius
       )

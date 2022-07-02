@@ -2,16 +2,16 @@ import React from 'react';
 import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
 
-export const translateElements = ({
-  svg,
+const translateElements = ({
+  elementsWrapper,
   tx,
   ty,
 }: {
-  svg: SVGSVGElement;
+  elementsWrapper: SVGGraphicsElement;
   tx: number;
   ty: number;
 }) => {
-  Object.values(svg.children).forEach((element) => {
+  Object.values(elementsWrapper.children).forEach((element) => {
     const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
     const newX = Number(element.getAttribute(xName)) + Math.abs(tx);
     element.setAttribute(xName, newX.toString());
@@ -27,14 +27,14 @@ const resizeFactor = (size: number, zoom: number) =>
 
 export const resizeSvg = ({
   zoomableRef,
-  svg,
+  elementsWrapper,
   setSvgSize,
   zoom,
   width,
   height,
 }: {
   zoomableRef: React.RefObject<ZoomableRef>;
-  svg: SVGSVGElement;
+  elementsWrapper: SVGGraphicsElement;
   setSvgSize: React.Dispatch<React.SetStateAction<DOMRectReadOnly | undefined>>;
   zoom: number;
   width: number;
@@ -47,7 +47,11 @@ export const resizeSvg = ({
   const elementsTranslateY = height && Math.abs(Math.min(height, 0));
 
   zoomableRef.current?.translate(editorTranslateX, editorTranslateY);
-  translateElements({ svg, tx: elementsTranslateX, ty: elementsTranslateY });
+  translateElements({
+    elementsWrapper,
+    tx: elementsTranslateX,
+    ty: elementsTranslateY,
+  });
   setSvgSize((prevState) => {
     return new DOMRectReadOnly(
       0,

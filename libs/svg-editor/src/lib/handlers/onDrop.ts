@@ -29,6 +29,7 @@ export const onDrop = ({
   event,
   zoomableRef,
   svg,
+  elementsWrapper,
   zoom,
   dragOffset,
   setSvgSize,
@@ -36,6 +37,7 @@ export const onDrop = ({
   event: React.DragEvent;
   zoomableRef: React.RefObject<ZoomableRef>;
   svg: SVGSVGElement | undefined;
+  elementsWrapper: SVGGraphicsElement | null;
   zoom: number;
   dragOffset: { tx: number; ty: number };
   setSvgSize: React.Dispatch<React.SetStateAction<DOMRectReadOnly | undefined>>;
@@ -44,7 +46,7 @@ export const onDrop = ({
     event.dataTransfer.getData('elementId')
   )?.firstElementChild;
   const editor = zoomableRef.current;
-  if (!element || !editor || !svg) return;
+  if (!element || !editor || !svg || !elementsWrapper) return;
   const elementCopy = element.cloneNode(true) as SVGElement;
   const { x, y } = editor.getMousePoint(event);
   const { xName, yName, x: elementX, y: elementY } = nodeCoords(elementCopy);
@@ -52,12 +54,12 @@ export const onDrop = ({
   const newY = Math.round(y + elementY + dragOffset.ty);
   elementCopy.setAttribute(xName, newX.toString());
   elementCopy.setAttribute(yName, newY.toString());
-  svg.appendChild(elementCopy);
+  elementsWrapper.appendChild(elementCopy);
 
   const { width, height } = resizeDimensions(x, y, svg);
   resizeSvg({
     zoomableRef,
-    svg,
+    elementsWrapper,
     setSvgSize,
     zoom,
     width,

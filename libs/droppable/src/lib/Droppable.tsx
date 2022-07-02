@@ -6,7 +6,6 @@ interface Props {
   onDrop(event: React.DragEvent): void;
   onDragEnter?(event: React.DragEvent): void;
   onDragOver?(event: React.DragEvent): void;
-  onDragLeave?(event: React.DragEvent): void;
   children: React.ReactElement;
 }
 

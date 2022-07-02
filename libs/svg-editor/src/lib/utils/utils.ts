@@ -67,3 +67,6 @@ export const nodeCoordsInEditor = (
     y: isCircular(node) ? y - (height ?? width) / 2 : y,
   };
 };
+
+export const strokeWidthByZoom = (zoom: number) =>
+  Math.min(1, Math.max(0.1, 1 / zoom));

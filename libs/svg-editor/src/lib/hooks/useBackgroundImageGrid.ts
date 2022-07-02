@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+import { strokeWidthByZoom } from '../utils';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
 /**
@@ -19,7 +21,7 @@ export const useBackgroundImageGrid = (
         clearTimeout(timer.current);
       }
       timer.current = setTimeout(
-        () => setStrokeWidth(Math.min(1, Math.max(0.1, 1 / zoom))),
+        () => setStrokeWidth(strokeWidthByZoom(zoom)),
         300
       );
     };

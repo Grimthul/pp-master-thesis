@@ -6,7 +6,7 @@ export interface GuideLineCoords {
   start: DOMPointReadOnly;
   end: DOMPointReadOnly;
 }
-export type ElementGuideLine = {
+export type ElementGuideLines = {
   [key in keyof ElementSide]?: GuideLineCoords;
 };
 export type AlignedElement = {
@@ -16,5 +16,5 @@ export type AlignedElement = {
 export interface DragImageTranslate {
   tx: number;
   ty: number;
-  guideLines?: ElementGuideLine;
+  guideLines?: ElementGuideLines;
 }
