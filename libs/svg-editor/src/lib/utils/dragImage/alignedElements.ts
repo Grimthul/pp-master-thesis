@@ -6,7 +6,7 @@ const isInBounds = (bound: number) => (coord: number) =>
 const isAligned =
   (diff: number, elementSize: number, snapRadius: number) =>
   (offset = 0) => {
-    const isInSnapRadius = isInBounds(snapRadius);
+    const isInSnapRadius = isInBounds(snapRadius - 0.01);
     return (
       isInSnapRadius(diff + offset) ||
       isInSnapRadius(diff + offset - elementSize / 2) ||
