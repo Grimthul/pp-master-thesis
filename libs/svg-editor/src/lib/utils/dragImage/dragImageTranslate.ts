@@ -1,4 +1,4 @@
-import { nodeCoordsInEditor, nodeSize } from '../utils';
+import { keyCoords, nodeCoordsInEditor, nodeSize } from '../utils';
 import {
   furtherGuideLineCoords,
   getInitialElementGuideLines,
@@ -7,7 +7,6 @@ import {
 import { SidesX, SidesY } from '../../enums/dragImage';
 import { getAlignedElements } from './alignedElements';
 import {
-  keyCoords,
   offsetX,
   offsetY,
   infiniteTranslate,

@@ -18,6 +18,3 @@ export const offsetY = (height: number) => ({
   [SidesY.middleY]: height / 2,
   [SidesY.bottom]: height,
 });
-
-export const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
-  key in SidesX ? { isX: true } : { isY: true };

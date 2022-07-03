@@ -152,7 +152,8 @@ export const SvgEditor = React.forwardRef(
                 guideLines={guideLines.guideLines}
                 dragImage={props.dragImageRef?.current}
                 zoom={zoom}
-                snapRadius={options.elements?.snapRadius || 1}
+                gridGap={Boolean(options.guideLines?.gap)}
+                snapRadius={options.elements?.snapRadius}
               />
             )}
 
