@@ -20,7 +20,7 @@ import type {
 } from '../../types/dragImage';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
-import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
+import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
 /**
  * Returns the farthest elements for each side of given element.

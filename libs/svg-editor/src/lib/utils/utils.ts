@@ -4,6 +4,7 @@ import { ElementType, GuideLinesStyle } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
 const GAP_DEFAULT_SIZE = 10;
+const ELEMENT_SNAP_RADIUS_MIN = 2;
 
 const CIRCULAR_ELEMENTS = [ElementType.CIRCLE, ElementType.ELLIPSE];
 
@@ -27,7 +28,11 @@ export const mergeWithDefaultOptions = (
   },
   elements: {
     snap: true,
-    snapRadius: (options?.guideLines?.gap || GAP_DEFAULT_SIZE) / 2,
+    snapRadius:
+      Math.max(
+        options?.guideLines?.gap ?? GAP_DEFAULT_SIZE,
+        ELEMENT_SNAP_RADIUS_MIN
+      ) / 2,
     ...options?.elements,
   },
 });

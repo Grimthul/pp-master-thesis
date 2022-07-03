@@ -86,11 +86,6 @@ export const SvgEditor = React.forwardRef(
     useRefHandlers(ref, zoomableRef.current);
     useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
 
-    //   <GuideLines
-    //   mouse={guideLines.mouse}
-    //   guideLines={guideLines.guideLines}
-    //   zoom={zoom}
-    // />
     return (
       <Droppable
         id={ID_DROPPABLE}
@@ -151,11 +146,16 @@ export const SvgEditor = React.forwardRef(
             }}
           >
             <g ref={elementsWrapperRef} />
-            <GuideLines
-              mouse={guideLines.mouse}
-              guideLines={guideLines.guideLines}
-              zoom={zoom}
-            />
+            {props.dragImageRef?.current && (
+              <GuideLines
+                mouse={guideLines.mouse}
+                guideLines={guideLines.guideLines}
+                dragImage={props.dragImageRef?.current}
+                zoom={zoom}
+                snapRadius={options.elements?.snapRadius || 1}
+              />
+            )}
+
             {/* <rect
               width="100"
               height="100"
