@@ -30,8 +30,6 @@ export const GuideLines = ({
   const strokeWidth = strokeWidthByZoom(zoom);
   const dragImageWidth = dragImage.clientWidth;
   const dragImageHeight = dragImage.clientHeight;
-  const mouseSnapX = roundToMultiple(mouse.x, snapRadius * 2);
-  const mouseSnapY = roundToMultiple(mouse.y, snapRadius * 2);
 
   return (
     <>
@@ -41,12 +39,12 @@ export const GuideLines = ({
 
         const { start, end } = guideLine;
         const { isX, isY } = keyCoords(key);
-        // const mouseSnapX = isX
-        //   ? mouse.x
-        //   : roundToMultiple(mouse.x, snapRadius * 2);
-        // const mouseSnapY = isY
-        //   ? mouse.y
-        //   : roundToMultiple(mouse.y, snapRadius * 2);
+        const mouseSnapX = isX
+          ? roundToMultiple(mouse.x, snapRadius * 2)
+          : mouse.x;
+        const mouseSnapY = isY
+          ? roundToMultiple(mouse.y, snapRadius * 2)
+          : mouse.y;
 
         const { xDiff, yDiff } = guideLineDiff(guideLine);
         const mouseXDiff =
