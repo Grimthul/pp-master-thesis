@@ -22,7 +22,7 @@ export const useBackgroundImageGrid = (
       }
       timer.current = setTimeout(
         () => setStrokeWidth(strokeWidthByZoom(zoom)),
-        300
+        100
       );
     };
     updateStrokeWidthWithDelay();

@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@pp-master-thesis/activable-svg": [
+        "libs/activable-svg/src/index.ts"
+      ],
       "@pp-master-thesis/constants": ["libs/constants/src/index.ts"],
       "@pp-master-thesis/draggable": ["libs/draggable/src/index.ts"],
       "@pp-master-thesis/droppable": ["libs/droppable/src/index.ts"],

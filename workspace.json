@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "activable-svg": "libs/activable-svg",
     "constants": "libs/constants",
     "demo": "apps/demo",
     "draggable": "libs/draggable",
