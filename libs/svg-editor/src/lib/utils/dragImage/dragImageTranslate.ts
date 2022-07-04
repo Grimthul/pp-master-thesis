@@ -19,6 +19,7 @@ import type {
 } from '../../types/dragImage';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
+import { ElementType } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
 /**
@@ -35,6 +36,8 @@ const farthestElementsInAxes = (
 
   return svgElements
     .filter((element) => {
+      const node = element.nodeName;
+      if (node === ElementType.PATH || node === ElementType.TEXT) return false;
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       return elementWidth || elementHeight;
     })

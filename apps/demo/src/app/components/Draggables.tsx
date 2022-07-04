@@ -70,7 +70,7 @@ export const Draggables = ({
       </DraggableSvgWithAttrs>
       <DraggableSvgWithAttrs>
         <svg id="add-text" className="draggable__svg" height={18}>
-          <text x="0" y="16" fontSize={18}>
+          <text x="0" y="16" fontSize={18} textLength={40}>
             Text
           </text>
         </svg>
