@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { resizeSvg, nodeCoords } from '../utils/';
+import * as Path from '../shapes/path';
 
 import {
   ADD_ELEMENT_SIZE,
@@ -7,6 +8,7 @@ import {
   EDITOR_WIDTH_ADD,
 } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
+import { ElementType } from '@pp-master-thesis/enums';
 
 const resizeDimensions = (
   x: number,
@@ -49,11 +51,20 @@ export const onDrop = ({
   if (!element || !editor || !svg || !elementsWrapper) return;
   const elementCopy = element.cloneNode(true) as SVGElement;
   const { x, y } = editor.getMousePoint(event);
-  const { xName, yName, x: elementX, y: elementY } = nodeCoords(elementCopy);
-  const newX = Math.round(x + elementX + dragOffset.tx);
-  const newY = Math.round(y + elementY + dragOffset.ty);
-  elementCopy.setAttribute(xName, newX.toString());
-  elementCopy.setAttribute(yName, newY.toString());
+  if (elementCopy.nodeName === ElementType.PATH) {
+    const d = elementCopy.getAttribute('d') || '';
+    elementCopy.setAttribute(
+      'd',
+      Path.moveBy(d, x + dragOffset.tx, y + dragOffset.ty)
+    );
+  } else {
+    const { xName, yName, x: elementX, y: elementY } = nodeCoords(elementCopy);
+    const newX = Math.round(x + elementX + dragOffset.tx);
+    const newY = Math.round(y + elementY + dragOffset.ty);
+    elementCopy.setAttribute(xName, newX.toString());
+    elementCopy.setAttribute(yName, newY.toString());
+  }
+
   elementsWrapper.appendChild(elementCopy);
 
   const { width, height } = resizeDimensions(x, y, svg);
