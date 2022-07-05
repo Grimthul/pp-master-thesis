@@ -75,8 +75,5 @@ export const nodeCoordsInEditor = (
   };
 };
 
-export const strokeWidthByZoom = (zoom: number) =>
-  Math.min(1, Math.max(0.1, 1 / zoom));
-
 export const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
   key in SidesX ? { isX: true } : { isY: true };

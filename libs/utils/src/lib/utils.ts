@@ -27,3 +27,6 @@ export const hexToRgb = (hex: string) => {
 
 export const roundToMultiple = (n: number, m: number, offset = 0) =>
   Math.round((n - offset) / m) * m + offset;
+
+export const strokeWidthByZoom = (zoom: number) =>
+  Math.min(1, Math.max(0.1, 1 / zoom));
