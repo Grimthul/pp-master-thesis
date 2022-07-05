@@ -67,7 +67,7 @@ export const useZoomableHandlers = ({
   const handleMouseDown = React.useCallback(
     (event: React.MouseEvent) => {
       if (timer.current) clearTimeout(timer.current);
-      if (!allowPan || !wrapperRect) return;
+      if (!allowPan || !wrapperRect || !event.ctrlKey) return;
       const position = mousePointInElement(event, wrapperRect);
       setLastMouse(position);
       setPanning(true);
@@ -77,7 +77,7 @@ export const useZoomableHandlers = ({
 
   const handleMouseMove = (event: React.MouseEvent) => {
     event.preventDefault(); // needed to disable text highlight on drag
-    if (!allowPan || !wrapperRect || !lastMouse) return;
+    if (!allowPan || !wrapperRect || !lastMouse || !event.ctrlKey) return;
     if (panning) {
       setTool(Tool.PAN);
       const newLastMouse = mousePointInElement(event, wrapperRect);
