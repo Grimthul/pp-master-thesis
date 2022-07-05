@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { strokeWidthByZoom } from '../utils';
+import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
 /**

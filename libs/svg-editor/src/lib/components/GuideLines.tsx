@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { strokeWidthByZoom, keyCoords } from '../utils';
+import { keyCoords } from '../utils';
 
-import { roundToMultiple } from '@pp-master-thesis/utils';
+import { roundToMultiple, strokeWidthByZoom } from '@pp-master-thesis/utils';
 
 import type { ElementGuideLines } from '../types/dragImage';
 

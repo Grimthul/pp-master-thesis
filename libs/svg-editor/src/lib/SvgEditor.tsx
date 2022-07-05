@@ -49,7 +49,7 @@ export const SvgEditor = React.forwardRef(
     });
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
-    const [activeElement, setActiveElement] = React.useState<SVGElement>();
+    const [activeElements, setActiveElements] = React.useState<SVGElement[]>();
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [guideLines, setGuideLines] = React.useState<{
       mouse: DOMPointReadOnly;
@@ -85,8 +85,9 @@ export const SvgEditor = React.forwardRef(
     }, [options.size]);
 
     React.useEffect(() => {
+      console.log(activeElements);
       // handle active element - e.g. show active element menu
-    }, [activeElement]);
+    }, [activeElements]);
 
     useBackgroundImageGrid(options, zoom, setBackgroundImage);
     useRefHandlers(ref, zoomableRef.current);
@@ -150,7 +151,9 @@ export const SvgEditor = React.forwardRef(
               backgroundImage: backgroundImage,
               backgroundColor: options.backgroundColor,
             }}
-            setActiveSvg={setActiveElement}
+            setActiveElements={setActiveElements}
+            getMousePoint={zoomableRef.current?.getMousePoint}
+            zoom={zoom}
           >
             <g ref={elementsWrapperRef} />
             {props.dragImageRef?.current && (
