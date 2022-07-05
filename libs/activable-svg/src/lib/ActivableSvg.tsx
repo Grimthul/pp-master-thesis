@@ -16,7 +16,6 @@ type Props = React.SVGProps<SVGSVGElement> & {
 export const ActivableSvg = React.forwardRef(
   (
     { setActiveElements, getMousePoint, children, zoom, ...props }: Props,
-
     ref: React.ForwardedRef<SVGSVGElement>
   ) => {
     const svgRef = React.useRef<SVGSVGElement | null>(null);
@@ -28,45 +27,96 @@ export const ActivableSvg = React.forwardRef(
       React.useState<DOMPointReadOnly>();
     const [mouseDragPos, setMouseDragPos] = React.useState<DOMPointReadOnly>();
 
-    const mousePosition = (event: React.MouseEvent) =>
-      new DOMPointReadOnly(event.clientX, event.clientY);
+    const mousePosition = React.useCallback(
+      (event: React.MouseEvent) =>
+        new DOMPointReadOnly(event.clientX, event.clientY),
+      []
+    );
 
-    const onMouseDown = (event: React.MouseEvent) => {
-      if (getMousePoint && !event.ctrlKey) {
-        setSelectorStart(mousePosition(event));
-        setSelectorStartInSvg(getMousePoint(event));
-      }
-    };
+    const setSelectorStarts = React.useCallback(
+      (event: React.MouseEvent) => {
+        if (getMousePoint) {
+          setSelectorStart(mousePosition(event));
+          setSelectorStartInSvg(getMousePoint(event));
+        }
+      },
+      [getMousePoint, mousePosition]
+    );
 
-    const onMouseMove = (event: React.MouseEvent) => {
-      if (getMousePoint && selectorStart) {
-        setMouseDragPos(mousePosition(event));
-        setMouseDragPosInSvg(getMousePoint(event));
-      }
-    };
+    const setMouseDrags = React.useCallback(
+      (event: React.MouseEvent) => {
+        if (getMousePoint) {
+          setMouseDragPos(mousePosition(event));
+          setMouseDragPosInSvg(getMousePoint(event));
+        }
+      },
+      [getMousePoint, mousePosition]
+    );
 
-    const elementsInsideSelector = (
-      selectorStart: DOMPointReadOnly,
-      mouseDragPos: DOMPointReadOnly
-    ) => {
-      const startX = Math.min(selectorStart.x, mouseDragPos.x);
-      const startY = Math.min(selectorStart.y, mouseDragPos.y);
-      const endX = Math.max(selectorStart.x, mouseDragPos.x);
-      const endY = Math.max(selectorStart.y, mouseDragPos.y);
-      return Array.from(
-        (svgRef?.current?.firstChild?.childNodes || []) as SVGElement[]
-      ).filter((element) => {
-        const { left, top, width, height } = element.getBoundingClientRect();
-        return (
-          left + width >= startX &&
-          left <= endX &&
-          top + height >= startY &&
-          top <= endY
-        );
-      });
-    };
+    const onMouseDown = React.useCallback(
+      (event: React.MouseEvent) => {
+        if (!event.ctrlKey) {
+          setSelectorStarts(event);
+        }
+      },
+      [setSelectorStarts]
+    );
 
-    const onMouseUp = (event: React.MouseEvent) => {
+    const onMouseMove = React.useCallback(
+      (event: React.MouseEvent) => {
+        if (selectorStart) {
+          setMouseDrags(event);
+        }
+      },
+      [selectorStart, setMouseDrags]
+    );
+
+    const elementsInsideSelector = React.useCallback(
+      (selectorStart: DOMPointReadOnly, mouseDragPos: DOMPointReadOnly) => {
+        const startX = Math.min(selectorStart.x, mouseDragPos.x);
+        const startY = Math.min(selectorStart.y, mouseDragPos.y);
+        const endX = Math.max(selectorStart.x, mouseDragPos.x);
+        const endY = Math.max(selectorStart.y, mouseDragPos.y);
+        return Array.from(
+          (svgRef?.current?.firstChild?.childNodes || []) as SVGElement[]
+        ).filter((element) => {
+          const { left, top, width, height } = element.getBoundingClientRect();
+          return (
+            left + width >= startX &&
+            left <= endX &&
+            top + height >= startY &&
+            top <= endY
+          );
+        });
+      },
+      []
+    );
+
+    const size = React.useCallback(
+      (start: number, end: number) =>
+        Math.max(strokeWidthByZoom(zoom), Math.abs(start - end)),
+      [zoom]
+    );
+
+    const selectorRectAttributes = React.useCallback(
+      (start: DOMPointReadOnly, end: DOMPointReadOnly) => {
+        if (!svgRef.current) return;
+        const { x: startX, y: startY } = start;
+        const { x: endX, y: endY } = end;
+        const width = size(startX, endX);
+        const height = size(startY, endY);
+        return {
+          x: startX > endX ? endX : startX,
+          y: startY > endY ? endY : startY,
+          width,
+          height,
+        };
+      },
+      [size]
+    );
+
+    // there the useCallback is useless
+    const onMouseUp = () => {
       if (selectorStart && mouseDragPos) {
         setActiveElements(elementsInsideSelector(selectorStart, mouseDragPos));
       }
@@ -74,24 +124,6 @@ export const ActivableSvg = React.forwardRef(
       setSelectorStartInSvg(undefined);
       setMouseDragPos(undefined);
       setMouseDragPosInSvg(undefined);
-    };
-
-    const selectorRectAttributes = (
-      start: DOMPointReadOnly,
-      end: DOMPointReadOnly
-    ) => {
-      if (!svgRef.current) return;
-
-      const { x: startX, y: startY } = start;
-      const { x: endX, y: endY } = end;
-      const width = Math.max(strokeWidthByZoom(zoom), Math.abs(startX - endX));
-      const height = Math.max(strokeWidthByZoom(zoom), Math.abs(startY - endY));
-      return {
-        x: startX > endX ? endX : startX,
-        y: startY > endY ? endY : startY,
-        width,
-        height,
-      };
     };
 
     return (
