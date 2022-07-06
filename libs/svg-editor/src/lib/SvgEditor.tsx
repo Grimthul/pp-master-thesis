@@ -7,8 +7,11 @@ import {
   useDragImageResetOnDragExit,
   useRefHandlers,
 } from './hooks';
+import { ActiveElements, GuideLines } from './components/';
+
 import type { ElementGuideLines } from './types/dragImage';
 
+import { ActivableSvg } from '@pp-master-thesis/activable-svg';
 import { ID_DROPPABLE, ID_EDITOR } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
 import { Zoomable } from '@pp-master-thesis/zoomable';
@@ -22,8 +25,6 @@ import type {
 } from '@pp-master-thesis/types';
 
 import './SvgEditor.scss';
-import { GuideLines } from './components/GuideLines';
-import { ActivableSvg } from '@pp-master-thesis/activable-svg';
 
 interface Props {
   options?: SvgEditorOptions;
@@ -49,7 +50,9 @@ export const SvgEditor = React.forwardRef(
     });
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
-    const [activeElements, setActiveElements] = React.useState<SVGElement[]>();
+    const [activeElements, setActiveElements] = React.useState<SVGElement[]>(
+      []
+    );
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [guideLines, setGuideLines] = React.useState<{
       mouse: DOMPointReadOnly;
@@ -165,6 +168,9 @@ export const SvgEditor = React.forwardRef(
                 gridGap={Boolean(options.guideLines?.gap)}
                 snapRadius={options.elements?.snapRadius}
               />
+            )}
+            {activeElements.length > 0 && (
+              <ActiveElements activeElements={activeElements} />
             )}
 
             {/* <rect

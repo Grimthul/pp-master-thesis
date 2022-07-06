@@ -6,9 +6,7 @@ import type { GetMousePoint } from '@pp-master-thesis/types';
 import './ActivableSvg.scss';
 
 type Props = React.SVGProps<SVGSVGElement> & {
-  setActiveElements: React.Dispatch<
-    React.SetStateAction<SVGElement[] | undefined>
-  >;
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGElement[]>>;
   getMousePoint: GetMousePoint | undefined;
   zoom: number;
 };
@@ -116,10 +114,12 @@ export const ActivableSvg = React.forwardRef(
     );
 
     // there the useCallback is useless
-    const onMouseUp = () => {
+    const onMouseUp = (event: React.MouseEvent) => {
       if (selectorStart && mouseDragPos) {
         setActiveElements(elementsInsideSelector(selectorStart, mouseDragPos));
       }
+      if (!mouseDragPos) setActiveElements([event.target as SVGElement]);
+
       setSelectorStart(undefined);
       setSelectorStartInSvg(undefined);
       setMouseDragPos(undefined);
