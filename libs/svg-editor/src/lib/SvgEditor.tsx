@@ -154,6 +154,7 @@ export const SvgEditor = React.forwardRef(
               backgroundImage: backgroundImage,
               backgroundColor: options.backgroundColor,
             }}
+            activeElements={activeElements}
             setActiveElements={setActiveElements}
             getMousePoint={zoomableRef.current?.getMousePoint}
             zoom={zoom}

@@ -6,6 +6,7 @@ import type { GetMousePoint } from '@pp-master-thesis/types';
 import './ActivableSvg.scss';
 
 type Props = React.SVGProps<SVGSVGElement> & {
+  activeElements: SVGGraphicsElement[];
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
   getMousePoint: GetMousePoint | undefined;
   zoom: number;
@@ -13,10 +14,19 @@ type Props = React.SVGProps<SVGSVGElement> & {
 
 export const ActivableSvg = React.forwardRef(
   (
-    { setActiveElements, getMousePoint, children, zoom, ...props }: Props,
+    {
+      activeElements,
+      setActiveElements,
+      getMousePoint,
+      children,
+      zoom,
+      ...props
+    }: Props,
     ref: React.ForwardedRef<SVGSVGElement>
   ) => {
     const svgRef = React.useRef<SVGSVGElement | null>(null);
+    const [clicked, setClicked] = React.useState(false);
+    const [moved, setMoved] = React.useState(false);
     const [selectorStartInSvg, setSelectorStartInSvg] =
       React.useState<DOMPointReadOnly>();
     const [mouseDragPosInSvg, setMouseDragPosInSvg] =
@@ -49,25 +59,22 @@ export const ActivableSvg = React.forwardRef(
     const onMouseDown = React.useCallback(
       (event: React.MouseEvent) => {
         const target = event.target as SVGGraphicsElement;
-        setActiveElements((prevElements) => {
-          if (
-            isEditor(target) &&
-            prevElements.length &&
-            !prevElements.includes(target)
-          )
-            return [];
-          return event.ctrlKey || prevElements.includes(target)
-            ? prevElements
-            : [target];
-        });
-
+        if (
+          !event.ctrlKey &&
+          !activeElements.includes(target) &&
+          !isEditor(target)
+        ) {
+          setActiveElements([target]);
+        }
         if (target === svgRef.current) setSelectorStarts(event);
+        else setClicked(true);
       },
-      [isEditor, setActiveElements, setSelectorStarts]
+      [activeElements, isEditor, setActiveElements, setSelectorStarts]
     );
 
     const onMouseMove = React.useCallback(
       (event: React.MouseEvent) => {
+        setMoved(true);
         if (selectorStart && getMousePoint) {
           setMouseDragPos(mousePosition(event));
           setMouseDragPosInSvg(getMousePoint(event));
@@ -124,16 +131,27 @@ export const ActivableSvg = React.forwardRef(
     // there the useCallback is useless
     const onMouseUp = (event: React.MouseEvent) => {
       const target = event.target as SVGGraphicsElement;
-      if (!isEditor(target) && selectorStart && !mouseDragPos) {
-        setActiveElements([target]);
+      // editor
+      if (isEditor(target) && activeElements.length) {
+        setActiveElements([]);
       }
-      if (selectorStart && mouseDragPos) {
-        setActiveElements(elementsInsideSelector(selectorStart, mouseDragPos));
+      // elements
+      else if (!activeElements.includes(target) || activeElements.length > 1) {
+        if (clicked && !moved) {
+          setActiveElements([target]);
+        }
+        if (selectorStart && mouseDragPos) {
+          setActiveElements(
+            elementsInsideSelector(selectorStart, mouseDragPos)
+          );
+        }
       }
       setSelectorStart(undefined);
       setSelectorStartInSvg(undefined);
       setMouseDragPos(undefined);
       setMouseDragPosInSvg(undefined);
+      setClicked(false);
+      setMoved(false);
     };
 
     return (
