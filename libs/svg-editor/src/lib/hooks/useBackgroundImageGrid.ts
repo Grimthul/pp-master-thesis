@@ -11,7 +11,7 @@ export const useBackgroundImageGrid = (
   zoom: number,
   setBackgroundImage: React.Dispatch<React.SetStateAction<string>>
 ) => {
-  const { gap, style, color, hide } = options.guideLines || {};
+  const { gap, style, color, hide } = options.grid || {};
   const [strokeWidth, setStrokeWidth] = React.useState(1);
   const timer = React.useRef<ReturnType<typeof setTimeout>>();
 

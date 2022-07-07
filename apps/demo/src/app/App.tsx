@@ -33,7 +33,7 @@ const App = () => {
   const editorOptions: SvgEditorOptions = React.useMemo(
     () => ({
       backgroundColor: editorBackgroundColor,
-      guideLines: {
+      grid: {
         gap: guideLinesGap,
         color: guideLinesColor,
       },

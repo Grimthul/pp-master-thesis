@@ -164,11 +164,9 @@ export const dragImageTranslate = (
       )
     : zeroTranslate();
 
-  const gap = options.guideLines?.gap;
+  const gap = options.grid?.gap;
   const gridTranslate =
-    options.guideLines?.snap && gap
-      ? gridSnapTranslate(mouse, gap)
-      : zeroTranslate();
+    options.grid?.snap && gap ? gridSnapTranslate(mouse, gap) : zeroTranslate();
   return {
     tx: isFinite(elementsTranslate.tx)
       ? elementsTranslate.tx

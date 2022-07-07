@@ -1,7 +1,7 @@
 import { SidesX } from '../enums/dragImage';
 
 import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
-import { ElementType, GuideLinesStyle } from '@pp-master-thesis/enums';
+import { ElementType, GridLinesStyle } from '@pp-master-thesis/enums';
 
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
@@ -20,19 +20,19 @@ export const mergeWithDefaultOptions = (
   zoomOptions: undefined,
   size: new DOMRectReadOnly(0, 0, 800, 600),
   ...options,
-  guideLines: {
+  grid: {
     gap: GAP_DEFAULT_SIZE,
     color: '#000',
-    style: GuideLinesStyle.LINES,
+    style: GridLinesStyle.LINES,
     snap: true,
     hide: false,
-    ...options?.guideLines,
+    ...options?.grid,
   },
   elements: {
     snap: true,
     snapRadius:
       Math.max(
-        options?.guideLines?.gap ?? GAP_DEFAULT_SIZE,
+        options?.grid?.gap ?? GAP_DEFAULT_SIZE,
         ELEMENT_SNAP_RADIUS_MIN
       ) / 2,
     ...options?.elements,
