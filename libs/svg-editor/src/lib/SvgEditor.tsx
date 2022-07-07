@@ -50,9 +50,9 @@ export const SvgEditor = React.forwardRef(
     });
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
-    const [activeElements, setActiveElements] = React.useState<SVGElement[]>(
-      []
-    );
+    const [activeElements, setActiveElements] = React.useState<
+      SVGGraphicsElement[]
+    >([]);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [guideLines, setGuideLines] = React.useState<{
       mouse: DOMPointReadOnly;
@@ -170,7 +170,10 @@ export const SvgEditor = React.forwardRef(
               />
             )}
             {activeElements.length > 0 && (
-              <ActiveElements activeElements={activeElements} />
+              <ActiveElements
+                activeElements={activeElements}
+                setTool={setTool}
+              />
             )}
 
             {/* <rect

@@ -54,10 +54,10 @@ export const nodeCoords = (
 export const nodeSize = (node: Element): { width: number; height?: number } => {
   const { widthName, heightName } = ELEMENT_SIZE_ATTRIBUTES[node.nodeName];
   const width = Number(node.getAttribute(widthName));
-  const height = heightName ? Number(node.getAttribute(heightName)) : 0;
+  const height = heightName ? Number(node.getAttribute(heightName)) : undefined;
   return {
     width: isCircular(node) ? width * 2 : width,
-    height: isCircular(node) ? height * 2 : height,
+    height: isCircular(node) ? (height ?? width) * 2 : height,
   };
 };
 
@@ -66,7 +66,6 @@ export const nodeCoordsInEditor = (
 ): { xName: string; yName: string; x: number; y: number } => {
   const { xName, yName, x, y } = nodeCoords(node);
   const { width, height } = nodeSize(node);
-
   return {
     xName,
     yName,

@@ -2,6 +2,15 @@ export enum Tool {
   NONE = 'DEFAULT',
   PAN = 'MOVE',
   ZOOM = 'ZOOM',
+  NW_RESIZE = 'NW-RESIZE',
+  SW_RESIZE = 'SW-RESIZE',
+  NE_RESIZE = 'NE-RESIZE',
+  SE_RESIZE = 'SE-RESIZE',
+  W_RESIZE = 'W-RESIZE',
+  E_RESIZE = 'E-RESIZE',
+  N_RESIZE = 'N-RESIZE',
+  S_RESIZE = 'S-RESIZE',
+  ROTATE = 'CROSSHAIR',
 }
 
 export enum ZoomDirection {
@@ -9,7 +18,7 @@ export enum ZoomDirection {
   OUT = -1,
 }
 
-export enum GuideLinesStyle {
+export enum GridLinesStyle {
   DOTTED = 'DOTTED',
   LINES = 'LINES',
   // DASHED = "DASHED" ??

@@ -6,7 +6,7 @@ import type { GetMousePoint } from '@pp-master-thesis/types';
 import './ActivableSvg.scss';
 
 type Props = React.SVGProps<SVGSVGElement> & {
-  setActiveElements: React.Dispatch<React.SetStateAction<SVGElement[]>>;
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
   getMousePoint: GetMousePoint | undefined;
   zoom: number;
 };
@@ -76,7 +76,8 @@ export const ActivableSvg = React.forwardRef(
         const endX = Math.max(selectorStart.x, mouseDragPos.x);
         const endY = Math.max(selectorStart.y, mouseDragPos.y);
         return Array.from(
-          (svgRef?.current?.firstChild?.childNodes || []) as SVGElement[]
+          (svgRef?.current?.firstChild?.childNodes ||
+            []) as SVGGraphicsElement[]
         ).filter((element) => {
           const { left, top, width, height } = element.getBoundingClientRect();
           return (
@@ -118,7 +119,8 @@ export const ActivableSvg = React.forwardRef(
       if (selectorStart && mouseDragPos) {
         setActiveElements(elementsInsideSelector(selectorStart, mouseDragPos));
       }
-      if (!mouseDragPos) setActiveElements([event.target as SVGElement]);
+      if (!mouseDragPos)
+        setActiveElements([event.target as SVGGraphicsElement]);
 
       setSelectorStart(undefined);
       setSelectorStartInSvg(undefined);

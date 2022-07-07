@@ -29,7 +29,7 @@ const farthestElementsInAxes = (
   mouse: DOMPointReadOnly,
   snapRadius: number,
   dragImage: Element,
-  svgElements: SVGElement[]
+  svgElements: SVGGraphicsElement[]
 ): ElementGuideLines => {
   const dragImageWidth = dragImage.clientWidth;
   const dragImageHeight = dragImage.clientHeight;
@@ -91,7 +91,7 @@ const farthestElementsInAxes = (
 
 const elementsSnapTranslate = (
   mouse: DOMPointReadOnly,
-  elements: SVGElement[],
+  elements: SVGGraphicsElement[],
   dragImage: Element,
   snapRadius = 0
 ): DragImageTranslate => {
@@ -158,7 +158,7 @@ export const dragImageTranslate = (
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(
         mouse,
-        Array.from(elementsWrapper?.children || []) as SVGElement[],
+        Array.from(elementsWrapper?.children || []) as SVGGraphicsElement[],
         dragImage,
         options?.elements?.snapRadius
       )

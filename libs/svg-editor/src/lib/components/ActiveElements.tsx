@@ -1,7 +1,16 @@
+import { Tool } from '@pp-master-thesis/enums';
+
 interface Props {
-  activeElements: SVGElement[];
+  activeElements: SVGGraphicsElement[];
+  setTool: React.Dispatch<React.SetStateAction<Tool>>;
 }
 
 export const ActiveElements = ({ activeElements }: Props) => {
-  return <circle></circle>;
+  return (
+    <>
+      {activeElements.map((element, i) => {
+        return <circle key={i}></circle>;
+      })}
+    </>
+  );
 };
