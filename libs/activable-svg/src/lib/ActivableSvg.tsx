@@ -75,7 +75,7 @@ export const ActivableSvg = React.forwardRef(
     const onMouseMove = React.useCallback(
       (event: React.MouseEvent) => {
         setMoved(true);
-        if (selectorStart && getMousePoint) {
+        if (!event.ctrlKey && selectorStart && getMousePoint) {
           setMouseDragPos(mousePosition(event));
           setMouseDragPosInSvg(getMousePoint(event));
         }
