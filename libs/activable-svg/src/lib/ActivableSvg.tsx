@@ -41,32 +41,39 @@ export const ActivableSvg = React.forwardRef(
       [getMousePoint, mousePosition]
     );
 
-    const setMouseDrags = React.useCallback(
-      (event: React.MouseEvent) => {
-        if (getMousePoint) {
-          setMouseDragPos(mousePosition(event));
-          setMouseDragPosInSvg(getMousePoint(event));
-        }
-      },
-      [getMousePoint, mousePosition]
+    const isEditor = React.useCallback(
+      (element: SVGGraphicsElement) => element === svgRef.current,
+      []
     );
 
     const onMouseDown = React.useCallback(
       (event: React.MouseEvent) => {
-        if (!event.ctrlKey) {
-          setSelectorStarts(event);
-        }
+        const target = event.target as SVGGraphicsElement;
+        setActiveElements((prevElements) => {
+          if (
+            isEditor(target) &&
+            prevElements.length &&
+            !prevElements.includes(target)
+          )
+            return [];
+          return event.ctrlKey || prevElements.includes(target)
+            ? prevElements
+            : [target];
+        });
+
+        if (target === svgRef.current) setSelectorStarts(event);
       },
-      [setSelectorStarts]
+      [isEditor, setActiveElements, setSelectorStarts]
     );
 
     const onMouseMove = React.useCallback(
       (event: React.MouseEvent) => {
-        if (selectorStart) {
-          setMouseDrags(event);
+        if (selectorStart && getMousePoint) {
+          setMouseDragPos(mousePosition(event));
+          setMouseDragPosInSvg(getMousePoint(event));
         }
       },
-      [selectorStart, setMouseDrags]
+      [getMousePoint, mousePosition, selectorStart]
     );
 
     const elementsInsideSelector = React.useCallback(
@@ -116,12 +123,13 @@ export const ActivableSvg = React.forwardRef(
 
     // there the useCallback is useless
     const onMouseUp = (event: React.MouseEvent) => {
+      const target = event.target as SVGGraphicsElement;
+      if (!isEditor(target) && selectorStart && !mouseDragPos) {
+        setActiveElements([target]);
+      }
       if (selectorStart && mouseDragPos) {
         setActiveElements(elementsInsideSelector(selectorStart, mouseDragPos));
       }
-      if (!mouseDragPos)
-        setActiveElements([event.target as SVGGraphicsElement]);
-
       setSelectorStart(undefined);
       setSelectorStartInSvg(undefined);
       setMouseDragPos(undefined);

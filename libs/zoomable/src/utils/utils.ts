@@ -35,7 +35,7 @@ export const mergeWithDefaultOptions = (
 });
 
 export const mousePointInElement = (
-  e: React.MouseEvent,
+  e: React.MouseEvent | MouseEvent,
   elementRect: DOMRect
 ): DOMPointReadOnly =>
   new DOMPointReadOnly(
@@ -54,7 +54,7 @@ export const invertMousePointInElement = (
     .matrixTransform(matrix.inverse());
 
 export const mousePointInElementInverted = (
-  e: React.MouseEvent,
+  e: React.MouseEvent | MouseEvent,
   elementRect: DOMRect,
   matrix: DOMMatrixReadOnly,
   tx = 0,

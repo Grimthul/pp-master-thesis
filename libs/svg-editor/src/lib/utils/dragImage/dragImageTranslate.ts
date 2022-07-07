@@ -153,7 +153,7 @@ export const dragImageTranslate = (
   mouse: DOMPointReadOnly,
   dragImage: Element,
   options: SvgEditorOptions,
-  elementsWrapper: SVGGraphicsElement
+  elementsWrapper: SVGGElement
 ): DragImageTranslate => {
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(

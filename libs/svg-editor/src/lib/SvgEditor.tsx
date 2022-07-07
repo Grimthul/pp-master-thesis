@@ -171,47 +171,12 @@ export const SvgEditor = React.forwardRef(
             )}
             {activeElements.length > 0 && (
               <ActiveElements
-                activeElements={activeElements}
+                elements={activeElements}
+                zoomable={zoomableRef.current}
+                zoom={zoom}
                 setTool={setTool}
               />
             )}
-
-            {/* <rect
-              width="100"
-              height="100"
-              fill="#EDE29F"
-              // transform="matrix(0.5, 0, 0, 0.5, 0, 50)"
-            /> */}
-            {/* <rect
-              width="600"
-              height="300"
-              fill="#EDE29F"
-              // transform="matrix(0.5, 0, 0, 0.5, 0, 50)"
-            />
-            <circle
-              cx="150"
-              cy="100"
-              r="90"
-              fill="#48440E"
-              // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
-            />
-            <circle cx="50" cy="50" r="1" fill="#ff0000" />
-            <circle cx="400" cy="300" r="1" fill="#ff0000" />
-            <text
-              x="75"
-              y="130"
-              fontSize="77"
-              fill="#ffffff"
-              // transform="matrix(0.5, 0, 0, 0.5, 50, 50)"
-            >
-              SVG
-            </text>
-            <text x="150" y="500" fontSize="77" fill="#ff0000">
-              Text
-              <tspan fill="#000000" fontFamily="sans-serif">
-                test
-              </tspan>
-            </text> */}
           </ActivableSvg>
         </Zoomable>
       </Droppable>

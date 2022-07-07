@@ -10,7 +10,7 @@ const ELEMENT_SNAP_RADIUS_MIN = 2;
 
 const CIRCULAR_ELEMENTS = [ElementType.CIRCLE, ElementType.ELLIPSE];
 
-const isCircular = (node: Element) =>
+export const isCircular = (node: Element) =>
   CIRCULAR_ELEMENTS.includes(node.nodeName as ElementType);
 
 export const mergeWithDefaultOptions = (

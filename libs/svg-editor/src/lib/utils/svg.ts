@@ -2,22 +2,40 @@ import React from 'react';
 import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
 
+export const translateElementTo = (
+  element: SVGGraphicsElement,
+  x: number,
+  y: number
+) => {
+  const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
+  element.setAttribute(xName, x.toString());
+  element.setAttribute(yName, y.toString());
+};
+
+export const translateElement = (
+  element: SVGGraphicsElement,
+  tx: number,
+  ty: number
+) => {
+  const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
+  const newX = Number(element.getAttribute(xName)) + tx;
+  element.setAttribute(xName, newX.toString());
+  const newY = Number(element.getAttribute(yName)) + ty;
+  element.setAttribute(yName, newY.toString());
+};
+
 const translateElements = ({
   elementsWrapper,
   tx,
   ty,
 }: {
-  elementsWrapper: SVGGraphicsElement;
+  elementsWrapper: SVGGElement;
   tx: number;
   ty: number;
 }) => {
-  Object.values(elementsWrapper.children).forEach((element) => {
-    const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
-    const newX = Number(element.getAttribute(xName)) + Math.abs(tx);
-    element.setAttribute(xName, newX.toString());
-    const newY = Number(element.getAttribute(yName)) + Math.abs(ty);
-    element.setAttribute(yName, newY.toString());
-  });
+  Object.values(elementsWrapper.children).forEach((element) =>
+    translateElement(element as SVGGraphicsElement, tx, ty)
+  );
 };
 
 const resizeFactor = (size: number, zoom: number) =>
@@ -34,7 +52,7 @@ export const resizeSvg = ({
   height,
 }: {
   zoomableRef: React.RefObject<ZoomableRef>;
-  elementsWrapper: SVGGraphicsElement;
+  elementsWrapper: SVGGElement;
   setSvgSize: React.Dispatch<React.SetStateAction<DOMRectReadOnly | undefined>>;
   zoom: number;
   width: number;

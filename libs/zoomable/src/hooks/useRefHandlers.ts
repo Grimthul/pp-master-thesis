@@ -28,7 +28,7 @@ export const useRefHandlers = ({
     getChild() {
       return childRef.current;
     },
-    getMousePoint(event: React.MouseEvent) {
+    getMousePoint(event: React.MouseEvent | MouseEvent) {
       if (!wrapperRect || !childRef.current) return new DOMPointReadOnly();
       const { x: childX, y: childY } = childRef.current.getBoundingClientRect();
       const { tx, ty } = {

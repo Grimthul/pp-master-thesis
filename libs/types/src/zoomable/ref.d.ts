@@ -1,6 +1,8 @@
-import type { MouseEvent } from 'react';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 
-export type GetMousePoint = (event: MouseEvent) => DOMPointReadOnly;
+export type GetMousePoint = (
+  event: ReactMouseEvent | MouseEvent
+) => DOMPointReadOnly;
 
 export interface ZoomableRef {
   getChild(): HTMLElement | undefined;

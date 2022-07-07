@@ -39,7 +39,7 @@ export const onDrop = ({
   event: React.DragEvent;
   zoomableRef: React.RefObject<ZoomableRef>;
   svg: SVGSVGElement | undefined;
-  elementsWrapper: SVGGraphicsElement | null;
+  elementsWrapper: SVGGElement | null;
   zoom: number;
   dragOffset: { tx: number; ty: number };
   setSvgSize: React.Dispatch<React.SetStateAction<DOMRectReadOnly | undefined>>;
@@ -65,6 +65,7 @@ export const onDrop = ({
     elementCopy.setAttribute(yName, newY.toString());
   }
 
+  elementCopy.setAttribute('draggable', 'true');
   elementsWrapper.appendChild(elementCopy);
 
   const { width, height } = resizeDimensions(x, y, svg);
