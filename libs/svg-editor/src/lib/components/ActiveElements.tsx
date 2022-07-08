@@ -8,6 +8,7 @@ import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 interface PropsCommon {
   zoomable: ZoomableRef | null;
   setTool: React.Dispatch<React.SetStateAction<Tool>>;
+  setUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   zoom: number;
 }
 
@@ -43,6 +44,8 @@ interface Controls {
   SW: Control;
   W: Control;
 }
+
+const PRIMARY_BUTTON = 1;
 
 const ActiveElement = ({
   element,
@@ -124,7 +127,7 @@ const ActiveElement = ({
 
 export const ActiveElements = (props: PropsActiveElements) => {
   const { elements, ...common } = props;
-  const { setTool, zoomable } = common;
+  const { setTool, setUpdating, zoomable } = common;
   const [dragging, setDragging] = React.useState(false);
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
   const [elementPosition, setElementPosition] =
@@ -140,8 +143,8 @@ export const ActiveElements = (props: PropsActiveElements) => {
    * incorrect.
    * Difference between starting positions and current mouse position must be used instead.
    */
-  React.useEffect(() => {
-    const startDragging = (event: MouseEvent) => {
+  const startDrag = React.useCallback(
+    (event: MouseEvent) => {
       const mouse = zoomable?.getMousePoint(event);
       if (mouse && event.target !== zoomable?.getChild()) {
         setMouseOffsets(
@@ -156,11 +159,26 @@ export const ActiveElements = (props: PropsActiveElements) => {
           })
         );
       }
-
       setDragging(true);
+      setUpdating(true);
+    },
+    [elements, setUpdating, zoomable]
+  );
+
+  React.useEffect(() => {
+    const startDragging = (event: MouseEvent) => {
+      startDrag(event);
     };
 
     const drag = (event: MouseEvent) => {
+      // handle drag right away after click
+      if (
+        !dragging &&
+        elements.includes(event.target as SVGGraphicsElement) &&
+        event.buttons === PRIMARY_BUTTON
+      ) {
+        startDrag(event);
+      }
       if (dragging && zoomable && mouseOffsets) {
         const mouse = zoomable.getMousePoint(event);
         elements.forEach((element, i) => {
@@ -175,6 +193,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     const stopDragging = () => {
       setMouseOffsets(undefined);
       setDragging(false);
+      setUpdating(false);
     };
 
     elements.forEach((element) =>
@@ -190,7 +209,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       document.removeEventListener('mousemove', drag);
       document.removeEventListener('mouseup', stopDragging);
     };
-  }, [dragging, elements, mouseOffsets, zoomable]);
+  }, [dragging, elements, mouseOffsets, setUpdating, startDrag, zoomable]);
 
   return (
     <>

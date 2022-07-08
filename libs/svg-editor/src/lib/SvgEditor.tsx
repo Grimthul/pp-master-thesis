@@ -53,6 +53,8 @@ export const SvgEditor = React.forwardRef(
     const [activeElements, setActiveElements] = React.useState<
       SVGGraphicsElement[]
     >([]);
+    const [activeElementUpdating, setActiveElementUpdating] =
+      React.useState(false);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [guideLines, setGuideLines] = React.useState<{
       mouse: DOMPointReadOnly;
@@ -176,6 +178,7 @@ export const SvgEditor = React.forwardRef(
                 zoomable={zoomableRef.current}
                 zoom={zoom}
                 setTool={setTool}
+                setUpdating={setActiveElementUpdating}
               />
             )}
           </ActivableSvg>
