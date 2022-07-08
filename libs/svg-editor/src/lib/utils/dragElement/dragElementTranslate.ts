@@ -4,7 +4,7 @@ import {
   getInitialElementGuideLines,
   isGuideLineFinite,
 } from './guideLines';
-import { SidesX, SidesY } from '../../enums/dragImage';
+import { SidesX, SidesY } from '../../enums/dragElement';
 import { getAlignedElements } from './alignedElements';
 import {
   offsetX,
@@ -14,9 +14,9 @@ import {
 } from './generators';
 import type {
   AlignedElement,
-  DragImageTranslate,
+  DragElementTranslate,
   ElementGuideLines,
-} from '../../types/dragImage';
+} from '../../types/dragElement';
 
 import { roundToMultiple } from '@pp-master-thesis/utils';
 import { ElementType } from '@pp-master-thesis/enums';
@@ -28,11 +28,11 @@ import type { SvgEditorOptions } from '@pp-master-thesis/types';
 const farthestElementsInAxes = (
   mouse: DOMPointReadOnly,
   snapRadius: number,
-  dragImage: Element,
+  dragElement: Element,
   svgElements: SVGGraphicsElement[]
 ): ElementGuideLines => {
-  const dragImageWidth = dragImage.clientWidth;
-  const dragImageHeight = dragImage.clientHeight;
+  const dragElementWidth = dragElement.clientWidth;
+  const dragElementHeight = dragElement.clientHeight;
 
   return svgElements
     .filter((element) => {
@@ -49,15 +49,15 @@ const farthestElementsInAxes = (
         mouse.y - elementY,
         elementWidth,
         elementHeight || elementWidth,
-        dragImageWidth,
-        dragImageHeight,
+        dragElementWidth,
+        dragElementHeight,
         snapRadius
       );
       const alignedElementsKeys = Object.keys(alignedElements) as Array<
         keyof AlignedElement
       >;
       /**
-       * Processes alignedElements, for each side of dragImage chooses the farthest one.
+       * Processes alignedElements, for each side of dragElement chooses the farthest one.
        */
       return alignedElementsKeys.reduce((updatedGuideLines, key) => {
         if (alignedElements[key]) {
@@ -66,14 +66,14 @@ const farthestElementsInAxes = (
           const addWidth = isY ? elementWidth : 0;
           const valX = isX
             ? roundToMultiple(
-                mouse.x + offsetX(dragImageWidth)[key as SidesX],
+                mouse.x + offsetX(dragElementWidth)[key as SidesX],
                 elementWidth / 2,
                 elementX
               )
             : elementX;
           const valY = isY
             ? roundToMultiple(
-                mouse.y + offsetY(dragImageHeight)[key as SidesY],
+                mouse.y + offsetY(dragElementHeight)[key as SidesY],
                 (elementHeight || elementWidth) / 2,
                 elementY
               )
@@ -92,16 +92,16 @@ const farthestElementsInAxes = (
 const elementsSnapTranslate = (
   mouse: DOMPointReadOnly,
   elements: SVGGraphicsElement[],
-  dragImage: Element,
+  dragElement: Element,
   snapRadius = 0
-): DragImageTranslate => {
+): DragElementTranslate => {
   if (elements?.length) {
-    const dragImageWidth = dragImage.clientWidth;
-    const dragImageHeight = dragImage.clientHeight;
+    const dragElementWidth = dragElement.clientWidth;
+    const dragElementHeight = dragElement.clientHeight;
     const farthestElements = farthestElementsInAxes(
       mouse,
       snapRadius,
-      dragImage,
+      dragElement,
       elements
     );
     const farthestElementsKeys = Object.keys(farthestElements) as Array<
@@ -118,13 +118,13 @@ const elementsSnapTranslate = (
             isX && !isFinite(acc.tx)
               ? guideLine.start.x -
                 mouse.x -
-                offsetX(dragImageWidth)[key as SidesX]
+                offsetX(dragElementWidth)[key as SidesX]
               : acc.tx,
           ty:
             isY && !isFinite(acc.ty)
               ? guideLine.start.y -
                 mouse.y -
-                offsetY(dragImageHeight)[key as SidesY]
+                offsetY(dragElementHeight)[key as SidesY]
               : acc.ty,
           guideLines: acc.guideLines,
         };
@@ -142,24 +142,24 @@ const gridSnapTranslate = (mouse: DOMPointReadOnly, gap: number) => {
 };
 
 /**
- * Counts the nearest coordinates translation to snap dragImage/Element that
- * will be added onDrop event.
+ * Counts the nearest coordinates translation to snap dragImage that
+ * will be added onDrop event or to snap element that is being updated with cursor drag.
  * Snap is controlled by SvgEditorOptions - it can be either to
  * already present Element in SvgEditor or guideLines.
  * Element snapping has priority.
  * Also returns guide lines coords, if there are any.
  */
-export const dragImageTranslate = (
+export const dragElementTranslate = (
   mouse: DOMPointReadOnly,
-  dragImage: Element,
+  dragElement: Element,
   options: SvgEditorOptions,
   elementsWrapper: SVGGElement
-): DragImageTranslate => {
+): DragElementTranslate => {
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(
         mouse,
         Array.from(elementsWrapper?.children || []) as SVGGraphicsElement[],
-        dragImage,
+        dragElement,
         options?.elements?.snapRadius
       )
     : zeroTranslate();

@@ -1,3 +1,3 @@
-export * from './dragImage';
+export * from './dragElement';
 export * from './utils';
 export * from './svg';

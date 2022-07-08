@@ -1,4 +1,4 @@
-import { SidesX } from '../enums/dragImage';
+import { SidesX } from '../enums/dragElement';
 
 import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 import { ElementType, GridLinesStyle } from '@pp-master-thesis/enums';

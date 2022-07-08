@@ -1,8 +1,8 @@
-import { SidesX, SidesY } from '../../enums/dragImage';
-import type { DragImageTranslate } from '../../types/dragImage';
+import { SidesX, SidesY } from '../../enums/dragElement';
+import type { DragElementTranslate } from '../../types/dragElement';
 
-export const zeroTranslate = (): DragImageTranslate => ({ tx: 0, ty: 0 });
-export const infiniteTranslate = (): DragImageTranslate => ({
+export const zeroTranslate = (): DragElementTranslate => ({ tx: 0, ty: 0 });
+export const infiniteTranslate = (): DragElementTranslate => ({
   tx: Infinity,
   ty: Infinity,
   guideLines: {},

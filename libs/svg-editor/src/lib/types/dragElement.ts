@@ -1,4 +1,4 @@
-import { ElementSide } from '../enums/dragImage';
+import { ElementSide } from '../enums/dragElement';
 
 export type ElementSide = typeof ElementSide;
 
@@ -13,7 +13,7 @@ export type AlignedElement = {
   [key in keyof ElementSide]: boolean;
 };
 
-export interface DragImageTranslate {
+export interface DragElementTranslate {
   tx: number;
   ty: number;
   guideLines?: ElementGuideLines;

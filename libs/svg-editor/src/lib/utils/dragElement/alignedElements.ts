@@ -1,4 +1,4 @@
-import type { AlignedElement } from '../../types/dragImage';
+import type { AlignedElement } from '../../types/dragElement';
 
 const isInBounds = (bound: number) => (coord: number) =>
   coord >= -bound && coord <= bound;
@@ -15,15 +15,15 @@ const isAligned =
   };
 
 /**
- * Returns boolean for each side of dragImage that is aligned with some element in svg.
+ * Returns boolean for each side of dragElement that is aligned with some element in svg.
  */
 export const getAlignedElements = (
   xDiff: number,
   yDiff: number,
   elementWidth: number,
   elementHeight: number | undefined,
-  dragImageWidth: number,
-  dragImageHeight: number,
+  dragElementWidth: number,
+  dragElementHeight: number,
   snapRadius: number
 ): AlignedElement => {
   const isAlignedX = isAligned(xDiff, elementWidth, snapRadius);
@@ -34,10 +34,10 @@ export const getAlignedElements = (
   );
   return {
     left: isAlignedX(),
-    middleX: isAlignedX(dragImageWidth / 2),
-    right: isAlignedX(dragImageWidth),
+    middleX: isAlignedX(dragElementWidth / 2),
+    right: isAlignedX(dragElementWidth),
     top: isAlignedY(),
-    middleY: isAlignedY(dragImageHeight / 2),
-    bottom: isAlignedY(dragImageHeight),
+    middleY: isAlignedY(dragElementHeight / 2),
+    bottom: isAlignedY(dragElementHeight),
   };
 };

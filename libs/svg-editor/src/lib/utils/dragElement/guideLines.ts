@@ -1,4 +1,4 @@
-import type { GuideLineCoords } from '../../types/dragImage';
+import type { GuideLineCoords } from '../../types/dragElement';
 
 export const isGuideLineFinite = (guideLine: GuideLineCoords) =>
   isFinite(guideLine.start.x) &&

@@ -1,4 +1,4 @@
-import { updateDragImage } from '../utils/';
+import { updateDragElement } from '../utils/';
 
 export const onDragEnter = (dragImage: HTMLDivElement, zoom: number) =>
-  updateDragImage(dragImage, zoom);
+  updateDragElement(dragImage, zoom);

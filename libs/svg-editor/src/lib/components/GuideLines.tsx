@@ -4,12 +4,12 @@ import { keyCoords } from '../utils';
 
 import { roundToMultiple, strokeWidthByZoom } from '@pp-master-thesis/utils';
 
-import type { ElementGuideLines } from '../types/dragImage';
+import type { ElementGuideLines } from '../types/dragElement';
 
 interface Props {
   mouse: DOMPointReadOnly;
   guideLines: ElementGuideLines;
-  dragImage: HTMLDivElement;
+  dragElement: HTMLDivElement;
   zoom: number;
   gridGap?: boolean;
   snapRadius?: number;
@@ -19,13 +19,13 @@ interface MouseDiffProps {
   mouse: number;
   start: number;
   end: number;
-  dragImageSize: number;
+  dragElementSize: number;
 }
 
 export const GuideLines = ({
   mouse,
   guideLines,
-  dragImage,
+  dragElement,
   zoom,
   gridGap,
   snapRadius,
@@ -34,8 +34,8 @@ export const GuideLines = ({
     keyof ElementGuideLines
   >;
   const strokeWidth = React.useMemo(() => strokeWidthByZoom(zoom), [zoom]);
-  const dragImageWidth = dragImage.clientWidth;
-  const dragImageHeight = dragImage.clientHeight;
+  const dragElementWidth = dragElement.clientWidth;
+  const dragElementHeight = dragElement.clientHeight;
 
   const mouseSnap = React.useCallback(
     (coord: number, snapRadius: number, shouldRound?: boolean) =>
@@ -44,8 +44,8 @@ export const GuideLines = ({
   );
 
   const mouseDiff = React.useCallback(
-    ({ mouse, start, end, dragImageSize }: MouseDiffProps) =>
-      mouse > start ? mouse - start : Math.abs(end - mouse - dragImageSize),
+    ({ mouse, start, end, dragElementSize }: MouseDiffProps) =>
+      mouse > start ? mouse - start : Math.abs(end - mouse - dragElementSize),
     []
   );
 
@@ -63,9 +63,9 @@ export const GuideLines = ({
     (
       mouse: number,
       start: number,
-      dragImageSize: number,
+      dragElementSize: number,
       isGuideLineCoord?: boolean
-    ) => (isGuideLineCoord ? start : Math.min(mouse + dragImageSize, start)),
+    ) => (isGuideLineCoord ? start : Math.min(mouse + dragElementSize, start)),
     []
   );
 
@@ -85,7 +85,7 @@ export const GuideLines = ({
             mouse: mouseSnapX,
             start: start.x,
             end: end.x,
-            dragImageSize: dragImageWidth,
+            dragElementSize: dragElementWidth,
           },
           isX
         );
@@ -94,13 +94,13 @@ export const GuideLines = ({
             mouse: mouseSnapY,
             start: start.y,
             end: end.y,
-            dragImageSize: dragImageHeight,
+            dragElementSize: dragElementHeight,
           },
           isY
         );
 
-        const x = coord(mouseSnapX, start.x, dragImageWidth, isX);
-        const y = coord(mouseSnapY, start.y, dragImageHeight, isY);
+        const x = coord(mouseSnapX, start.x, dragElementWidth, isX);
+        const y = coord(mouseSnapY, start.y, dragElementHeight, isY);
 
         return (
           <rect
