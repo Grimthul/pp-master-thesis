@@ -59,15 +59,16 @@ export const ActivableSvg = React.forwardRef(
     const onMouseDown = React.useCallback(
       (event: React.MouseEvent) => {
         const target = event.target as SVGGraphicsElement;
-        if (
-          !event.ctrlKey &&
-          !activeElements.includes(target) &&
-          !isEditor(target)
-        ) {
-          setActiveElements([target]);
-        }
         if (target === svgRef.current) setSelectorStarts(event);
         else setClicked(true);
+        if (
+          event.ctrlKey ||
+          !svgRef.current?.firstChild?.contains(target) || // to disable activating element controls
+          activeElements.includes(target) ||
+          isEditor(target)
+        )
+          return;
+        setActiveElements([target]);
       },
       [activeElements, isEditor, setActiveElements, setSelectorStarts]
     );
@@ -132,7 +133,7 @@ export const ActivableSvg = React.forwardRef(
     const onMouseUp = (event: React.MouseEvent) => {
       const target = event.target as SVGGraphicsElement;
       // editor
-      if (isEditor(target) && activeElements.length) {
+      if (!event.ctrlKey && isEditor(target) && activeElements.length) {
         setActiveElements([]);
       }
       // elements
