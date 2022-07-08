@@ -5,3 +5,5 @@ export const ADD_ELEMENT_SIZE = 40;
 
 export const ID_EDITOR = 'svg-editor';
 export const ID_DROPPABLE = 'droppable';
+
+export const PRIMARY_BUTTON = 1;

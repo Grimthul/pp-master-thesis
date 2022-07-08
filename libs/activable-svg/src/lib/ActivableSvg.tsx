@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
+import { PRIMARY_BUTTON } from '@pp-master-thesis/constants';
 import type { GetMousePoint } from '@pp-master-thesis/types';
 
 import './ActivableSvg.scss';
@@ -8,6 +9,7 @@ import './ActivableSvg.scss';
 type Props = React.SVGProps<SVGSVGElement> & {
   activeElements: SVGGraphicsElement[];
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
+  setSelecting: React.Dispatch<React.SetStateAction<boolean>>;
   getMousePoint: GetMousePoint | undefined;
   zoom: number;
 };
@@ -20,6 +22,7 @@ export const ActivableSvg = React.forwardRef(
       getMousePoint,
       children,
       zoom,
+      setSelecting,
       ...props
     }: Props,
     ref: React.ForwardedRef<SVGSVGElement>
@@ -34,6 +37,11 @@ export const ActivableSvg = React.forwardRef(
     const [selectorStart, setSelectorStart] =
       React.useState<DOMPointReadOnly>();
     const [mouseDragPos, setMouseDragPos] = React.useState<DOMPointReadOnly>();
+
+    React.useEffect(() => {
+      if (selectorStart) setSelecting(true);
+      else setSelecting(false);
+    }, [selectorStart, setSelecting]);
 
     const mousePosition = React.useCallback(
       (event: React.MouseEvent) =>
@@ -75,7 +83,7 @@ export const ActivableSvg = React.forwardRef(
 
     const onMouseMove = React.useCallback(
       (event: React.MouseEvent) => {
-        setMoved(true);
+        if (event.buttons === PRIMARY_BUTTON) setMoved(true);
         if (!event.ctrlKey && selectorStart && getMousePoint) {
           setMouseDragPos(mousePosition(event));
           setMouseDragPosInSvg(getMousePoint(event));
@@ -133,7 +141,12 @@ export const ActivableSvg = React.forwardRef(
     const onMouseUp = (event: React.MouseEvent) => {
       const target = event.target as SVGGraphicsElement;
       // editor
-      if (!event.ctrlKey && isEditor(target) && activeElements.length) {
+      if (
+        !event.ctrlKey &&
+        isEditor(target) &&
+        activeElements.length &&
+        !mouseDragPos
+      ) {
         setActiveElements([]);
       }
       // elements

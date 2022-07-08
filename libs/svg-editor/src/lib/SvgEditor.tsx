@@ -54,8 +54,10 @@ export const SvgEditor = React.forwardRef(
       SVGGraphicsElement[]
     >([]);
     const [activeElementUpdating, setActiveElementUpdating] =
-      React.useState(false);
+      React.useState(false); // for guide lines on element drag&drop and MAYBE on transforming by mouse
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
+    const [activeElementSelecting, setActiveElementSelecting] =
+      React.useState(false);
     const [guideLines, setGuideLines] = React.useState<{
       mouse: DOMPointReadOnly;
       guideLines: ElementGuideLines;
@@ -159,6 +161,7 @@ export const SvgEditor = React.forwardRef(
             activeElements={activeElements}
             setActiveElements={setActiveElements}
             getMousePoint={zoomableRef.current?.getMousePoint}
+            setSelecting={setActiveElementSelecting}
             zoom={zoom}
           >
             <g ref={elementsWrapperRef} />
@@ -177,6 +180,7 @@ export const SvgEditor = React.forwardRef(
                 elements={activeElements}
                 zoomable={zoomableRef.current}
                 zoom={zoom}
+                disableDrag={activeElementSelecting}
                 setTool={setTool}
                 setUpdating={setActiveElementUpdating}
               />
