@@ -130,8 +130,9 @@ export const ActiveElements = (props: PropsActiveElements) => {
   const { setTool, setUpdating, zoomable } = common;
   const [dragging, setDragging] = React.useState(false);
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
-  const [elementPosition, setElementPosition] =
-    React.useState<ElementPosition>();
+  const [elementPositions, setElementPositions] = React.useState<
+    ElementPosition[]
+  >([]);
 
   React.useEffect(
     () => (dragging ? setTool(Tool.PAN) : setTool(Tool.NONE)),
@@ -180,12 +181,13 @@ export const ActiveElements = (props: PropsActiveElements) => {
         startDrag(event);
       }
       if (dragging && zoomable && mouseOffsets) {
+        setElementPositions([]);
         const mouse = zoomable.getMousePoint(event);
         elements.forEach((element, i) => {
           const x = mouse.x - mouseOffsets[i].x;
           const y = mouse.y - mouseOffsets[i].y;
           translateElementTo(element, x, y);
-          setElementPosition({ x, y });
+          setElementPositions((prevPositions) => [...prevPositions, { x, y }]);
         });
       }
     };
@@ -213,10 +215,10 @@ export const ActiveElements = (props: PropsActiveElements) => {
 
   return (
     <>
-      {elements.map((element) => (
+      {elements.map((element, i) => (
         <ActiveElement
           element={element}
-          elementPosition={elementPosition}
+          elementPosition={elementPositions?.[i]}
           {...common}
         />
       ))}
