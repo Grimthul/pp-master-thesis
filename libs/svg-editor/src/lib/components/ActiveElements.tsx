@@ -56,16 +56,21 @@ const ActiveElementRotate = ({
     x: initX,
     y: initY,
     width,
+    height,
   } = React.useMemo(() => element.getBBox(), [element]);
+  const [offsetX, offsetY] = isCircular(element)
+    ? [width / 2, height / 2]
+    : [0, 0];
+
   const { x, y } = elementPosition || { x: initX, y: initY };
   return (
     <image
-      x={x + width}
-      y={y - 10}
+      x={x + width - offsetX}
+      y={y - 10 - offsetY}
       style={{
         cursor: Tool.ROTATE,
-        transformOrigin: `${x + width + 5}px ${
-          y - 10 * strokeWidthByZoom(zoom)
+        transformOrigin: `${x + width - offsetX + 5}px ${
+          y - offsetY - 10 * strokeWidthByZoom(zoom)
         }px`,
       }}
       transform={`scale(${Math.min(1, strokeWidthByZoom(zoom) * 2)})`}
@@ -89,6 +94,9 @@ const ActiveElementResize = ({
   const strokeWidth = strokeWidthByZoom(zoom);
   const circleStrokeWidth = 4 * strokeWidth;
   const fill = React.useMemo(() => '#d17127', []);
+  const [offsetX, offsetY] = isCircular(element)
+    ? [width / 2, height / 2]
+    : [0, 0];
   const controls = React.useMemo<Controls>(
     () => ({
       NW: {
@@ -129,8 +137,8 @@ const ActiveElementResize = ({
           <circle
             key={key}
             r={circleStrokeWidth}
-            cx={x + width * modifierX}
-            cy={y + height * modifierY}
+            cx={x - offsetX + width * modifierX}
+            cy={y - offsetY + height * modifierY}
             fill={fill}
             style={{ cursor: Tool[`${key}_RESIZE`] }}
           ></circle>
@@ -154,8 +162,17 @@ export const ActiveElements = (props: PropsActiveElements) => {
       setElementsPosition([]);
       elements.forEach((element, i) => {
         const bBox = element.getBBox();
-        const x = mouse && mouseOffsets ? mouse.x - mouseOffsets[i].x : bBox.x;
-        const y = mouse && mouseOffsets ? mouse.y - mouseOffsets[i].y : bBox.y;
+        const [offsetX, offsetY] = isCircular(element)
+          ? [bBox.width / 2, bBox.height / 2]
+          : [0, 0];
+        const x =
+          mouse && mouseOffsets
+            ? mouse.x - mouseOffsets[i].x
+            : bBox.x + offsetX;
+        const y =
+          mouse && mouseOffsets
+            ? mouse.y - mouseOffsets[i].y
+            : bBox.y + offsetY;
         translateElementTo(element, x, y);
         setElementsPosition((prevPositions) => [...prevPositions, { x, y }]);
       });
@@ -163,9 +180,9 @@ export const ActiveElements = (props: PropsActiveElements) => {
     [elements]
   );
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     updateElementsPosition();
-  }, [elements, updateElementsPosition]);
+  }, [updateElementsPosition]);
 
   React.useEffect(
     () => (dragging ? setTool(Tool.PAN) : setTool(Tool.NONE)),
