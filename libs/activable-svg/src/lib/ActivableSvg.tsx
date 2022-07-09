@@ -151,7 +151,7 @@ export const ActivableSvg = React.forwardRef(
       }
       // elements
       else if (!activeElements.includes(target) || activeElements.length > 1) {
-        if (clicked && !moved) {
+        if (svgRef.current?.firstChild?.contains(target) && clicked && !moved) {
           setActiveElements([target]);
         }
         if (selectorStart && mouseDragPos) {

@@ -256,6 +256,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     <>
       {elements.map((element, i) => (
         <ActiveElementResize
+          key={i}
           element={element}
           elementPosition={elementsPosition?.[i]}
           {...common}
