@@ -149,9 +149,11 @@ const ActiveElementResize = ({
     }),
     []
   );
-  const controlsKeys = Array.from(Object.keys(controls)) as Array<
-    keyof Controls
-  >;
+  const controlsKeys = React.useMemo(
+    () => Array.from(Object.keys(controls)) as Array<keyof Controls>,
+    [controls]
+  );
+
   const onMouseDown = (event: React.MouseEvent, key: string) => {
     if (!zoomable) return;
     setDirection(key);
@@ -161,8 +163,10 @@ const ActiveElementResize = ({
   };
 
   React.useEffect(() => {
+    // const oppositeDirection = (direction: keyof Controls) =>
+    //   controlsKeys[(controlsKeys.indexOf(direction) + 4) % controlsKeys.length];
+
     const onMouseMove = (event: MouseEvent) => {
-      console.log(tool, isResizing(tool));
       if (!zoomable || !startMouse || !isResizing(tool)) return;
       const { modifierX, modifierY } =
         controls[direction as keyof Controls].direction;
@@ -178,17 +182,18 @@ const ActiveElementResize = ({
       const ty =
         (modifierY < 0 ? -(end.y - start.y) : end.y - start.y) - tyOffset;
 
-      console.log(start, tx, ty);
-
       const { widthName, heightName } = nodeSizeNames(element);
       const { xName, yName } = nodeCoordsInEditor(element);
-      modifierX &&
-        element.setAttribute(widthName, Math.max(1, width + tx).toString());
+      const newWidth = Math.max(1, width + tx);
+      const newHeight = Math.max(1, height + ty);
+      if (newWidth === 1 || newHeight === 1) {
+        // setDirection(oppositeDirection(direction as keyof Controls));
+        return;
+      }
+
+      modifierX && element.setAttribute(widthName, newWidth.toString());
       modifierY &&
-        element.setAttribute(
-          heightName || widthName,
-          Math.max(1, height + ty).toString()
-        );
+        element.setAttribute(heightName || widthName, newHeight.toString());
       modifierX < 0 &&
         !circular &&
         element.setAttribute(xName, (x - tx).toString());
@@ -199,7 +204,6 @@ const ActiveElementResize = ({
     };
 
     const onMouseUp = () => {
-      console.log('CLEANUP');
       setStartMouse(undefined);
       setDirection('');
       setTranslate(new DOMPointReadOnly(0, 0));
@@ -214,6 +218,7 @@ const ActiveElementResize = ({
     };
   }, [
     controls,
+    // controlsKeys,
     direction,
     element,
     setTool,
@@ -309,7 +314,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     };
 
     const drag = (event: MouseEvent) => {
-      if (disableDrag) return;
+      if (disableDrag || event.ctrlKey) return;
       // handle drag right away after click
       if (
         !isPanning(tool) &&
