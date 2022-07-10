@@ -163,6 +163,7 @@ export const SvgEditor = React.forwardRef(
             getMousePoint={zoomableRef.current?.getMousePoint}
             setSelecting={setActiveElementSelecting}
             zoom={zoom}
+            tool={tool}
           >
             <g ref={elementsWrapperRef} />
             {props.dragImageRef?.current && (
@@ -181,6 +182,7 @@ export const SvgEditor = React.forwardRef(
                 zoomable={zoomableRef.current}
                 zoom={zoom}
                 disableDrag={activeElementSelecting}
+                tool={tool}
                 setTool={setTool}
                 setUpdating={setActiveElementUpdating}
               />

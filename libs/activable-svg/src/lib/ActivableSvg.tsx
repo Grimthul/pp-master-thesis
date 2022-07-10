@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { PRIMARY_BUTTON } from '@pp-master-thesis/constants';
+import { Tool } from '@pp-master-thesis/enums';
 import type { GetMousePoint } from '@pp-master-thesis/types';
 
 import './ActivableSvg.scss';
@@ -12,6 +13,7 @@ type Props = React.SVGProps<SVGSVGElement> & {
   setSelecting: React.Dispatch<React.SetStateAction<boolean>>;
   getMousePoint: GetMousePoint | undefined;
   zoom: number;
+  tool: Tool;
 };
 
 export const ActivableSvg = React.forwardRef(
@@ -23,6 +25,7 @@ export const ActivableSvg = React.forwardRef(
       children,
       zoom,
       setSelecting,
+      tool,
       ...props
     }: Props,
     ref: React.ForwardedRef<SVGSVGElement>
@@ -145,7 +148,8 @@ export const ActivableSvg = React.forwardRef(
         !event.ctrlKey &&
         isEditor(target) &&
         activeElements.length &&
-        !mouseDragPos
+        !mouseDragPos &&
+        tool === Tool.NONE
       ) {
         setActiveElements([]);
       }

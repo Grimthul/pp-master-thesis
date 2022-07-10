@@ -1,13 +1,13 @@
 import React from 'react';
-import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
+import { nodeSizeNames } from './utils';
 
 export const translateElementTo = (
   element: SVGGraphicsElement,
   x: number,
   y: number
 ) => {
-  const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
+  const { xName, yName } = nodeSizeNames(element);
   element.setAttribute(xName, x.toString());
   element.setAttribute(yName, y.toString());
 };
@@ -17,7 +17,7 @@ export const translateElement = (
   tx: number,
   ty: number
 ) => {
-  const { xName, yName } = ELEMENT_SIZE_ATTRIBUTES[element.nodeName];
+  const { xName, yName } = nodeSizeNames(element);
   const newX = Number(element.getAttribute(xName)) + tx;
   element.setAttribute(xName, newX.toString());
   const newY = Number(element.getAttribute(yName)) + ty;
