@@ -1,14 +1,5 @@
 import { SvgElementAttribute } from '@pp-master-thesis/enums';
 
-interface ElementSizeAttributes {
-  [key: string]: {
-    xName: string;
-    yName: string;
-    widthName: string;
-    heightName?: string;
-  };
-}
-
 interface SvgElementAttributes {
   baseAttrs: SvgElementAttribute[];
   additionalAttrs: SvgElementAttribute[];
@@ -22,15 +13,6 @@ interface DropdownAttributesValues {
 interface DropdownAttributes {
   [id: string]: DropdownAttributesValues;
 }
-
-export const ELEMENT_SIZE_ATTRIBUTES: ElementSizeAttributes = {
-  rect: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
-  image: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
-  svg: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
-  circle: { xName: 'cx', yName: 'cy', widthName: 'r' },
-  ellipse: { xName: 'cx', yName: 'cy', widthName: 'rx', heightName: 'ry' },
-  text: { xName: 'x', yName: 'y', widthName: 'font-size' },
-};
 
 export const percentAttrs = [
   SvgElementAttribute.FILL_OPACITY,

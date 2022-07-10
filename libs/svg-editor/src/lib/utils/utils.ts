@@ -1,14 +1,31 @@
 import { SidesX } from '../enums/dragElement';
 
-import { ELEMENT_SIZE_ATTRIBUTES } from '@pp-master-thesis/constants';
 import { ElementType, GridLinesStyle } from '@pp-master-thesis/enums';
 
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
+
+interface ElementSizeAttributes {
+  [key: string]: {
+    xName: string;
+    yName: string;
+    widthName: string;
+    heightName?: string;
+  };
+}
 
 const GAP_DEFAULT_SIZE = 10;
 const ELEMENT_SNAP_RADIUS_MIN = 2;
 
 const CIRCULAR_ELEMENTS = [ElementType.CIRCLE, ElementType.ELLIPSE];
+
+const ELEMENT_SIZE_ATTRIBUTES: ElementSizeAttributes = {
+  rect: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
+  image: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
+  svg: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
+  circle: { xName: 'cx', yName: 'cy', widthName: 'r' },
+  ellipse: { xName: 'cx', yName: 'cy', widthName: 'rx', heightName: 'ry' },
+  text: { xName: 'x', yName: 'y', widthName: 'font-size' },
+};
 
 export const isCircular = (node: Element) =>
   CIRCULAR_ELEMENTS.includes(node.nodeName as ElementType);
@@ -51,8 +68,16 @@ export const nodeCoords = (
   };
 };
 
-export const nodeSize = (node: Element): { width: number; height?: number } => {
-  const { widthName, heightName } = ELEMENT_SIZE_ATTRIBUTES[node.nodeName];
+export const nodeSizeNames = (node: Element) =>
+  ELEMENT_SIZE_ATTRIBUTES[node.nodeName];
+
+export const nodeSize = (
+  node: Element
+): {
+  width: number;
+  height?: number;
+} => {
+  const { widthName, heightName } = nodeSizeNames(node);
   const width = Number(node.getAttribute(widthName));
   const height = heightName ? Number(node.getAttribute(heightName)) : undefined;
   return {

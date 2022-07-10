@@ -1,9 +1,5 @@
 import { keyCoords, nodeCoordsInEditor, nodeSize } from '../utils';
-import {
-  furtherGuideLineCoords,
-  getInitialElementGuideLines,
-  isGuideLineFinite,
-} from './guideLines';
+import { furtherGuideLineCoords, isGuideLineFinite } from './guideLines';
 import { SidesX, SidesY } from '../../enums/dragElement';
 import { getAlignedElements } from './alignedElements';
 import {
@@ -11,6 +7,7 @@ import {
   offsetY,
   infiniteTranslate,
   zeroTranslate,
+  getInitialElementGuideLines,
 } from './generators';
 import type {
   AlignedElement,

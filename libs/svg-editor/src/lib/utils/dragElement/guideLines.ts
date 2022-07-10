@@ -1,3 +1,4 @@
+import { getInitialGuideLinesCoords } from './generators';
 import type { GuideLineCoords } from '../../types/dragElement';
 
 export const isGuideLineFinite = (guideLine: GuideLineCoords) =>
@@ -5,19 +6,6 @@ export const isGuideLineFinite = (guideLine: GuideLineCoords) =>
   isFinite(guideLine.start.y) &&
   isFinite(guideLine.end.x) &&
   isFinite(guideLine.end.y);
-
-export const getInitialGuideLinesCoords = () => ({
-  start: new DOMPointReadOnly(Infinity, Infinity),
-  end: new DOMPointReadOnly(-Infinity, -Infinity),
-});
-export const getInitialElementGuideLines = () => ({
-  left: getInitialGuideLinesCoords(),
-  middleX: getInitialGuideLinesCoords(),
-  right: getInitialGuideLinesCoords(),
-  top: getInitialGuideLinesCoords(),
-  middleY: getInitialGuideLinesCoords(),
-  bottom: getInitialGuideLinesCoords(),
-});
 
 export const furtherGuideLineCoords = (
   current = getInitialGuideLinesCoords(),

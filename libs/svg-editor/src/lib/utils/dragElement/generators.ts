@@ -18,3 +18,16 @@ export const offsetY = (height: number) => ({
   [SidesY.middleY]: height / 2,
   [SidesY.bottom]: height,
 });
+
+export const getInitialGuideLinesCoords = () => ({
+  start: new DOMPointReadOnly(Infinity, Infinity),
+  end: new DOMPointReadOnly(-Infinity, -Infinity),
+});
+export const getInitialElementGuideLines = () => ({
+  left: getInitialGuideLinesCoords(),
+  middleX: getInitialGuideLinesCoords(),
+  right: getInitialGuideLinesCoords(),
+  top: getInitialGuideLinesCoords(),
+  middleY: getInitialGuideLinesCoords(),
+  bottom: getInitialGuideLinesCoords(),
+});
