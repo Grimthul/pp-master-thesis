@@ -10,7 +10,7 @@ export enum Tool {
   E_RESIZE = 'E-RESIZE',
   N_RESIZE = 'N-RESIZE',
   S_RESIZE = 'S-RESIZE',
-  ROTATE = 'CROSSHAIR',
+  PATH_MOVE_POINT = 'CROSSHAIR',
 }
 
 export enum ZoomDirection {

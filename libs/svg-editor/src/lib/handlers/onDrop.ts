@@ -65,7 +65,6 @@ export const onDrop = ({
     elementCopy.setAttribute(yName, newY.toString());
   }
 
-  elementCopy.setAttribute('draggable', 'true');
   elementsWrapper.appendChild(elementCopy);
 
   const { width, height } = resizeDimensions(x, y, svg);

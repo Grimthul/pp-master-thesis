@@ -1,6 +1,6 @@
 import { SidesX } from '../enums/dragElement';
 
-import { ElementType, GridLinesStyle } from '@pp-master-thesis/enums';
+import { ElementType, GridLinesStyle, Tool } from '@pp-master-thesis/enums';
 
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
@@ -101,3 +101,6 @@ export const nodeCoordsInEditor = (
 
 export const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
   key in SidesX ? { isX: true } : { isY: true };
+
+export const isResizing = (tool: Tool) => tool.includes('-RESIZE');
+export const isPanning = (tool: Tool) => tool === Tool.PAN;

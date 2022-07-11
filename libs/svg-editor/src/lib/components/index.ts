@@ -1,2 +1,2 @@
-export * from './ActiveElements';
+export * from './ActiveElements/ActiveElements';
 export * from './GuideLines';

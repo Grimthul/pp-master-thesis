@@ -1,15 +1,26 @@
 import React from 'react';
-import { ZoomableRef } from '@pp-master-thesis/types';
 import { nodeSizeNames } from './utils';
+import * as Path from '../shapes/path';
+
+import { ElementType } from '@pp-master-thesis/enums';
+import { ZoomableRef } from '@pp-master-thesis/types';
 
 export const translateElementTo = (
   element: SVGGraphicsElement,
   x: number,
   y: number
 ) => {
-  const { xName, yName } = nodeSizeNames(element);
-  element.setAttribute(xName, x.toString());
-  element.setAttribute(yName, y.toString());
+  if (element.nodeName === ElementType.PATH) {
+    const bBox = element.getBBox();
+    element.setAttribute(
+      'd',
+      Path.moveBy(element.getAttribute('d') || '', x - bBox.x, y - bBox.y)
+    );
+  } else {
+    const { xName, yName } = nodeSizeNames(element);
+    element.setAttribute(xName, x.toString());
+    element.setAttribute(yName, y.toString());
+  }
 };
 
 export const translateElement = (
