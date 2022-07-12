@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { isPanning, isResizing } from '../../utils';
-import type { PropsActiveElements } from './types';
+import { isPanning, isResizing, isPathMoving } from '../../utils';
+import type { PropsActiveElements } from '../../types/activeElements';
 
 import { ElementType, Tool } from '@pp-master-thesis/enums';
 import { isCircular, translateElementTo } from '../../utils';
@@ -102,6 +102,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       // handle drag right away after click
       if (
         !isPanning(tool) &&
+        !isPathMoving(tool) &&
         !isResizing(tool) &&
         elements.includes(event.target as SVGGraphicsElement) &&
         event.buttons === PRIMARY_BUTTON
@@ -150,7 +151,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       {!isPanning(tool) &&
         elements.map((element, i) =>
           element.nodeName === ElementType.PATH ? (
-            <PathControls element={element} {...common} />
+            <PathControls key={i} element={element} {...common} />
           ) : (
             <ActiveElementResize key={i} element={element} {...common} />
           )

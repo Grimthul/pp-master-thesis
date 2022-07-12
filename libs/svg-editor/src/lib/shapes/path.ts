@@ -1,16 +1,32 @@
-const moveCoords = (coords: string[], tx: number, ty: number) =>
-  coords
-    .map((coord, i) => (i % 2 === 0 ? Number(coord) + tx : Number(coord) + ty))
-    .join(' ');
+import { PathPoint } from '../types/path';
+
+const pathPointToString = (point: PathPoint) =>
+  `${point.command} ${point.x} ${point.y}`;
+
+const pathPoints = (d: string): PathPoint[] =>
+  d.split(/(?=[MZLHVCSQTAmzlhvcsqta])/g).map((group) => {
+    const [command, x, y] = group.trim().split(' ');
+    return {
+      command,
+      x: Number(x),
+      y: Number(y),
+    };
+  });
+
+const moveCoords = (point: PathPoint, tx: number, ty: number): PathPoint => ({
+  command: point.command,
+  x: point.x + tx,
+  y: point.y + ty,
+});
 
 const moveBy = (d: string, tx: number, ty: number): string =>
-  d
-    .split(/(?=[MZLHVCSQTAmzlhvcsqta])/g)
-    .map((group) => {
-      const [command, ...coords] = group.trim().split(' ');
-      if (command === command.toLowerCase()) return group;
-      return `${command} ${moveCoords(coords, tx, ty)}`;
+  pathPoints(d)
+    .map((point) => {
+      const newPoint = moveCoords(point, tx, ty);
+      if (newPoint.command === newPoint.command.toLowerCase()) return point;
+      return newPoint;
     })
+    .map(pathPointToString)
     .join(' ');
 
-export { moveBy };
+export { moveBy, pathPoints, pathPointToString };

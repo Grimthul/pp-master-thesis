@@ -80,6 +80,7 @@ export const Draggables = ({
           <path
             d={`M 0 ${ADD_ELEMENT_SIZE} L ${ADD_ELEMENT_SIZE} 0`}
             stroke="#000"
+            fill="none"
           />
         </svg>
       </DraggableSvgWithAttrs>

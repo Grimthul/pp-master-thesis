@@ -6,7 +6,7 @@ import {
   nodeCoordsInEditor,
   nodeSizeNames,
 } from '../../utils';
-import type { Controls, PropsActiveElement } from './types';
+import type { Controls, PropsActiveElement } from '../../types/activeElements';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { Tool } from '@pp-master-thesis/enums';
@@ -152,7 +152,7 @@ export const ActiveElementResize = ({
       {controlsKeys.map((key) => {
         const { modifierX, modifierY } = controls[key].coordsModifier;
         return (
-          (direction === '' || direction === key) && (
+          (direction === '' || direction === key || tool === Tool.NONE) && (
             <circle
               key={key}
               onMouseDown={(event) => onMouseDown(event, key)}
