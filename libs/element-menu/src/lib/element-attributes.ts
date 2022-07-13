@@ -1,24 +1,11 @@
 import { SvgElementAttribute } from '@pp-master-thesis/enums';
+import type { DropdownAttributes, SvgElementAttributes } from './types';
 
-interface SvgElementAttributes {
-  baseAttrs: SvgElementAttribute[];
-  additionalAttrs: SvgElementAttribute[];
-}
-
-interface DropdownAttributesValues {
-  values: string[];
-  defaultVal: string;
-}
-
-interface DropdownAttributes {
-  [id: string]: DropdownAttributesValues;
-}
-
-export const percentAttrs = [
+export const PERCENT_ATTRIBUTES = [
   SvgElementAttribute.FILL_OPACITY,
   SvgElementAttribute.STOP_OPACITY,
 ];
-export const numberAttrs = [
+export const NUMBER_ATTRIBUTES = [
   SvgElementAttribute.AMPLITUDE,
   SvgElementAttribute.AZIMUTH,
   SvgElementAttribute.BASE_FREQUENCY,
@@ -60,7 +47,7 @@ export const numberAttrs = [
   SvgElementAttribute.UNDERLINE_THICKNESS,
   SvgElementAttribute.Z,
 ];
-export const inputAttrs = [
+export const INPUT_ATTRIBUTES = [
   SvgElementAttribute.ATTRIBUTE_NAME,
   SvgElementAttribute.BEGIN,
   SvgElementAttribute.BY,
@@ -131,7 +118,7 @@ export const inputAttrs = [
   SvgElementAttribute.Y1,
   SvgElementAttribute.Y2,
 ];
-export const colorAttrs = [
+export const COLOR_ATTRIBUTES = [
   SvgElementAttribute.COLOR,
   SvgElementAttribute.FILL,
   SvgElementAttribute.FLOOD_COLOR,
@@ -139,29 +126,29 @@ export const colorAttrs = [
   SvgElementAttribute.STROKE,
 ];
 
-export const dropdownAttrs: DropdownAttributes = {
+export const DROPDOWN_ATTRIBUTES: DropdownAttributes = {
   [SvgElementAttribute.ACCUMULATE]: {
     values: ['', 'none', 'sum'],
-    defaultVal: '',
+    defaultValue: '',
   },
-  [SvgElementAttribute.ADDITIVE]: { values: [''], defaultVal: '' },
-  [SvgElementAttribute.ALIGNMENT_BASELINE]: { values: [''], defaultVal: '' },
-  [SvgElementAttribute.BASELINE_SHIFT]: { values: [''], defaultVal: '' },
-  [SvgElementAttribute.CLIP_PATH_UNITS]: { values: [''], defaultVal: '' },
-  [SvgElementAttribute.CLIP_RULE]: { values: [''], defaultVal: '' },
+  [SvgElementAttribute.ADDITIVE]: { values: [''], defaultValue: '' },
+  [SvgElementAttribute.ALIGNMENT_BASELINE]: { values: [''], defaultValue: '' },
+  [SvgElementAttribute.BASELINE_SHIFT]: { values: [''], defaultValue: '' },
+  [SvgElementAttribute.CLIP_PATH_UNITS]: { values: [''], defaultValue: '' },
+  [SvgElementAttribute.CLIP_RULE]: { values: [''], defaultValue: '' },
   [SvgElementAttribute.COLOR_INTERPOLATION]: {
     values: [''],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.COLOR_INTERPOLATION_FILTERS]: {
     values: [''],
-    defaultVal: '',
+    defaultValue: '',
   },
-  [SvgElementAttribute.CROSSORIGIN]: { values: [''], defaultVal: '' },
-  [SvgElementAttribute.CURSOR]: { values: [''], defaultVal: '' },
+  [SvgElementAttribute.CROSSORIGIN]: { values: [''], defaultValue: '' },
+  [SvgElementAttribute.CURSOR]: { values: [''], defaultValue: '' },
   [SvgElementAttribute.DIRECTION]: {
     values: ['', 'ltr', 'rtl'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.DOMINANT_BASELINE]: {
     values: [
@@ -176,91 +163,91 @@ export const dropdownAttrs: DropdownAttributes = {
       'hanging',
       'text-top',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.DUR]: {
     values: ['', 'media', 'indefinite'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.EDGEMODE]: {
     values: ['', 'duplicate', 'wrap', 'none'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.FILL_RULE]: {
     values: ['', 'nonzero', 'evenodd'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.FILTER_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.FONT_FAMILY]: {
     values: ['', 'sans-serif', 'monospace', 'cursive', 'fantasy'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.FONT_STYLE]: {
     values: ['', 'normal', 'italic', 'oblique'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.FONT_WEIGHT]: {
     values: ['', 'normal', 'bold', 'bolder', 'lighter'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.GRADIENT_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.IMAGE_RENDERING]: {
     values: ['', 'auto', 'optimizeSpeed', 'optimizeQuality'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.LENGTH_ADJUST]: {
     values: ['', 'spacing', 'spacingAndGlyphs'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.LETTER_SPACING]: {
     values: ['', 'normal'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.MARKER_UNITS]: {
     values: ['', 'userSpaceOnUse', 'strokeWidth'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.MASK_CONTENT_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.MASK_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.METHOD]: {
     values: ['', 'align', 'stretch'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.OPERATOR]: {
     values: ['', 'over', 'in', 'out', 'atop', 'xor', 'lighter', 'arithmetic'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.ORIENT]: {
     values: ['', 'auto', 'auto-start-reverse'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.OVERFLOW]: {
     values: ['', 'visible', 'hidden', 'scroll', 'auto'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PAINT_ORDER]: {
     values: ['', 'normal', 'fill', 'stroke', 'markers'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PATTERN_CONTENT_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PATTERN_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.POINTER_EVENTS]: {
     values: [
@@ -276,11 +263,11 @@ export const dropdownAttrs: DropdownAttributes = {
       'all',
       'none',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PRESERVE_ALPHA]: {
     values: ['', 'true', 'false'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PRESERVE_ASPECT_RATIO]: {
     values: [
@@ -316,80 +303,80 @@ export const dropdownAttrs: DropdownAttributes = {
       'xMidYMax slice',
       'xMaxYMax slice',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.PRIMITIVE_UNITS]: {
     values: ['', 'userSpaceOnUse', 'objectBoundingBox'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.REF_X]: {
     values: ['', 'left', 'center', 'right'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.REF_Y]: {
     values: ['', 'top', 'center', 'bottom'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.REPEAT_COUNT]: {
     values: ['', 'indefinite'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.REPEAT_DUR]: {
     values: ['', 'indefinite'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.RESTART]: {
     values: ['', 'always', 'whenNotActive', 'never'],
-    defaultVal: '',
+    defaultValue: '',
   },
   // weird documentation
   // [SvgElementAttribute.ROTATE]: {
   //   values: ["", "auto", "auto-reverse"],
-  //   defaultVal: "",
+  //   defaultValue: "",
   // },
   // [SvgElementAttribute.RX]: {
   //   values: ["", "auto"],
-  //   defaultVal: "",
+  //   defaultValue: "",
   // },
   // [SvgElementAttribute.RY]: {
   //   values: ["", "auto"],
-  //   defaultVal: "",
+  //   defaultValue: "",
   // },
   [SvgElementAttribute.SHAPE_RENDERING]: {
     values: ['', 'auto', 'optimizeSpeed', 'crispEdges', 'geometricPrecision'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.SPACING]: {
     values: ['', 'auto', 'exact'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.SPREAD_METHOD]: {
     values: ['', 'pad', 'reflect', 'repeat'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.STITCH_TILES]: {
     values: ['', 'noStitch', 'stitch'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.STOP_COLOR]: {
     values: ['', 'currentcolor'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.STROKE_LINECAP]: {
     values: ['', 'butt', 'round', 'square'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.STROKE_LINEJOIN]: {
     values: ['', 'arcs', 'bevel', 'miter', 'miter-clip', 'round'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.TARGET]: {
     values: ['', '_self', '_parent', '_top', '_blank'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.TEXT_ANCHOR]: {
     values: ['', 'start', 'middle', 'end'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.TEXT_RENDERING]: {
     values: [
@@ -399,7 +386,7 @@ export const dropdownAttrs: DropdownAttributes = {
       'optimizeLegibility',
       'geometricPrecision',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.UNICODE_BIDI]: {
     values: [
@@ -411,7 +398,7 @@ export const dropdownAttrs: DropdownAttributes = {
       'isolate-override',
       'plaintext',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.VECTOR_EFFECT]: {
     values: [
@@ -422,113 +409,119 @@ export const dropdownAttrs: DropdownAttributes = {
       'non-rotation',
       'fixed-position',
     ],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.VISIBILITY]: {
     values: ['', 'visible', 'hidden', 'collapse'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.WORD_SPACING]: {
     values: ['', 'normal'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.WRITING_MODE]: {
     values: ['', 'horizontal-tb', 'vertical-rl', 'vertical-lr'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.X_CHANNEL_SELECTOR]: {
     values: ['', 'R', 'G', 'B', 'A'],
-    defaultVal: '',
+    defaultValue: '',
   },
   [SvgElementAttribute.Y_CHANNEL_SELECTOR]: {
     values: ['', 'R', 'G', 'B', 'A'],
-    defaultVal: '',
+    defaultValue: '',
   },
 };
 
-const commonAttrs: SvgElementAttributes = {
-  baseAttrs: [SvgElementAttribute.FILL],
-  additionalAttrs: [
+const COMMON_ATTRIBUTES: SvgElementAttributes = {
+  baseAttributes: [SvgElementAttribute.FILL],
+  additionalAttributes: [
     SvgElementAttribute.FILL_OPACITY,
     SvgElementAttribute.OPACITY,
   ],
 };
 
-const textAttrs: SvgElementAttributes = {
-  baseAttrs: [
+const TEXT_ATTRIBUTES: SvgElementAttributes = {
+  baseAttributes: [
     SvgElementAttribute.X,
     SvgElementAttribute.Y,
     SvgElementAttribute.FONT_FAMILY,
     SvgElementAttribute.FONT_SIZE,
-    ...commonAttrs.baseAttrs,
+    ...COMMON_ATTRIBUTES.baseAttributes,
   ],
-  additionalAttrs: [
+  additionalAttributes: [
     SvgElementAttribute.DX,
     SvgElementAttribute.DY,
     SvgElementAttribute.ROTATE,
     SvgElementAttribute.LETTER_SPACING,
-    ...commonAttrs.additionalAttrs,
+    ...COMMON_ATTRIBUTES.additionalAttributes,
   ],
 };
 
-const circularAttributes: SvgElementAttributes = {
-  baseAttrs: [
+const CIRCULAR_ATTRIBUTES: SvgElementAttributes = {
+  baseAttributes: [
     SvgElementAttribute.CX,
     SvgElementAttribute.CY,
-    ...commonAttrs.baseAttrs,
+    ...COMMON_ATTRIBUTES.baseAttributes,
   ],
-  additionalAttrs: [
+  additionalAttributes: [
     SvgElementAttribute.PATH_LENGTH,
-    ...commonAttrs.additionalAttrs,
+    ...COMMON_ATTRIBUTES.additionalAttributes,
   ],
 };
 
-const polyAttributes: SvgElementAttributes = {
-  baseAttrs: [SvgElementAttribute.POINTS, ...commonAttrs.baseAttrs],
-  additionalAttrs: [
+const POLY_ATTRIBUTES: SvgElementAttributes = {
+  baseAttributes: [
+    SvgElementAttribute.POINTS,
+    ...COMMON_ATTRIBUTES.baseAttributes,
+  ],
+  additionalAttributes: [
     SvgElementAttribute.PATH_LENGTH,
-    ...commonAttrs.additionalAttrs,
+    ...COMMON_ATTRIBUTES.additionalAttributes,
   ],
 };
 
-export const elementAttributes: { [id: string]: SvgElementAttributes } = {
+export const ELEMENT_ATTRIBUTES: { [id: string]: SvgElementAttributes } = {
   circle: {
-    baseAttrs: [SvgElementAttribute.R, ...circularAttributes.baseAttrs],
-    additionalAttrs: [...circularAttributes.additionalAttrs],
+    baseAttributes: [
+      SvgElementAttribute.R,
+      ...CIRCULAR_ATTRIBUTES.baseAttributes,
+    ],
+    additionalAttributes: [...CIRCULAR_ATTRIBUTES.additionalAttributes],
   },
   ellipse: {
-    baseAttrs: [
+    baseAttributes: [
       SvgElementAttribute.RX,
       SvgElementAttribute.RY,
-      ...circularAttributes.baseAttrs,
+      ...CIRCULAR_ATTRIBUTES.baseAttributes,
     ],
-    additionalAttrs: [...circularAttributes.additionalAttrs],
+    additionalAttributes: [...CIRCULAR_ATTRIBUTES.additionalAttributes],
   },
   path: {
-    baseAttrs: [...commonAttrs.baseAttrs],
-    additionalAttrs: [
+    baseAttributes: [...COMMON_ATTRIBUTES.baseAttributes],
+    additionalAttributes: [
       SvgElementAttribute.PATH_LENGTH,
-      ...commonAttrs.additionalAttrs,
+      ...COMMON_ATTRIBUTES.additionalAttributes,
     ],
   },
-  polygon: polyAttributes,
-  polyline: polyAttributes,
+  polygon: POLY_ATTRIBUTES,
+  polyline: POLY_ATTRIBUTES,
   rect: {
-    baseAttrs: [
+    baseAttributes: [
       SvgElementAttribute.X,
       SvgElementAttribute.Y,
       SvgElementAttribute.WIDTH,
       SvgElementAttribute.HEIGHT,
       SvgElementAttribute.RX,
       SvgElementAttribute.RY,
-      ...commonAttrs.baseAttrs,
+      ...COMMON_ATTRIBUTES.baseAttributes,
     ],
-    additionalAttrs: [
+    additionalAttributes: [
       SvgElementAttribute.PATH_LENGTH,
-      ...commonAttrs.additionalAttrs,
+      ...COMMON_ATTRIBUTES.additionalAttributes,
     ],
   },
-  text: textAttrs,
+  text: TEXT_ATTRIBUTES,
   // textPath:,
-  tspan: textAttrs,
+  tspan: TEXT_ATTRIBUTES,
 };

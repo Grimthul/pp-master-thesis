@@ -46,7 +46,7 @@ import { PathControls } from './PathControls';
 
 export const ActiveElements = (props: PropsActiveElements) => {
   const { elements, disableDrag, ...common } = props;
-  const { setTool, setUpdating, zoomable, tool } = common;
+  const { setTool, zoomable, tool } = common;
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
 
   const updateElementsPosition = React.useCallback(
@@ -87,9 +87,8 @@ export const ActiveElements = (props: PropsActiveElements) => {
         );
       }
       setTool(Tool.PAN);
-      setUpdating(true);
     },
-    [elements, setTool, setUpdating, zoomable]
+    [elements, setTool, zoomable]
   );
 
   React.useEffect(() => {
@@ -118,7 +117,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
     const stopDragging = () => {
       setMouseOffsets(undefined);
       setTool(Tool.NONE);
-      setUpdating(false);
     };
 
     elements.forEach((element) =>
@@ -139,7 +137,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
     elements,
     mouseOffsets,
     setTool,
-    setUpdating,
     startDrag,
     tool,
     updateElementsPosition,

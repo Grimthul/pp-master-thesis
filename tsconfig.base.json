@@ -15,12 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@pp-master-thesis/activable-svg": [
-        "libs/activable-svg/src/index.ts"
-      ],
+      "@pp-master-thesis/activable-svg": ["libs/activable-svg/src/index.ts"],
       "@pp-master-thesis/constants": ["libs/constants/src/index.ts"],
       "@pp-master-thesis/draggable": ["libs/draggable/src/index.ts"],
       "@pp-master-thesis/droppable": ["libs/droppable/src/index.ts"],
+      "@pp-master-thesis/element-menu": ["libs/element-menu/src/index.ts"],
       "@pp-master-thesis/enums": ["libs/enums/src/index.ts"],
       "@pp-master-thesis/matrix": ["libs/matrix/src/index.ts"],
       "@pp-master-thesis/svg-editor": ["libs/svg-editor/src/index.ts"],

@@ -4,7 +4,6 @@ import type { ZoomableRef } from '@pp-master-thesis/types';
 export interface PropsCommon {
   zoomable: ZoomableRef | null;
   setTool: React.Dispatch<React.SetStateAction<Tool>>;
-  setUpdating: React.Dispatch<React.SetStateAction<boolean>>;
   zoom: number;
   tool: Tool;
 }

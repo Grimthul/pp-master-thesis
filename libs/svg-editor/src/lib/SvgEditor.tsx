@@ -29,6 +29,7 @@ import './SvgEditor.scss';
 interface Props {
   options?: SvgEditorOptions;
   dragImageRef?: React.RefObject<HTMLDivElement>;
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
 }
 
 const defaultGuideLines = () => ({
@@ -53,8 +54,6 @@ export const SvgEditor = React.forwardRef(
     const [activeElements, setActiveElements] = React.useState<
       SVGGraphicsElement[]
     >([]);
-    const [activeElementUpdating, setActiveElementUpdating] =
-      React.useState(false); // for guide lines on element drag&drop and MAYBE on transforming by mouse
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [activeElementSelecting, setActiveElementSelecting] =
       React.useState(false);
@@ -62,6 +61,7 @@ export const SvgEditor = React.forwardRef(
       mouse: DOMPointReadOnly;
       guideLines: ElementGuideLines;
     }>(defaultGuideLines());
+    const propsSetActiveElements = props.setActiveElements;
     const options = React.useMemo(
       () => mergeWithDefaultOptions(props.options),
       [props.options]
@@ -92,9 +92,8 @@ export const SvgEditor = React.forwardRef(
     }, [options.size]);
 
     React.useEffect(() => {
-      console.log(activeElements);
-      // handle active element - e.g. show active element menu
-    }, [activeElements]);
+      propsSetActiveElements(activeElements);
+    }, [activeElements, propsSetActiveElements]);
 
     useBackgroundImageGrid(options, zoom, setBackgroundImage);
     useRefHandlers(ref, zoomableRef.current);
@@ -102,7 +101,6 @@ export const SvgEditor = React.forwardRef(
 
     return (
       <Droppable
-        id={ID_DROPPABLE}
         droppableRef={droppableRef}
         onDrop={(event) => {
           onDrop({
@@ -148,7 +146,6 @@ export const SvgEditor = React.forwardRef(
           style={{ cursor: tool }}
         >
           <ActivableSvg
-            id={ID_EDITOR}
             xmlns="http://www.w3.org/2000/svg"
             width={svgSize?.width}
             height={svgSize?.height}
@@ -184,7 +181,6 @@ export const SvgEditor = React.forwardRef(
                 disableDrag={activeElementSelecting}
                 tool={tool}
                 setTool={setTool}
-                setUpdating={setActiveElementUpdating}
               />
             )}
           </ActivableSvg>

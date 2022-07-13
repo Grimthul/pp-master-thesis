@@ -10,7 +10,6 @@ interface Props {
 }
 
 export const Droppable = ({
-  id,
   droppableRef,
   onDrop,
   onDragEnter,
@@ -24,7 +23,7 @@ export const Droppable = ({
 
   return (
     <div
-      id={id}
+      className={'droppable'}
       ref={droppableRef}
       onDrop={onDrop}
       onDragOver={(event) => {
