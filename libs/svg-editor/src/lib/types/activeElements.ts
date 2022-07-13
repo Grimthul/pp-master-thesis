@@ -6,6 +6,8 @@ export interface PropsCommon {
   setTool: React.Dispatch<React.SetStateAction<Tool>>;
   zoom: number;
   tool: Tool;
+  updatedFromOutside: number;
+  setUpdated: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export interface ElementPosition {

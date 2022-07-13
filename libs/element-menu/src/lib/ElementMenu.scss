@@ -1,7 +1,25 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.element-menu {
+  &__title {
+    font-size: 1rem;
+  }
+  &__attribute {
+    position: relative;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    align-items: center;
+  }
+  &__input,
+  &__dropdown {
+    height: 1rem;
+    max-width: 60%;
+  }
+  &__input-suffix {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    right: 22px;
+  }
+}

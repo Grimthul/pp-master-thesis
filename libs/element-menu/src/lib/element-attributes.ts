@@ -3,6 +3,7 @@ import type { DropdownAttributes, SvgElementAttributes } from './types';
 
 export const PERCENT_ATTRIBUTES = [
   SvgElementAttribute.FILL_OPACITY,
+  SvgElementAttribute.OPACITY,
   SvgElementAttribute.STOP_OPACITY,
 ];
 export const NUMBER_ATTRIBUTES = [
@@ -14,9 +15,11 @@ export const NUMBER_ATTRIBUTES = [
   SvgElementAttribute.DIVISOR,
   SvgElementAttribute.ELEVATION,
   SvgElementAttribute.EXPONENT,
+  SvgElementAttribute.FILL_OPACITY,
   SvgElementAttribute.FLOOD_OPACITY,
   SvgElementAttribute.FONT_SIZE_ADJUST,
   SvgElementAttribute.INTERCEPT,
+  SvgElementAttribute.HEIGHT,
   SvgElementAttribute.K1,
   SvgElementAttribute.K2,
   SvgElementAttribute.K3,
@@ -31,10 +34,13 @@ export const NUMBER_ATTRIBUTES = [
   SvgElementAttribute.POINTS_AT_Y,
   SvgElementAttribute.POINTS_AT_Z,
   SvgElementAttribute.ROTATE,
+  SvgElementAttribute.RX,
+  SvgElementAttribute.RY,
   SvgElementAttribute.SCALE,
   SvgElementAttribute.SEED,
   SvgElementAttribute.SPECULAR_CONSTANT,
   SvgElementAttribute.SPECULAR_EXPONENT,
+  SvgElementAttribute.STOP_OPACITY,
   SvgElementAttribute.STRIKETHROUGH_POSITION,
   SvgElementAttribute.STRIKETHROUGH_THICKNESS,
   SvgElementAttribute.STROKE_MITERLIMIT,
@@ -45,6 +51,9 @@ export const NUMBER_ATTRIBUTES = [
   SvgElementAttribute.TO,
   SvgElementAttribute.UNDERLINE_POSITION,
   SvgElementAttribute.UNDERLINE_THICKNESS,
+  SvgElementAttribute.WIDTH,
+  SvgElementAttribute.X,
+  SvgElementAttribute.Y,
   SvgElementAttribute.Z,
 ];
 export const INPUT_ATTRIBUTES = [
@@ -67,7 +76,6 @@ export const INPUT_ATTRIBUTES = [
   SvgElementAttribute.FX,
   SvgElementAttribute.FY,
   SvgElementAttribute.HREF,
-  SvgElementAttribute.HEIGHT,
   SvgElementAttribute.ID,
   SvgElementAttribute.KERNEL_MATRIX,
   SvgElementAttribute.KEY_POINTS,
@@ -91,8 +99,6 @@ export const INPUT_ATTRIBUTES = [
   SvgElementAttribute.R,
   SvgElementAttribute.RADIUS,
   SvgElementAttribute.RESULT,
-  SvgElementAttribute.RX,
-  SvgElementAttribute.RY,
   SvgElementAttribute.START_OFFSET,
   SvgElementAttribute.STD_DEVIATION,
   SvgElementAttribute.STROKE_DASHARRAY,
@@ -109,12 +115,9 @@ export const INPUT_ATTRIBUTES = [
   SvgElementAttribute.TYPE,
   SvgElementAttribute.VALUES,
   SvgElementAttribute.VIEW_BOX,
-  SvgElementAttribute.WIDTH,
-  SvgElementAttribute.X,
   SvgElementAttribute.X1,
   SvgElementAttribute.X2,
   SvgElementAttribute.XML_LANG,
-  SvgElementAttribute.Y,
   SvgElementAttribute.Y1,
   SvgElementAttribute.Y2,
 ];
@@ -434,7 +437,12 @@ export const DROPDOWN_ATTRIBUTES: DropdownAttributes = {
 };
 
 const COMMON_ATTRIBUTES: SvgElementAttributes = {
-  baseAttributes: [SvgElementAttribute.FILL],
+  baseAttributes: [
+    SvgElementAttribute.STROKE,
+    SvgElementAttribute.FILL,
+    SvgElementAttribute.FILL_OPACITY,
+    SvgElementAttribute.OPACITY,
+  ],
   additionalAttributes: [
     SvgElementAttribute.FILL_OPACITY,
     SvgElementAttribute.OPACITY,
@@ -465,7 +473,7 @@ const CIRCULAR_ATTRIBUTES: SvgElementAttributes = {
     ...COMMON_ATTRIBUTES.baseAttributes,
   ],
   additionalAttributes: [
-    SvgElementAttribute.PATH_LENGTH,
+    // SvgElementAttribute.PATH_LENGTH,
     ...COMMON_ATTRIBUTES.additionalAttributes,
   ],
 };
@@ -476,7 +484,7 @@ const POLY_ATTRIBUTES: SvgElementAttributes = {
     ...COMMON_ATTRIBUTES.baseAttributes,
   ],
   additionalAttributes: [
-    SvgElementAttribute.PATH_LENGTH,
+    // SvgElementAttribute.PATH_LENGTH,
     ...COMMON_ATTRIBUTES.additionalAttributes,
   ],
 };
@@ -500,7 +508,7 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgElementAttributes } = {
   path: {
     baseAttributes: [...COMMON_ATTRIBUTES.baseAttributes],
     additionalAttributes: [
-      SvgElementAttribute.PATH_LENGTH,
+      // SvgElementAttribute.PATH_LENGTH,
       ...COMMON_ATTRIBUTES.additionalAttributes,
     ],
   },
@@ -517,7 +525,7 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgElementAttributes } = {
       ...COMMON_ATTRIBUTES.baseAttributes,
     ],
     additionalAttributes: [
-      SvgElementAttribute.PATH_LENGTH,
+      // SvgElementAttribute.PATH_LENGTH,
       ...COMMON_ATTRIBUTES.additionalAttributes,
     ],
   },

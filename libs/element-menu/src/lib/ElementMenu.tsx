@@ -7,42 +7,38 @@ import './ElementMenu.scss';
 
 interface Props {
   elements: SVGGraphicsElement[];
+  updatedFromOutside: number;
+  setUpdated: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export function ElementMenu({ elements }: Props) {
-  React.useEffect(() => {
-    console.log('menu', elements);
-  }, [elements]);
+export const ElementMenu = ({
+  elements,
+  updatedFromOutside,
+  setUpdated,
+}: Props) => {
+  const element = elements.length === 1 ? elements[0] : undefined;
 
   // when elements is empty, maybe use the svg attributes?
   // when elements is populated with more than 1 element, use their intersection?
-  const attributes: SvgElementAttributes =
-    elements.length === 1
-      ? ELEMENT_ATTRIBUTES[elements[0].nodeName]
-      : { baseAttributes: [], additionalAttributes: [] };
-  // const attributes = defAttributes && {
-  //   baseAttrs: defAttributes.baseAttrs,
-  //   additionalAttrs: filterArray(
-  //     union(
-  //       defAttributes.additionalAttrs,
-  //       getAttrNames(active?.attributes) || []
-  //     ),
-  //     defAttributes.baseAttrs
-  //   ),
-  // };
+  const attributes: SvgElementAttributes = element
+    ? ELEMENT_ATTRIBUTES[elements[0].nodeName]
+    : { baseAttributes: [], additionalAttributes: [] };
 
   return (
     <div className="element-menu">
       <div>
-        <h2>Attributes:</h2>
-        <Attributes attributes={attributes.baseAttributes} />
-      </div>
-      <div>
-        <h2>Additional Attributes:</h2>
-        <Attributes attributes={attributes.additionalAttributes} />
+        {element && (
+          <>
+            <h2 className="element-menu__title">Attributes:</h2>
+            <Attributes
+              attributes={attributes.baseAttributes}
+              element={element}
+              updatedFromOutside={updatedFromOutside}
+              setUpdated={setUpdated}
+            />
+          </>
+        )}
       </div>
     </div>
   );
-}
-
-export default ElementMenu;
+};

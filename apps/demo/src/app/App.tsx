@@ -25,6 +25,8 @@ const App = () => {
   const [activeElements, setActiveElements] = React.useState<
     SVGGraphicsElement[]
   >([]);
+  const [editorUpdated, setEditorUpdated] = React.useState(0);
+  const [elementUpdated, setElementUpdated] = React.useState(0);
 
   const zoomOptions: ZoomOptions = React.useMemo(
     () => ({
@@ -111,9 +113,15 @@ const App = () => {
         options={editorOptions}
         dragImageRef={dragImageRef}
         setActiveElements={setActiveElements}
+        updatedFromOutside={elementUpdated}
+        setUpdated={setEditorUpdated}
       />
 
-      <ElementMenu elements={activeElements} />
+      <ElementMenu
+        elements={activeElements}
+        updatedFromOutside={editorUpdated}
+        setUpdated={setElementUpdated}
+      />
     </div>
   );
 };

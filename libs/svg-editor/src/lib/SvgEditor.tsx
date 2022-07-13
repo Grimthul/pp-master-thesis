@@ -10,9 +10,7 @@ import {
 import { ActiveElements, GuideLines } from './components/';
 
 import type { ElementGuideLines } from './types/dragElement';
-
 import { ActivableSvg } from '@pp-master-thesis/activable-svg';
-import { ID_DROPPABLE, ID_EDITOR } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
 import { Zoomable } from '@pp-master-thesis/zoomable';
 import { Tool } from '@pp-master-thesis/enums';
@@ -30,6 +28,8 @@ interface Props {
   options?: SvgEditorOptions;
   dragImageRef?: React.RefObject<HTMLDivElement>;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
+  updatedFromOutside: number;
+  setUpdated: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const defaultGuideLines = () => ({
@@ -181,6 +181,8 @@ export const SvgEditor = React.forwardRef(
                 disableDrag={activeElementSelecting}
                 tool={tool}
                 setTool={setTool}
+                updatedFromOutside={props.updatedFromOutside}
+                setUpdated={props.setUpdated}
               />
             )}
           </ActivableSvg>

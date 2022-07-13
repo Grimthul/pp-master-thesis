@@ -17,6 +17,7 @@ export const ActiveElementResize = ({
   zoom,
   tool,
   setTool,
+  setUpdated,
 }: PropsActiveElement) => {
   const [startMouse, setStartMouse] = React.useState<DOMPointReadOnly>();
   const [startBbox, setStartBbox] = React.useState<DOMRectReadOnly>(() =>
@@ -27,6 +28,7 @@ export const ActiveElementResize = ({
   );
   const [direction, setDirection] = React.useState('');
   const { x, y, width, height } = element.getBBox();
+
   const strokeWidth = strokeWidthByZoom(zoom);
   const circleStrokeWidth = 4 * strokeWidth;
   const fill = React.useMemo(() => '#d17127', []);
@@ -123,10 +125,13 @@ export const ActiveElementResize = ({
     };
 
     const onMouseUp = () => {
-      setStartMouse(undefined);
-      setDirection('');
-      setTranslate(new DOMPointReadOnly(0, 0));
-      setTool(Tool.NONE);
+      if (startMouse) {
+        setStartMouse(undefined);
+        setDirection('');
+        setTranslate(new DOMPointReadOnly(0, 0));
+        setTool(Tool.NONE);
+        setUpdated((prevValue) => prevValue + 1);
+      }
     };
 
     document.addEventListener('mousemove', onMouseMove);
@@ -137,10 +142,10 @@ export const ActiveElementResize = ({
     };
   }, [
     controls,
-    // controlsKeys,
     direction,
     element,
     setTool,
+    setUpdated,
     startBbox,
     startMouse,
     tool,
