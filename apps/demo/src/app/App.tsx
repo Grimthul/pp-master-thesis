@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Draggables } from './components/';
 
 import { SvgEditor } from '@pp-master-thesis/svg-editor';

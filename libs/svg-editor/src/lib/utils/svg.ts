@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { nodeSizeNames } from './utils';
 import * as Path from '../shapes/path';
 

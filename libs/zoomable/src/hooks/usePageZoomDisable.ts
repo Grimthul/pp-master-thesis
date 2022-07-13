@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 // disabling page zoom on wheel
 export const usePageZoomDisable = (
