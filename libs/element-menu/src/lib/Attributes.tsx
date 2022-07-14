@@ -59,12 +59,14 @@ const Attribute = ({
   }, [elements, elementsValues, updatedFromOutside]);
 
   React.useEffect(() => {
-    values.forEach((value, i) => {
-      if (value !== elements[i].getAttribute(attribute) && value !== '') {
+    elements.forEach((element, i) => {
+      if (values[i] !== element.getAttribute(attribute) && values[i] !== '') {
         setUpdated((prevValue) => prevValue + 1);
-        elements[i].setAttribute(
+        element.setAttribute(
           attribute,
-          isPercent ? (Number(value) / percentModifier).toString() : value
+          isPercent
+            ? (Number(values[i]) / percentModifier).toString()
+            : values[i]
         );
       }
     });
@@ -108,6 +110,7 @@ export const Attributes = ({
     <>
       {attributesWithDefault.map((attribute, i) => (
         <Attribute
+          key={attribute.attribute + i}
           attributeWithDefault={attribute}
           elements={elements}
           updatedFromOutside={updatedFromOutside}

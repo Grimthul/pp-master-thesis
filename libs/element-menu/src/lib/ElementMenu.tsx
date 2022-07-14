@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Attributes } from './Attributes';
 import { ELEMENT_ATTRIBUTES } from './element-attributes';
 
-import type { SvgAttributeWithDefault } from './types';
-
 import './ElementMenu.scss';
 
 interface Props {
@@ -17,26 +15,30 @@ export const ElementMenu = ({
   updatedFromOutside,
   setUpdated,
 }: Props) => {
-  const attributes: SvgAttributeWithDefault[] = [
-    ...new Set(
-      elements.flatMap((element) => ELEMENT_ATTRIBUTES[element.nodeName])
-    ),
-  ];
-
   return (
     <div className="element-menu">
       <div>
-        {elements && (
+        {elements.length ? (
           <>
             <h2 className="element-menu__title">Attributes:</h2>
             <Attributes
-              attributesWithDefault={attributes}
+              attributesWithDefault={
+                elements.length > 1
+                  ? elements
+                      .map((element) => ELEMENT_ATTRIBUTES[element.nodeName])
+                      .reduce((a, b) =>
+                        a.filter((attr1) =>
+                          b.some((attr2) => attr2.attribute === attr1.attribute)
+                        )
+                      )
+                  : ELEMENT_ATTRIBUTES[elements[0].nodeName]
+              }
               elements={elements}
               updatedFromOutside={updatedFromOutside}
               setUpdated={setUpdated}
             />
           </>
-        )}
+        ) : null}
       </div>
     </div>
   );

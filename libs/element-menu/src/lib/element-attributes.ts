@@ -65,7 +65,7 @@ export const DROPDOWN_ATTRIBUTES: DropdownAttributes = {
 
 const COMMON_ATTRIBUTES: SvgAttributeWithDefault[] = [
   { attribute: SvgAttribute.STROKE, defaultValue: '' },
-  { attribute: SvgAttribute.FILL, defaultValue: '#000000' },
+  { attribute: SvgAttribute.FILL, defaultValue: '' },
   { attribute: SvgAttribute.OPACITY, defaultValue: '100' },
 ];
 
