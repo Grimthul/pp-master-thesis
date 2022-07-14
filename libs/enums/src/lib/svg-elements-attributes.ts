@@ -21,6 +21,7 @@ export enum SvgAttribute {
   STROKE = 'stroke',
   SCALE = 'scale',
   TEXT_ANCHOR = 'text-anchor',
+  TEXT_LENGTH = 'textLength',
   VISIBILITY = 'visibility',
   WIDTH = 'width',
   WORD_SPACING = 'word-spacing',

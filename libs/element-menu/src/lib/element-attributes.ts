@@ -9,22 +9,21 @@ export const PERCENT_ATTRIBUTES = [
 export const NUMBER_ATTRIBUTES = [
   SvgAttribute.CX,
   SvgAttribute.CY,
+  SvgAttribute.DISPLAY,
+  SvgAttribute.DX,
+  SvgAttribute.DY,
   SvgAttribute.FILL_OPACITY,
+  SvgAttribute.FONT_SIZE,
   SvgAttribute.HEIGHT,
   SvgAttribute.OPACITY,
   SvgAttribute.R,
   SvgAttribute.RX,
   SvgAttribute.RY,
   SvgAttribute.SCALE,
+  SvgAttribute.TEXT_LENGTH,
   SvgAttribute.WIDTH,
   SvgAttribute.X,
   SvgAttribute.Y,
-];
-export const INPUT_ATTRIBUTES = [
-  SvgAttribute.DISPLAY,
-  SvgAttribute.DX,
-  SvgAttribute.DY,
-  SvgAttribute.FONT_SIZE,
 ];
 export const COLOR_ATTRIBUTES = [
   SvgAttribute.COLOR,
@@ -112,6 +111,7 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgAttributeWithDefault[] } = {
     ...COORDS_ATTRIBUTES,
     { attribute: SvgAttribute.FONT_FAMILY, defaultValue: '' },
     { attribute: SvgAttribute.FONT_SIZE, defaultValue: '' },
+    { attribute: SvgAttribute.TEXT_LENGTH, defaultValue: 'none' },
     ...COMMON_ATTRIBUTES,
     { attribute: SvgAttribute.FILL_OPACITY, defaultValue: '100' },
   ],
