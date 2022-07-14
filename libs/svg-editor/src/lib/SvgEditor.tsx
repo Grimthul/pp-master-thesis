@@ -23,6 +23,7 @@ import type {
 } from '@pp-master-thesis/types';
 
 import './SvgEditor.scss';
+import { ID_DROPPABLE } from '@pp-master-thesis/constants';
 
 interface Props {
   options?: SvgEditorOptions;
@@ -101,6 +102,7 @@ export const SvgEditor = React.forwardRef(
 
     return (
       <Droppable
+        id={ID_DROPPABLE}
         droppableRef={droppableRef}
         onDrop={(event) => {
           onDrop({
