@@ -40,7 +40,7 @@ const Attribute = ({
   const [value, setValue] = React.useState(
     () => element.getAttribute(attribute) || (isNumber ? '0' : '')
   );
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     setValue(element.getAttribute(attribute) || '');
   }, [attribute, element, updatedFromOutside]);
 

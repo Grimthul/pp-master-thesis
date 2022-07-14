@@ -11,6 +11,8 @@ export const NUMBER_ATTRIBUTES = [
   SvgElementAttribute.AZIMUTH,
   SvgElementAttribute.BASE_FREQUENCY,
   SvgElementAttribute.BIAS,
+  SvgElementAttribute.CX,
+  SvgElementAttribute.CY,
   SvgElementAttribute.DIFFUSE_CONSTANT,
   SvgElementAttribute.DIVISOR,
   SvgElementAttribute.ELEVATION,
@@ -63,8 +65,7 @@ export const INPUT_ATTRIBUTES = [
   SvgElementAttribute.CALC_MODE,
   SvgElementAttribute.CLASS,
   SvgElementAttribute.CLIP_PATH,
-  SvgElementAttribute.CX,
-  SvgElementAttribute.CY,
+
   SvgElementAttribute.D,
   SvgElementAttribute.DISPLAY,
   SvgElementAttribute.DX,
