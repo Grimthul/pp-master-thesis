@@ -61,7 +61,11 @@ const Attribute = ({
 
   React.useEffect(() => {
     elements.forEach((element, i) => {
-      if (values[i] !== element.getAttribute(attribute) && values[i] !== '') {
+      if (
+        values[i] &&
+        values[i] !== element.getAttribute(attribute) &&
+        values[i] !== ''
+      ) {
         setUpdated((prevValue) => prevValue + 1);
         element.setAttribute(
           attribute,

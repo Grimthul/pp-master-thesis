@@ -86,6 +86,11 @@ const App = () => {
         >
           Create new editor with 1200x800 size
         </button>
+        <button
+          onClick={() => svgEditorRef.current?.changeEditorSize(1200, 800)}
+        >
+          Change editor size to 1200x800
+        </button>
         <span>Grid gap:</span>
         <input
           type="number"
