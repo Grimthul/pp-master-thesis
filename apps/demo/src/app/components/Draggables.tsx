@@ -36,7 +36,8 @@ export const Draggables = ({
             cy={ADD_ELEMENT_SIZE / 2}
             r={ADD_ELEMENT_SIZE / 2 - 0.5}
             stroke="#000000"
-            fill="none"
+            fill="#000000"
+            fillOpacity={0}
           />
         </svg>
       </DraggableSvgWithAttrs>
@@ -46,7 +47,8 @@ export const Draggables = ({
             width={ADD_ELEMENT_SIZE}
             height={ADD_ELEMENT_SIZE}
             stroke="#000000"
-            fill="none"
+            fill="#000000"
+            fillOpacity={0}
           />
         </svg>
       </DraggableSvgWithAttrs>
@@ -64,7 +66,8 @@ export const Draggables = ({
             rx={ADD_ELEMENT_SIZE / 2}
             ry={ADD_ELEMENT_SIZE / 4}
             stroke="#000000"
-            fill="none"
+            fill="#000000"
+            fillOpacity={0}
           />
         </svg>
       </DraggableSvgWithAttrs>
@@ -73,7 +76,8 @@ export const Draggables = ({
           <path
             d={`M 0 ${ADD_ELEMENT_SIZE} L ${ADD_ELEMENT_SIZE} 0`}
             stroke="#000000"
-            fill="none"
+            fill="#000000"
+            fillOpacity={0}
           />
         </svg>
       </DraggableSvgWithAttrs>
