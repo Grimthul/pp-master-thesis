@@ -1,8 +1,7 @@
 .zoomable svg {
   & rect,
   & circle,
-  & ellipse,
-  & text {
-    pointer-events: all;
+  & ellipse {
+    pointer-events: bounding-box;
   }
 }

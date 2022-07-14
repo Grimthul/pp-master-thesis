@@ -78,12 +78,14 @@ export const ActiveElements = (props: PropsActiveElements) => {
         setMouseOffsets(
           elements.map((element) => {
             const bBox = element.getBBox();
+            const newX = mouse.x - bBox.x;
+            const newY = mouse.y - bBox.y;
             if (isCircular(element))
               return new DOMPointReadOnly(
-                mouse.x - bBox.x - bBox.width / 2,
-                mouse.y - bBox.y - bBox.height / 2
+                newX - bBox.width / 2,
+                newY - bBox.height / 2
               );
-            return new DOMPointReadOnly(mouse.x - bBox.x, mouse.y - bBox.y);
+            return new DOMPointReadOnly(newX, newY);
           })
         );
       }

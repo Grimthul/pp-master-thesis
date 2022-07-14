@@ -1,4 +1,4 @@
-import type { SvgAttributeWithDefault, DropdownAttributes } from './types';
+import type { SvgAttributeWithDefault } from './types';
 
 import { SvgAttribute } from '@pp-master-thesis/enums';
 
@@ -13,14 +13,12 @@ export const NUMBER_ATTRIBUTES = [
   SvgAttribute.DX,
   SvgAttribute.DY,
   SvgAttribute.FILL_OPACITY,
-  SvgAttribute.FONT_SIZE,
   SvgAttribute.HEIGHT,
   SvgAttribute.OPACITY,
   SvgAttribute.R,
   SvgAttribute.RX,
   SvgAttribute.RY,
   SvgAttribute.SCALE,
-  SvgAttribute.TEXT_LENGTH,
   SvgAttribute.WIDTH,
   SvgAttribute.X,
   SvgAttribute.Y,
@@ -31,41 +29,11 @@ export const COLOR_ATTRIBUTES = [
   SvgAttribute.STROKE,
 ];
 
-export const DROPDOWN_ATTRIBUTES: DropdownAttributes = {
-  [SvgAttribute.FONT_FAMILY]: {
-    values: ['', 'sans-serif', 'monospace', 'cursive', 'fantasy'],
-    defaultValue: '',
-  },
-  [SvgAttribute.FONT_STYLE]: {
-    values: ['', 'normal', 'italic', 'oblique'],
-    defaultValue: '',
-  },
-  [SvgAttribute.FONT_WEIGHT]: {
-    values: ['', 'normal', 'bold', 'bolder', 'lighter'],
-    defaultValue: '',
-  },
-  [SvgAttribute.LETTER_SPACING]: {
-    values: ['', 'normal'],
-    defaultValue: '',
-  },
-  [SvgAttribute.TEXT_ANCHOR]: {
-    values: ['', 'start', 'middle', 'end'],
-    defaultValue: '',
-  },
-  [SvgAttribute.VISIBILITY]: {
-    values: ['', 'visible', 'hidden', 'collapse'],
-    defaultValue: '',
-  },
-  [SvgAttribute.WORD_SPACING]: {
-    values: ['', 'normal'],
-    defaultValue: '',
-  },
-};
-
 const COMMON_ATTRIBUTES: SvgAttributeWithDefault[] = [
   { attribute: SvgAttribute.STROKE, defaultValue: '' },
   { attribute: SvgAttribute.FILL, defaultValue: '' },
   { attribute: SvgAttribute.OPACITY, defaultValue: '100' },
+  { attribute: SvgAttribute.FILL_OPACITY, defaultValue: '0' },
 ];
 
 const CIRCULAR_ATTRIBUTES: SvgAttributeWithDefault[] = [
@@ -93,10 +61,7 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgAttributeWithDefault[] } = {
 
   ellipse: [...RADIUS_ATTRIBUTES, ...CIRCULAR_ATTRIBUTES],
 
-  path: [
-    ...COMMON_ATTRIBUTES,
-    { attribute: SvgAttribute.FILL_OPACITY, defaultValue: '0' },
-  ],
+  path: [...COMMON_ATTRIBUTES],
 
   rect: [
     ...COORDS_ATTRIBUTES,
@@ -104,15 +69,5 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgAttributeWithDefault[] } = {
     { attribute: SvgAttribute.HEIGHT, defaultValue: '1' },
     ...RADIUS_ATTRIBUTES,
     ...COMMON_ATTRIBUTES,
-    { attribute: SvgAttribute.FILL_OPACITY, defaultValue: '0' },
-  ],
-
-  text: [
-    ...COORDS_ATTRIBUTES,
-    { attribute: SvgAttribute.FONT_FAMILY, defaultValue: '' },
-    { attribute: SvgAttribute.FONT_SIZE, defaultValue: '' },
-    { attribute: SvgAttribute.TEXT_LENGTH, defaultValue: 'none' },
-    ...COMMON_ATTRIBUTES,
-    { attribute: SvgAttribute.FILL_OPACITY, defaultValue: '100' },
   ],
 };

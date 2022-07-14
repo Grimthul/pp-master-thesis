@@ -28,6 +28,5 @@ export enum ElementType {
   CIRCLE = 'circle',
   ELLIPSE = 'ellipse',
   RECTANGLE = 'rect',
-  TEXT = 'text',
   PATH = 'path',
 }

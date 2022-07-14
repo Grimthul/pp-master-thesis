@@ -69,13 +69,6 @@ export const Draggables = ({
         </svg>
       </DraggableSvgWithAttrs>
       <DraggableSvgWithAttrs>
-        <svg id="add-text" className="draggable__svg" height={18}>
-          <text x="0" y="16" fontSize={18} textLength={40}>
-            Text
-          </text>
-        </svg>
-      </DraggableSvgWithAttrs>
-      <DraggableSvgWithAttrs>
         <svg id="add-path" className="draggable__svg">
           <path
             d={`M 0 ${ADD_ELEMENT_SIZE} L ${ADD_ELEMENT_SIZE} 0`}

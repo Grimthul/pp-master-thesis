@@ -10,10 +10,12 @@
     gap: 5px;
     align-items: center;
   }
-  &__input,
-  &__dropdown {
+  &__input {
     height: 1rem;
-    max-width: 60%;
+    width: 60%;
+  }
+  &__dropdown {
+    padding: 1px 2px;
   }
   &__input-suffix {
     position: absolute;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { resizeSvg, nodeCoords } from '../utils/';
+import { resizeSvg, nodeCoords, isPath } from '../utils/';
 import * as Path from '../shapes/path';
 
 import {
@@ -8,7 +8,6 @@ import {
   EDITOR_WIDTH_ADD,
 } from '@pp-master-thesis/constants';
 import { ZoomableRef } from '@pp-master-thesis/types';
-import { ElementType } from '@pp-master-thesis/enums';
 
 const resizeDimensions = (
   x: number,
@@ -51,7 +50,7 @@ export const onDrop = ({
   if (!element || !editor || !svg || !elementsWrapper) return;
   const elementCopy = element.cloneNode(true) as SVGElement;
   const { x, y } = editor.getMousePoint(event);
-  if (elementCopy.nodeName === ElementType.PATH) {
+  if (isPath(element)) {
     const d = elementCopy.getAttribute('d') || '';
     elementCopy.setAttribute(
       'd',

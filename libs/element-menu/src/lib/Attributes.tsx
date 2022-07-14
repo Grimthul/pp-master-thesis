@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   COLOR_ATTRIBUTES,
-  DROPDOWN_ATTRIBUTES,
   NUMBER_ATTRIBUTES,
   PERCENT_ATTRIBUTES,
 } from './element-attributes';
@@ -35,7 +34,6 @@ const Attribute = ({
   const percentModifier = isPercent ? 100 : 1;
   const isColor = COLOR_ATTRIBUTES.includes(attribute);
   const isNumber = NUMBER_ATTRIBUTES.includes(attribute);
-  const isDropdown = Object.keys(DROPDOWN_ATTRIBUTES).includes(attribute);
   const suffix = isPercent ? '%' : '';
   const type = isNumber ? 'number' : isColor ? 'color' : undefined;
 
@@ -53,6 +51,9 @@ const Attribute = ({
   );
 
   const [values, setValues] = React.useState(elementsValues(elements));
+
+  // if multiple elements are chosen, show the value only if it is same for all, else show empty field
+  const value = new Set(values).size > 1 ? '' : values[0];
 
   React.useLayoutEffect(() => {
     setValues(elementsValues(elements));
@@ -75,27 +76,17 @@ const Attribute = ({
   return (
     <div className="element-menu__attribute">
       <h3 className="element-menu__attribute-title">{attribute}</h3>
-      {isDropdown ? (
-        <div className="element-menu__dropdown"></div>
-      ) : (
-        <>
-          <input
-            ref={inputRef}
-            type={type}
-            // if multiple elements are chosen, show the value only if it is same for all, else show empty field
-            value={new Set(values).size > 1 ? '' : values[0]}
-            onChange={(event) => {
-              event.preventDefault();
-              setValues((prevValues) =>
-                prevValues.map(() => event.target.value)
-              );
-            }}
-            min={isNumber ? 0 : undefined}
-            className="element-menu__input"
-          ></input>
-          <div className="element-menu__input-suffix">{suffix}</div>
-        </>
-      )}
+      <input
+        ref={inputRef}
+        className="element-menu__input"
+        type={type}
+        value={value}
+        onChange={(event) =>
+          setValues((prevValues) => prevValues.map(() => event.target.value))
+        }
+        min={isNumber ? 0 : undefined}
+      ></input>
+      <div className="element-menu__input-suffix">{suffix}</div>
     </div>
   );
 };

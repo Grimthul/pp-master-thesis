@@ -34,7 +34,7 @@ const farthestElementsInAxes = (
   return svgElements
     .filter((element) => {
       const node = element.nodeName;
-      if (node === ElementType.PATH || node === ElementType.TEXT) return false;
+      if (node === ElementType.PATH) return false;
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       return elementWidth || elementHeight;
     })

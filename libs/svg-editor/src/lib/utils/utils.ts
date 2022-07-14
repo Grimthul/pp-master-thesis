@@ -24,11 +24,11 @@ const ELEMENT_SIZE_ATTRIBUTES: ElementSizeAttributes = {
   svg: { xName: 'x', yName: 'y', widthName: 'width', heightName: 'height' },
   circle: { xName: 'cx', yName: 'cy', widthName: 'r' },
   ellipse: { xName: 'cx', yName: 'cy', widthName: 'rx', heightName: 'ry' },
-  text: { xName: 'x', yName: 'y', widthName: 'font-size' },
 };
 
 export const isCircular = (node: Element) =>
   CIRCULAR_ELEMENTS.includes(node.nodeName as ElementType);
+export const isPath = (node: Element) => node.nodeName === ElementType.PATH;
 
 export const mergeWithDefaultOptions = (
   options?: SvgEditorOptions
