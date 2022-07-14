@@ -23,6 +23,7 @@ export interface PropsActiveElement extends PropsCommon {
 export interface PropsActiveElements extends PropsCommon {
   elements: SVGGraphicsElement[];
   disableDrag: boolean;
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
 }
 export interface CoordsModifier {
   modifierX: number;

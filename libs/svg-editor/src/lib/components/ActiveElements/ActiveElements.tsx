@@ -45,7 +45,7 @@ import { PathControls } from './PathControls';
 // };
 
 export const ActiveElements = (props: PropsActiveElements) => {
-  const { elements, disableDrag, ...common } = props;
+  const { elements, disableDrag, setActiveElements, ...common } = props;
   const { setTool, zoomable, tool, setUpdated } = common;
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
   const [dragged, setDragged] = React.useState(false);
@@ -64,6 +64,19 @@ export const ActiveElements = (props: PropsActiveElements) => {
   React.useLayoutEffect(() => {
     updateElementsPosition();
   }, [updateElementsPosition]);
+
+  React.useEffect(() => {
+    const deleteElements = (event: KeyboardEvent) => {
+      if (event.key === 'Delete') {
+        elements.forEach((element) =>
+          element.parentElement?.removeChild(element)
+        );
+        setActiveElements([]);
+      }
+    };
+    document.addEventListener('keypress', deleteElements);
+    return () => document.removeEventListener('keypress', deleteElements);
+  }, [elements, setActiveElements]);
 
   /**
    * Can't use just difference between last mouse and current mouse position,

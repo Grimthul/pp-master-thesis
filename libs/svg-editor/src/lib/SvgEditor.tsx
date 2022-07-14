@@ -193,6 +193,7 @@ export const SvgEditor = React.forwardRef(
                 setTool={setTool}
                 updatedFromOutside={props.updatedFromOutside}
                 setUpdated={props.setUpdated}
+                setActiveElements={setActiveElements}
               />
             )}
           </ActivableSvg>
