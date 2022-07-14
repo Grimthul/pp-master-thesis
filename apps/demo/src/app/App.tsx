@@ -13,7 +13,7 @@ import './App.scss';
 const App = () => {
   const dragImageRef = React.useRef<HTMLDivElement>(null);
   const svgEditorRef = React.useRef<SvgEditorRef>(null);
-  const [guideLinesGap, setGuideLinesGap] = React.useState(10);
+  const [gridGap, setGridGap] = React.useState(10);
   const [guideLinesColor, setGuideLinesColor] = React.useState('#cccccc');
   const [editorBackgroundColorPicker, setEditorBackgroundColorPicker] =
     React.useState('#aaaa1e');
@@ -40,12 +40,12 @@ const App = () => {
     () => ({
       backgroundColor: editorBackgroundColor,
       grid: {
-        gap: guideLinesGap,
+        gap: gridGap,
         color: guideLinesColor,
       },
       zoomOptions,
     }),
-    [guideLinesGap, guideLinesColor, zoomOptions, editorBackgroundColor]
+    [editorBackgroundColor, gridGap, guideLinesColor, zoomOptions]
   );
 
   React.useEffect(() => {
@@ -77,11 +77,13 @@ const App = () => {
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
           Zoom to 500%
         </button>
+        <span>Grid gap:</span>
         <input
           type="number"
-          value={guideLinesGap || ''}
-          onChange={(e) => setGuideLinesGap(Number(e.target.value))}
+          value={gridGap || ''}
+          onChange={(e) => setGridGap(Number(e.target.value))}
         />
+
         <input
           type="color"
           value={guideLinesColor}
@@ -92,6 +94,8 @@ const App = () => {
           value={editorBackgroundColorPicker}
           onChange={(e) => setEditorBackgroundColorPicker(e.target.value)}
         />
+        <span>Editor background opacity:</span>
+
         <input
           type="number"
           step="0.1"
