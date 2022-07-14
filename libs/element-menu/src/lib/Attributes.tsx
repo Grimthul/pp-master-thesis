@@ -1,62 +1,74 @@
 import * as React from 'react';
-import { SvgElementAttribute } from '@pp-master-thesis/enums';
 import {
   COLOR_ATTRIBUTES,
   DROPDOWN_ATTRIBUTES,
   NUMBER_ATTRIBUTES,
   PERCENT_ATTRIBUTES,
 } from './element-attributes';
+import type { SvgAttributeWithDefault } from './types';
 
 interface CommonProps {
-  element: SVGGraphicsElement;
+  elements: SVGGraphicsElement[];
   updatedFromOutside: number;
   setUpdated: React.Dispatch<React.SetStateAction<number>>;
 }
 
 interface Props extends CommonProps {
-  attributes: SvgElementAttribute[];
+  attributesWithDefault: SvgAttributeWithDefault[];
 }
 
 interface AttributeProps extends CommonProps {
-  attribute: SvgElementAttribute;
+  attributeWithDefault: SvgAttributeWithDefault;
 }
 
 // TODO: attributes default values to prevent warnings for "transparent" colors for example
 
 const Attribute = ({
-  attribute,
-  element,
+  attributeWithDefault,
+  elements,
   updatedFromOutside,
   setUpdated,
 }: AttributeProps) => {
+  const { attribute, defaultValue } = attributeWithDefault;
   const inputRef = React.useRef<HTMLInputElement>(null);
   const isPercent = PERCENT_ATTRIBUTES.includes(attribute);
+  const percentModifier = isPercent ? 100 : 1;
   const isColor = COLOR_ATTRIBUTES.includes(attribute);
   const isNumber = NUMBER_ATTRIBUTES.includes(attribute);
   const isDropdown = Object.keys(DROPDOWN_ATTRIBUTES).includes(attribute);
   const suffix = isPercent ? '%' : '';
   const type = isNumber ? 'number' : isColor ? 'color' : undefined;
 
-  const [value, setValue] = React.useState(
-    () => element.getAttribute(attribute) || (isNumber ? '0' : '')
+  const elementsValues = React.useCallback(
+    (elements: SVGGraphicsElement[]) =>
+      elements.map((element) => {
+        const value = element.getAttribute(attribute);
+        return value
+          ? isColor
+            ? value
+            : (Number(value) * percentModifier).toString()
+          : defaultValue;
+      }),
+    [attribute, defaultValue, isColor, percentModifier]
   );
+
+  const [values, setValues] = React.useState(elementsValues(elements));
+
   React.useLayoutEffect(() => {
-    setValue(element.getAttribute(attribute) || '');
-  }, [attribute, element, updatedFromOutside]);
+    setValues(elementsValues(elements));
+  }, [elements, elementsValues, updatedFromOutside]);
 
   React.useEffect(() => {
-    if (
-      value !== '0' &&
-      value !== '' &&
-      value !== element.getAttribute(attribute)
-    ) {
-      setUpdated((prevValue) => prevValue + 1);
-      element.setAttribute(
-        attribute,
-        isPercent ? (Number(value) / 100).toString() : value
-      );
-    }
-  }, [attribute, element, isPercent, setUpdated, value]);
+    values.forEach((value, i) => {
+      if (value !== elements[i].getAttribute(attribute) && value !== '') {
+        setUpdated((prevValue) => prevValue + 1);
+        elements[i].setAttribute(
+          attribute,
+          isPercent ? (Number(value) / percentModifier).toString() : value
+        );
+      }
+    });
+  }, [attribute, elements, isPercent, percentModifier, setUpdated, values]);
 
   return (
     <div className="element-menu__attribute">
@@ -68,10 +80,13 @@ const Attribute = ({
           <input
             ref={inputRef}
             type={type}
-            value={value}
+            // if multiple elements are chosen, show the value only if it is same for all, else show empty field
+            value={new Set(values).size > 1 ? '' : values[0]}
             onChange={(event) => {
               event.preventDefault();
-              setValue(event.target.value);
+              setValues((prevValues) =>
+                prevValues.map(() => event.target.value)
+              );
             }}
             min={isNumber ? 0 : undefined}
             className="element-menu__input"
@@ -84,17 +99,17 @@ const Attribute = ({
 };
 
 export const Attributes = ({
-  attributes,
-  element,
+  attributesWithDefault,
+  elements,
   updatedFromOutside,
   setUpdated,
 }: Props) => {
   return (
     <>
-      {attributes.map((attribute, i) => (
+      {attributesWithDefault.map((attribute, i) => (
         <Attribute
-          attribute={attribute}
-          element={element}
+          attributeWithDefault={attribute}
+          elements={elements}
           updatedFromOutside={updatedFromOutside}
           setUpdated={setUpdated}
         />

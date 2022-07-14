@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Attributes } from './Attributes';
 import { ELEMENT_ATTRIBUTES } from './element-attributes';
-import type { SvgElementAttributes } from './types';
+
+import type { SvgAttributeWithDefault } from './types';
 
 import './ElementMenu.scss';
 
@@ -16,23 +17,21 @@ export const ElementMenu = ({
   updatedFromOutside,
   setUpdated,
 }: Props) => {
-  const element = elements.length === 1 ? elements[0] : undefined;
-
-  // when elements is empty, maybe use the svg attributes?
-  // when elements is populated with more than 1 element, use their intersection?
-  const attributes: SvgElementAttributes = element
-    ? ELEMENT_ATTRIBUTES[elements[0].nodeName]
-    : { baseAttributes: [], additionalAttributes: [] };
+  const attributes: SvgAttributeWithDefault[] = [
+    ...new Set(
+      elements.flatMap((element) => ELEMENT_ATTRIBUTES[element.nodeName])
+    ),
+  ];
 
   return (
     <div className="element-menu">
       <div>
-        {element && (
+        {elements && (
           <>
             <h2 className="element-menu__title">Attributes:</h2>
             <Attributes
-              attributes={attributes.baseAttributes}
-              element={element}
+              attributesWithDefault={attributes}
+              elements={elements}
               updatedFromOutside={updatedFromOutside}
               setUpdated={setUpdated}
             />
