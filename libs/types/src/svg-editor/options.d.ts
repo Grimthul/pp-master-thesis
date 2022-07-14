@@ -14,6 +14,5 @@ export interface SvgEditorOptions {
     snap?: boolean;
     snapRadius?: number;
   };
-  size?: DOMRectReadOnly;
   zoomOptions?: ZoomOptions;
 }

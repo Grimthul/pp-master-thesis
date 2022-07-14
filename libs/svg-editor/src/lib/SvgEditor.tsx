@@ -63,9 +63,8 @@ export const SvgEditor = React.forwardRef(
       guideLines: ElementGuideLines;
     }>(defaultGuideLines());
     const propsSetActiveElements = props.setActiveElements;
-    const options = React.useMemo(
-      () => mergeWithDefaultOptions(props.options),
-      [props.options]
+    const [options, setOptions] = React.useState(() =>
+      mergeWithDefaultOptions(props.options)
     );
     const zoomOptions: ZoomOptions = {
       onZoomChange: React.useCallback(
@@ -89,15 +88,24 @@ export const SvgEditor = React.forwardRef(
 
     // update svg size when it's updated from outside
     React.useEffect(() => {
-      setSvgSize(options.size);
-    }, [options.size]);
+      if (props.options)
+        setOptions({
+          ...mergeWithDefaultOptions(props.options),
+        });
+    }, [props.options, svgSize]);
 
     React.useEffect(() => {
       propsSetActiveElements(activeElements);
     }, [activeElements, propsSetActiveElements]);
 
     useBackgroundImageGrid(options, zoom, setBackgroundImage);
-    useRefHandlers(ref, zoomableRef.current);
+    useRefHandlers(
+      ref,
+      zoomableRef.current,
+      elementsWrapperRef,
+      setSvgSize,
+      setActiveElements
+    );
     useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
 
     return (

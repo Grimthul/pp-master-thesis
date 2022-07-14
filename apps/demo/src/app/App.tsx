@@ -55,6 +55,10 @@ const App = () => {
     );
   }, [editorBackgroundColorPicker, backgroundOpacity]);
 
+  React.useEffect(() => {
+    svgEditorRef.current?.createNewEditor(800, 600);
+  }, []);
+
   return (
     <div className="editor">
       <div className="editor__options">
@@ -77,10 +81,16 @@ const App = () => {
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
           Zoom to 500%
         </button>
+        <button
+          onClick={() => svgEditorRef.current?.createNewEditor(1200, 800)}
+        >
+          Create new editor with 1200x800 size
+        </button>
         <span>Grid gap:</span>
         <input
           type="number"
           value={gridGap || ''}
+          min={0}
           onChange={(e) => setGridGap(Number(e.target.value))}
         />
 
@@ -95,7 +105,6 @@ const App = () => {
           onChange={(e) => setEditorBackgroundColorPicker(e.target.value)}
         />
         <span>Editor background opacity:</span>
-
         <input
           type="number"
           step="0.1"
