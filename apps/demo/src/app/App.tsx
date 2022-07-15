@@ -121,6 +121,20 @@ const App = () => {
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
           Zoom to 500%
         </button>
+        <input
+          onInput={(event) => {
+            svgEditorRef.current?.import(event.currentTarget.files?.[0]);
+            event.currentTarget.value = '';
+          }}
+          type="file"
+          accept=".svg"
+        />
+        <button onClick={() => svgEditorRef.current?.export('svg')}>
+          Export to SVG
+        </button>
+        <button onClick={() => svgEditorRef.current?.export('png')}>
+          Export to PNG
+        </button>
       </div>
       <div className="editor__tools">
         <Draggables dragImageRef={dragImageRef} />

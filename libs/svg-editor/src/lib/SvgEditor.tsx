@@ -101,6 +101,7 @@ export const SvgEditor = React.forwardRef(
     useBackgroundImageGrid(options, zoom, setBackgroundImage);
     useRefHandlers(
       ref,
+      svg,
       zoomableRef.current,
       elementsWrapperRef,
       setSvgSize,

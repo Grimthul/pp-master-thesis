@@ -70,4 +70,5 @@ export const ELEMENT_ATTRIBUTES: { [id: string]: SvgAttributeWithDefault[] } = {
     ...RADIUS_ATTRIBUTES,
     ...COMMON_ATTRIBUTES,
   ],
+  image: [...COORDS_ATTRIBUTES],
 };
