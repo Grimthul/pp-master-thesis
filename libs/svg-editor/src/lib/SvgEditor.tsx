@@ -9,7 +9,7 @@ import {
 } from './hooks';
 import { ActiveElements, GuideLines } from './components/';
 
-import type { ElementGuideLines } from './types/dragElement';
+import { ElementGuideLines } from './types/dragElement';
 import { ActivableSvg } from '@pp-master-thesis/activable-svg';
 import { Droppable } from '@pp-master-thesis/droppable';
 import { Zoomable } from '@pp-master-thesis/zoomable';
@@ -45,6 +45,9 @@ export const SvgEditor = React.forwardRef(
     const zoomableRef = React.useRef<ZoomableRef>(null);
     const droppableRef = React.useRef<HTMLDivElement>(null);
     const elementsWrapperRef = React.useRef<SVGGraphicsElement>(null);
+    const elements = Array.from(
+      elementsWrapperRef.current?.children || []
+    ) as SVGGraphicsElement[];
     const [backgroundImage, setBackgroundImage] = React.useState('');
     const [dragOffset, setDragOffset] = React.useState({
       tx: 0,
@@ -132,14 +135,13 @@ export const SvgEditor = React.forwardRef(
         onDragOver={(event: React.DragEvent) => {
           const dragImage = props.dragImageRef?.current;
           const zoomable = zoomableRef.current;
-          const elementsWrapper = elementsWrapperRef?.current;
-          if (dragImage && zoomable && elementsWrapper) {
+          if (dragImage && zoomable && elements) {
             const mouse = zoomable.getMousePoint(event);
             const { tx, ty, guideLines } = dragElementTranslate(
               mouse,
               dragImage,
               options,
-              elementsWrapper
+              elements
             );
 
             dragImage.style.left = `${event.clientX + tx * zoom}px`;
@@ -186,7 +188,9 @@ export const SvgEditor = React.forwardRef(
             )}
             {activeElements.length > 0 && (
               <ActiveElements
-                elements={activeElements}
+                activeElements={activeElements}
+                elements={elements}
+                options={options}
                 zoomable={zoomableRef.current}
                 zoom={zoom}
                 disableDrag={activeElementSelecting}

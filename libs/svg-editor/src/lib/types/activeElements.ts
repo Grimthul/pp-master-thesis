@@ -1,5 +1,5 @@
 import { Tool } from '@pp-master-thesis/enums';
-import type { ZoomableRef } from '@pp-master-thesis/types';
+import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
 
 export interface PropsCommon {
   zoomable: ZoomableRef | null;
@@ -22,6 +22,8 @@ export interface PropsActiveElement extends PropsCommon {
 
 export interface PropsActiveElements extends PropsCommon {
   elements: SVGGraphicsElement[];
+  activeElements: SVGGraphicsElement[];
+  options: SvgEditorOptions;
   disableDrag: boolean;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
 }

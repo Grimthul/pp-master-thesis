@@ -150,12 +150,12 @@ export const dragElementTranslate = (
   mouse: DOMPointReadOnly,
   dragElement: Element,
   options: SvgEditorOptions,
-  elementsWrapper: SVGGElement
+  elements: SVGGraphicsElement[]
 ): DragElementTranslate => {
   const elementsTranslate = options.elements?.snap
     ? elementsSnapTranslate(
         mouse,
-        Array.from(elementsWrapper?.children || []) as SVGGraphicsElement[],
+        elements,
         dragElement,
         options?.elements?.snapRadius
       )

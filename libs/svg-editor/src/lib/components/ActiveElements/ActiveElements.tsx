@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-import { isPanning, isResizing, isPathMoving } from '../../utils';
+import {
+  isPanning,
+  isResizing,
+  isPathMoving,
+  dragElementTranslate,
+} from '../../utils';
 import type { PropsActiveElements } from '../../types/activeElements';
 
 import { ElementType, Tool } from '@pp-master-thesis/enums';
@@ -45,20 +50,37 @@ import { PathControls } from './PathControls';
 // };
 
 export const ActiveElements = (props: PropsActiveElements) => {
-  const { elements, disableDrag, setActiveElements, ...common } = props;
+  const {
+    activeElements,
+    elements,
+    options,
+    disableDrag,
+    setActiveElements,
+    ...common
+  } = props;
   const { setTool, zoomable, tool, setUpdated } = common;
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
   const [dragged, setDragged] = React.useState(false);
 
   const updateElementsPosition = React.useCallback(
     (mouse?: DOMPointReadOnly, mouseOffsets?: DOMPointReadOnly[]) => {
-      elements.forEach((element, i) => {
-        const x = mouse && mouseOffsets && mouse.x - mouseOffsets[i].x;
-        const y = mouse && mouseOffsets && mouse.y - mouseOffsets[i].y;
-        if (x && y) translateElementTo(element, x, y);
+      activeElements.forEach((element, i) => {
+        if (!mouse || !mouseOffsets) return;
+        const { tx, ty } = dragElementTranslate(
+          new DOMPointReadOnly(
+            mouse.x - mouseOffsets[i].x,
+            mouse.y - mouseOffsets[i].y
+          ),
+          element,
+          options,
+          elements
+        );
+        const x = mouse.x - mouseOffsets[i].x + tx;
+        const y = mouse.y - mouseOffsets[i].y + ty;
+        translateElementTo(element, x, y);
       });
     },
-    [elements]
+    [activeElements, elements, options]
   );
 
   React.useLayoutEffect(() => {
@@ -68,7 +90,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
   React.useEffect(() => {
     const deleteElements = (event: KeyboardEvent) => {
       if (event.key === 'Delete') {
-        elements.forEach((element) =>
+        activeElements.forEach((element) =>
           element.parentElement?.removeChild(element)
         );
         setActiveElements([]);
@@ -76,7 +98,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     };
     document.addEventListener('keypress', deleteElements);
     return () => document.removeEventListener('keypress', deleteElements);
-  }, [elements, setActiveElements]);
+  }, [activeElements, setActiveElements]);
 
   /**
    * Can't use just difference between last mouse and current mouse position,
@@ -89,7 +111,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       const mouse = zoomable?.getMousePoint(event);
       if (mouse && event.target !== zoomable?.getChild()) {
         setMouseOffsets(
-          elements.map((element) => {
+          activeElements.map((element) => {
             const bBox = element.getBBox();
             const newX = mouse.x - bBox.x;
             const newY = mouse.y - bBox.y;
@@ -104,7 +126,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       }
       setTool(Tool.PAN);
     },
-    [elements, setTool, zoomable]
+    [activeElements, setTool, zoomable]
   );
 
   React.useEffect(() => {
@@ -119,7 +141,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
         !isPanning(tool) &&
         !isPathMoving(tool) &&
         !isResizing(tool) &&
-        elements.includes(event.target as SVGGraphicsElement) &&
+        activeElements.includes(event.target as SVGGraphicsElement) &&
         event.buttons === PRIMARY_BUTTON
       ) {
         startDrag(event);
@@ -139,14 +161,14 @@ export const ActiveElements = (props: PropsActiveElements) => {
       setTool(Tool.NONE);
     };
 
-    elements.forEach((element) =>
+    activeElements.forEach((element) =>
       element.addEventListener('mousedown', startDragging)
     );
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', stopDragging);
 
     return () => {
-      elements.forEach((element) =>
+      activeElements.forEach((element) =>
         element.removeEventListener('mousedown', startDragging)
       );
       document.removeEventListener('mousemove', drag);
@@ -155,7 +177,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
   }, [
     disableDrag,
     dragged,
-    elements,
+    activeElements,
     mouseOffsets,
     setTool,
     setUpdated,
@@ -168,7 +190,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
   return (
     <>
       {!isPanning(tool) &&
-        elements.map((element, i) =>
+        activeElements.map((element, i) =>
           element.nodeName === ElementType.PATH ? (
             <PathControls key={i} element={element} {...common} />
           ) : (
