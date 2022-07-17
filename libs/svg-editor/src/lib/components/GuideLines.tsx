@@ -9,7 +9,7 @@ import type { ElementGuideLines } from '../types/dragElement';
 interface Props {
   mouse: DOMPointReadOnly;
   guideLines: ElementGuideLines;
-  dragElement: HTMLDivElement;
+  dragElement: HTMLDivElement | SVGGraphicsElement;
   zoom: number;
   gridGap?: boolean;
   snapRadius?: number;
@@ -34,8 +34,17 @@ export const GuideLines = ({
     keyof ElementGuideLines
   >;
   const strokeWidth = React.useMemo(() => strokeWidthByZoom(zoom), [zoom]);
-  const dragElementWidth = dragElement.clientWidth;
-  const dragElementHeight = dragElement.clientHeight;
+
+  const {
+    width,
+    height,
+    x: elementX,
+    y: elementY,
+  } = dragElement instanceof SVGGraphicsElement
+    ? dragElement.getBBox()
+    : { width: 0, height: 0, x: 0, y: 0 };
+  const dragElementWidth = dragElement.clientWidth || width;
+  const dragElementHeight = dragElement.clientHeight || height;
 
   const mouseSnap = React.useCallback(
     (coord: number, snapRadius: number, shouldRound?: boolean) =>
@@ -73,12 +82,13 @@ export const GuideLines = ({
     <>
       {guideLinesKeys.map((key) => {
         const guideLine = guideLines[key];
+
         if (!guideLine || !snapRadius) return null;
 
         const { start, end } = guideLine;
         const { isX, isY } = keyCoords(key);
-        const mouseSnapX = mouseSnap(mouse.x, snapRadius, isY);
-        const mouseSnapY = mouseSnap(mouse.y, snapRadius, isX);
+        const mouseSnapX = mouseSnap(elementX || mouse.x, snapRadius, isY);
+        const mouseSnapY = mouseSnap(elementY || mouse.y, snapRadius, isX);
 
         const width = size(
           {

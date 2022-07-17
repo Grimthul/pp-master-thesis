@@ -88,6 +88,9 @@ export const SvgEditor = React.forwardRef(
       ),
     };
     const [svgSize, setSvgSize] = React.useState<DOMRectReadOnly>();
+    const [draggedElement, setDraggedElement] =
+      React.useState<SVGGraphicsElement>();
+    const dragElement = props.dragImageRef?.current || draggedElement;
 
     // update svg size when it's updated from outside
     React.useEffect(() => {
@@ -176,11 +179,11 @@ export const SvgEditor = React.forwardRef(
             tool={tool}
           >
             <g ref={elementsWrapperRef} />
-            {props.dragImageRef?.current && (
+            {dragElement && (
               <GuideLines
                 mouse={guideLines.mouse}
                 guideLines={guideLines.guideLines}
-                dragElement={props.dragImageRef?.current}
+                dragElement={dragElement}
                 zoom={zoom}
                 gridGap={Boolean(options.grid?.gap)}
                 snapRadius={options.elements?.snapRadius}
@@ -199,6 +202,9 @@ export const SvgEditor = React.forwardRef(
                 updatedFromOutside={props.updatedFromOutside}
                 setUpdated={props.setUpdated}
                 setActiveElements={setActiveElements}
+                draggedElement={draggedElement}
+                setDraggedElement={setDraggedElement}
+                setGuideLines={setGuideLines}
               />
             )}
           </ActivableSvg>

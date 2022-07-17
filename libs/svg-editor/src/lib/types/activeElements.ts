@@ -1,5 +1,7 @@
 import { Tool } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions, ZoomableRef } from '@pp-master-thesis/types';
+import React from 'react';
+import { ElementGuideLines } from './dragElement';
 
 export interface PropsCommon {
   zoomable: ZoomableRef | null;
@@ -25,7 +27,17 @@ export interface PropsActiveElements extends PropsCommon {
   activeElements: SVGGraphicsElement[];
   options: SvgEditorOptions;
   disableDrag: boolean;
+  draggedElement: SVGGraphicsElement | undefined;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
+  setDraggedElement: React.Dispatch<
+    React.SetStateAction<SVGGraphicsElement | undefined>
+  >;
+  setGuideLines: React.Dispatch<
+    React.SetStateAction<{
+      mouse: DOMPointReadOnly;
+      guideLines: ElementGuideLines;
+    }>
+  >;
 }
 export interface CoordsModifier {
   modifierX: number;

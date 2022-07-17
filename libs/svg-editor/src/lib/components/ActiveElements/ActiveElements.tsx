@@ -55,7 +55,10 @@ export const ActiveElements = (props: PropsActiveElements) => {
     elements,
     options,
     disableDrag,
+    draggedElement,
     setActiveElements,
+    setGuideLines,
+    setDraggedElement,
     ...common
   } = props;
   const { setTool, zoomable, tool, setUpdated } = common;
@@ -64,23 +67,26 @@ export const ActiveElements = (props: PropsActiveElements) => {
 
   const updateElementsPosition = React.useCallback(
     (mouse?: DOMPointReadOnly, mouseOffsets?: DOMPointReadOnly[]) => {
+      if (!mouse || !mouseOffsets || !draggedElement) return;
+
+      const { tx, ty, guideLines } = dragElementTranslate(
+        new DOMPointReadOnly(
+          mouse.x - mouseOffsets[0].x,
+          mouse.y - mouseOffsets[0].y
+        ),
+        draggedElement,
+        options,
+        elements.filter((element) => element !== draggedElement)
+      );
+
       activeElements.forEach((element, i) => {
-        if (!mouse || !mouseOffsets) return;
-        const { tx, ty } = dragElementTranslate(
-          new DOMPointReadOnly(
-            mouse.x - mouseOffsets[i].x,
-            mouse.y - mouseOffsets[i].y
-          ),
-          element,
-          options,
-          elements
-        );
         const x = mouse.x - mouseOffsets[i].x + tx;
         const y = mouse.y - mouseOffsets[i].y + ty;
         translateElementTo(element, x, y);
+        if (guideLines) setGuideLines({ mouse, guideLines });
       });
     },
-    [activeElements, elements, options]
+    [activeElements, draggedElement, elements, options, setGuideLines]
   );
 
   React.useLayoutEffect(() => {
@@ -125,8 +131,9 @@ export const ActiveElements = (props: PropsActiveElements) => {
         );
       }
       setTool(Tool.PAN);
+      setDraggedElement(event.target as SVGGraphicsElement);
     },
-    [activeElements, setTool, zoomable]
+    [activeElements, setDraggedElement, setTool, zoomable]
   );
 
   React.useEffect(() => {
@@ -159,6 +166,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       setDragged(false);
       setMouseOffsets(undefined);
       setTool(Tool.NONE);
+      setDraggedElement(undefined);
     };
 
     activeElements.forEach((element) =>
@@ -175,10 +183,11 @@ export const ActiveElements = (props: PropsActiveElements) => {
       document.removeEventListener('mouseup', stopDragging);
     };
   }, [
+    activeElements,
     disableDrag,
     dragged,
-    activeElements,
     mouseOffsets,
+    setDraggedElement,
     setTool,
     setUpdated,
     startDrag,
