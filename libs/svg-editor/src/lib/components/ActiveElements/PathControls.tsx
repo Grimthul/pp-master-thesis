@@ -1,20 +1,21 @@
 import * as React from 'react';
 
 import * as Path from '../../shapes/path';
-import type { PropsActiveElement, PathPoint } from '../../types';
+import type { PropsActiveElement } from '../../types';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { Tool } from '@pp-master-thesis/enums';
+import { dragElementTranslate } from '../../utils';
 
 export const PathControls = ({
   element,
   zoomable,
   zoom,
   tool,
+  options,
   setTool,
 }: PropsActiveElement) => {
   const [pointIndex, setPointIndex] = React.useState<number>(-1);
-  const [test, setTest] = React.useState<string>();
   const strokeWidth = strokeWidthByZoom(zoom);
   const circleStrokeWidth = 4 * strokeWidth;
   const fill = React.useMemo(() => '#d17127', []);
@@ -60,14 +61,12 @@ export const PathControls = ({
           return;
         }
       }
-      setTest('yes');
       setPointIndex(index);
     },
     [pathPoints.length, setTool, zoomable]
   );
 
   const onMouseUp = React.useCallback(() => {
-    setTest(undefined);
     setPointIndex(-1);
     setTool(Tool.NONE);
   }, [setTool]);
@@ -75,10 +74,14 @@ export const PathControls = ({
   React.useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
       if (!zoomable || pointIndex < 0 || tool !== Tool.PATH_MOVE_POINT) return;
-      const { x, y } = zoomable.getMousePoint(event);
+      const mouse = zoomable.getMousePoint(event);
+      const { tx, ty } = dragElementTranslate(mouse, element, options);
+
       setPathPoints((prevPoints) => {
         return prevPoints.map((prevPoint, i) =>
-          i === pointIndex ? { command: prevPoint.command, x, y } : prevPoint
+          i === pointIndex
+            ? { command: prevPoint.command, x: mouse.x + tx, y: mouse.y + ty }
+            : prevPoint
         );
       });
     };
@@ -87,7 +90,7 @@ export const PathControls = ({
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
     };
-  }, [pointIndex, tool, zoomable]);
+  }, [element, options, pointIndex, tool, zoomable]);
 
   return (
     <>

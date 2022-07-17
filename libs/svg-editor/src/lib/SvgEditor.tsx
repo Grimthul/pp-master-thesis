@@ -1,7 +1,11 @@
 import * as React from 'react';
 
 import { onDragEnter, onDrop } from './handlers';
-import { mergeWithDefaultOptions, dragElementTranslate } from './utils/';
+import {
+  mergeWithDefaultOptions,
+  dragElementTranslate,
+  isPath,
+} from './utils/';
 import {
   useBackgroundImageGrid,
   useDragImageResetOnDragExit,
@@ -90,7 +94,9 @@ export const SvgEditor = React.forwardRef(
     const [svgSize, setSvgSize] = React.useState<DOMRectReadOnly>();
     const [draggedElement, setDraggedElement] =
       React.useState<SVGGraphicsElement>();
-    const dragElement = props.dragImageRef?.current || draggedElement;
+    const dragElement =
+      props.dragImageRef?.current ||
+      (!isPath(draggedElement) && draggedElement);
 
     // update svg size when it's updated from outside
     React.useEffect(() => {
@@ -179,7 +185,7 @@ export const SvgEditor = React.forwardRef(
             tool={tool}
           >
             <g ref={elementsWrapperRef} />
-            {dragElement && (
+            {activeElements.length === 1 && dragElement && (
               <GuideLines
                 mouse={guideLines.mouse}
                 guideLines={guideLines.guideLines}

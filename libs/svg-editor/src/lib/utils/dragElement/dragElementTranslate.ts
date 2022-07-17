@@ -160,16 +160,17 @@ export const dragElementTranslate = (
   mouse: DOMPointReadOnly,
   dragElement: Element,
   options: SvgEditorOptions,
-  elements: SVGGraphicsElement[]
+  elements?: SVGGraphicsElement[]
 ): DragElementTranslate => {
-  const elementsTranslate = options.elements?.snap
-    ? elementsSnapTranslate(
-        mouse,
-        elements,
-        dragElement,
-        options?.elements?.snapRadius
-      )
-    : zeroTranslate();
+  const elementsTranslate =
+    options.elements?.snap && elements
+      ? elementsSnapTranslate(
+          mouse,
+          elements,
+          dragElement,
+          options?.elements?.snapRadius
+        )
+      : infiniteTranslate();
 
   const gap = options.grid?.gap;
   const gridTranslate =

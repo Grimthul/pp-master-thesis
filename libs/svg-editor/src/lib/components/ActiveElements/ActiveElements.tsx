@@ -5,6 +5,7 @@ import {
   isResizing,
   isPathMoving,
   dragElementTranslate,
+  isPath,
 } from '../../utils';
 import type { PropsActiveElements } from '../../types/activeElements';
 
@@ -53,7 +54,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
   const {
     activeElements,
     elements,
-    options,
     disableDrag,
     draggedElement,
     setActiveElements,
@@ -61,7 +61,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     setDraggedElement,
     ...common
   } = props;
-  const { setTool, zoomable, tool, setUpdated } = common;
+  const { setTool, zoomable, tool, options, setUpdated } = common;
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
   const [dragged, setDragged] = React.useState(false);
 
@@ -76,7 +76,9 @@ export const ActiveElements = (props: PropsActiveElements) => {
         ),
         draggedElement,
         options,
-        elements.filter((element) => element !== draggedElement)
+        isPath(draggedElement)
+          ? undefined
+          : elements.filter((element) => !activeElements.includes(element))
       );
 
       activeElements.forEach((element, i) => {

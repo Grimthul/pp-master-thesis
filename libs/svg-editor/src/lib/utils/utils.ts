@@ -28,7 +28,8 @@ const ELEMENT_SIZE_ATTRIBUTES: ElementSizeAttributes = {
 
 export const isCircular = (node: Element) =>
   CIRCULAR_ELEMENTS.includes(node.nodeName as ElementType);
-export const isPath = (node: Element) => node.nodeName === ElementType.PATH;
+export const isPath = (node?: Element) =>
+  node ? node.nodeName === ElementType.PATH : false;
 
 export const mergeWithDefaultOptions = (
   options?: SvgEditorOptions

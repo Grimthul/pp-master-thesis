@@ -5,10 +5,11 @@ import { ElementGuideLines } from './dragElement';
 
 export interface PropsCommon {
   zoomable: ZoomableRef | null;
-  setTool: React.Dispatch<React.SetStateAction<Tool>>;
   zoom: number;
   tool: Tool;
   updatedFromOutside: number;
+  options: SvgEditorOptions;
+  setTool: React.Dispatch<React.SetStateAction<Tool>>;
   setUpdated: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -25,7 +26,6 @@ export interface PropsActiveElement extends PropsCommon {
 export interface PropsActiveElements extends PropsCommon {
   elements: SVGGraphicsElement[];
   activeElements: SVGGraphicsElement[];
-  options: SvgEditorOptions;
   disableDrag: boolean;
   draggedElement: SVGGraphicsElement | undefined;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
