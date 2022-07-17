@@ -19,17 +19,22 @@ import { roundToMultiple } from '@pp-master-thesis/utils';
 import { ElementType } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
+// TODO: REFACTOR
 /**
  * Returns the farthest elements for each side of given element.
  */
 const farthestElementsInAxes = (
   mouse: DOMPointReadOnly,
   snapRadius: number,
-  dragElement: Element,
+  dragElement: Element | SVGGraphicsElement,
   svgElements: SVGGraphicsElement[]
 ): ElementGuideLines => {
-  const dragElementWidth = dragElement.clientWidth;
-  const dragElementHeight = dragElement.clientHeight;
+  const { width, height } =
+    dragElement instanceof SVGGraphicsElement
+      ? dragElement.getBBox()
+      : { width: 0, height: 0 };
+  const dragElementWidth = dragElement.clientWidth || width;
+  const dragElementHeight = dragElement.clientHeight || height;
 
   return svgElements
     .filter((element) => {
@@ -93,8 +98,13 @@ const elementsSnapTranslate = (
   snapRadius = 0
 ): DragElementTranslate => {
   if (elements?.length) {
-    const dragElementWidth = dragElement.clientWidth;
-    const dragElementHeight = dragElement.clientHeight;
+    const { width, height } =
+      dragElement instanceof SVGGraphicsElement
+        ? dragElement.getBBox()
+        : { width: 0, height: 0 };
+    const dragElementWidth = dragElement.clientWidth || width;
+    const dragElementHeight = dragElement.clientHeight || height;
+
     const farthestElements = farthestElementsInAxes(
       mouse,
       snapRadius,
