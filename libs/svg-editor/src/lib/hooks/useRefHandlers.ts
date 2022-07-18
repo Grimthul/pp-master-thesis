@@ -32,7 +32,6 @@ export const useRefHandlers = (
       if (!svg || !elementsWrapper) return;
       const svgCopy = svg.cloneNode() as SVGSVGElement;
       svgCopy.setAttribute('content', CONTENT);
-      // maybe there should be possibility to have options to include background and/or grid
       svgCopy.removeAttribute('style');
       (
         Array.from(elementsWrapper.childNodes || []) as SVGGraphicsElement[]

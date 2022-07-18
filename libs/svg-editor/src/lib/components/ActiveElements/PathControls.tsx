@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import * as Path from '../../shapes/path';
 import type { PropsActiveElement } from '../../types';
+import { dragElementTranslate } from '../../utils';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { Tool } from '@pp-master-thesis/enums';
-import { dragElementTranslate } from '../../utils';
 
 export const PathControls = ({
   element,
@@ -106,7 +106,15 @@ export const PathControls = ({
             cy={y}
             fill={fill}
             style={{ cursor: Tool.PATH_MOVE_POINT }}
-          ></circle>
+          >
+            <title>
+              {`Click and drag to move this path point.${
+                i === 0 || i === pathPoints.length - 1
+                  ? ' Hold shift to add a new point.'
+                  : ''
+              }`}
+            </title>
+          </circle>
         );
       })}
     </>
