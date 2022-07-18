@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mousePointInElementInverted } from '../utils/utils';
 import { zoomBy, zoomInStep, zoomOutStep, zoomTo } from '../utils/zoom';
 
-import { Matrix } from '@pp-master-thesis/matrix';
+import { resetZoom, identity } from '../utils/matrix';
 import type { ZoomableRef } from '@pp-master-thesis/types';
 import type { HandlersCommonProps } from '../lib/Zoomable';
 
@@ -41,10 +41,10 @@ export const useRefHandlers = ({
       setMatrix((matrix) => matrix.translate(x, y));
     },
     resetZoom(): void {
-      setMatrix((matrix) => Matrix.resetZoom(matrix));
+      setMatrix((matrix) => resetZoom(matrix));
     },
     resetView(): void {
-      setMatrix(Matrix.identity);
+      setMatrix(identity);
     },
     zoomIn(): void {
       if (!allowZoom) return;

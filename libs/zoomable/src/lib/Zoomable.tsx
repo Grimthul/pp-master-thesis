@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Matrix } from '@pp-master-thesis/matrix';
+import { identity } from '../utils/matrix';
 import {
   usePageZoomDisable,
   useOnActionHandlers,
@@ -34,9 +34,7 @@ export const Zoomable = React.forwardRef(
   (props: Props, ref: React.ForwardedRef<ZoomableRef>) => {
     const { children } = props;
     const [tool, setTool] = React.useState(Tool.NONE);
-    const [matrix, setMatrix] = React.useState<DOMMatrixReadOnly>(
-      Matrix.identity()
-    );
+    const [matrix, setMatrix] = React.useState<DOMMatrixReadOnly>(identity());
     const wrapperRef = React.useRef<HTMLDivElement>(null);
     const wrapperRect = wrapperRef?.current?.getBoundingClientRect();
     const childRef = React.useRef<HTMLElement>();

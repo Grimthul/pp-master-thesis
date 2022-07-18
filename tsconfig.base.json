@@ -21,7 +21,6 @@
       "@pp-master-thesis/droppable": ["libs/droppable/src/index.ts"],
       "@pp-master-thesis/element-menu": ["libs/element-menu/src/index.ts"],
       "@pp-master-thesis/enums": ["libs/enums/src/index.ts"],
-      "@pp-master-thesis/matrix": ["libs/matrix/src/index.ts"],
       "@pp-master-thesis/svg-editor": ["libs/svg-editor/src/index.ts"],
       "@pp-master-thesis/types": ["libs/types/src/index.ts"],
       "@pp-master-thesis/utils": ["libs/utils/src/index.ts"],

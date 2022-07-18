@@ -8,7 +8,6 @@
     "droppable": "libs/droppable",
     "element-menu": "libs/element-menu",
     "enums": "libs/enums",
-    "matrix": "libs/matrix",
     "svg-editor": "libs/svg-editor",
     "types": "libs/types",
     "utils": "libs/utils",

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Matrix } from '@pp-master-thesis/matrix';
+import * as Matrix from './matrix';
 import { ZoomDirection } from '@pp-master-thesis/enums';
 
 interface Props {
