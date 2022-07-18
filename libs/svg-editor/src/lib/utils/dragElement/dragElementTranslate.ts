@@ -1,4 +1,9 @@
-import { keyCoords, nodeCoordsInEditor, nodeSize } from '../utils';
+import {
+  keyCoords,
+  nodeCoordsInEditor,
+  nodeSize,
+  roundToMultiple,
+} from '../utils';
 import { furtherGuideLineCoords, isGuideLineFinite } from './guideLines';
 import { SidesX, SidesY } from '../../enums/dragElement';
 import { getAlignedElements } from './alignedElements';
@@ -15,7 +20,6 @@ import type {
   ElementGuideLines,
 } from '../../types/dragElement';
 
-import { roundToMultiple } from '@pp-master-thesis/utils';
 import { ElementType } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 

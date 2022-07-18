@@ -99,6 +99,9 @@ export const nodeCoordsInEditor = (
   };
 };
 
+export const roundToMultiple = (n: number, m: number, offset = 0) =>
+  Math.round((n - offset) / m) * m + offset;
+
 export const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
   key in SidesX ? { isX: true } : { isY: true };
 

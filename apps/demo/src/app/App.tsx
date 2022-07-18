@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Draggables } from './components/';
+import { Draggables, Loading } from './components/';
 
 import { SvgEditor } from '@pp-master-thesis/svg-editor';
 import { SvgEditorOptions, ZoomOptions } from '@pp-master-thesis/types';
@@ -17,9 +17,7 @@ const App = () => {
   const [guideLinesColor, setGuideLinesColor] = React.useState('#cccccc');
   const [editorBackgroundColorPicker, setEditorBackgroundColorPicker] =
     React.useState('#aaaa1e');
-  const [editorBackgroundColor, setEditorBackgroundColor] = React.useState(
-    editorBackgroundColorPicker
-  );
+  const [editorBackgroundColor, setEditorBackgroundColor] = React.useState('');
   const [backgroundOpacity, setBackgroundOpacity] = React.useState('0.1');
   const [zoom, setZoom] = React.useState(1);
   const [activeElements, setActiveElements] = React.useState<
@@ -27,6 +25,7 @@ const App = () => {
   >([]);
   const [editorUpdated, setEditorUpdated] = React.useState(0);
   const [elementUpdated, setElementUpdated] = React.useState(0);
+  const [loaded, setLoaded] = React.useState(false);
 
   const zoomOptions: ZoomOptions = React.useMemo(
     () => ({
@@ -55,9 +54,15 @@ const App = () => {
     );
   }, [editorBackgroundColorPicker, backgroundOpacity]);
 
-  React.useEffect(() => {
-    svgEditorRef.current?.createNewEditor(800, 600);
-  }, []);
+  React.useLayoutEffect(() => {
+    if (loaded) svgEditorRef.current?.createNewEditor(800, 600);
+  }, [loaded]);
+
+  React.useLayoutEffect(() => {
+    if (!loaded && zoomOptions && editorOptions && backgroundOpacity) {
+      setTimeout(() => setLoaded(true), 300);
+    }
+  }, [backgroundOpacity, editorOptions, loaded, zoomOptions]);
 
   return (
     <div className="editor">
@@ -140,14 +145,18 @@ const App = () => {
         <Draggables dragImageRef={dragImageRef} />
       </div>
 
-      <SvgEditor
-        ref={svgEditorRef}
-        options={editorOptions}
-        dragImageRef={dragImageRef}
-        setActiveElements={setActiveElements}
-        updatedFromOutside={elementUpdated}
-        setUpdated={setEditorUpdated}
-      />
+      {loaded ? (
+        <SvgEditor
+          ref={svgEditorRef}
+          options={editorOptions}
+          dragImageRef={dragImageRef}
+          setActiveElements={setActiveElements}
+          updatedFromOutside={elementUpdated}
+          setUpdated={setEditorUpdated}
+        />
+      ) : (
+        <Loading className="loading--editor" />
+      )}
 
       <ElementMenu
         elements={activeElements}
