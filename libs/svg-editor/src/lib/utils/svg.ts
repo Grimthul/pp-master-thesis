@@ -28,11 +28,18 @@ export const translateElement = (
   tx: number,
   ty: number
 ) => {
-  const { xName, yName } = nodeSizeNames(element);
-  const newX = Number(element.getAttribute(xName)) + tx;
-  element.setAttribute(xName, newX.toString());
-  const newY = Number(element.getAttribute(yName)) + ty;
-  element.setAttribute(yName, newY.toString());
+  if (element.nodeName === ElementType.PATH) {
+    element.setAttribute(
+      'd',
+      Path.moveBy(element.getAttribute('d') || '', tx, ty)
+    );
+  } else {
+    const { xName, yName } = nodeSizeNames(element);
+    const newX = Number(element.getAttribute(xName)) + tx;
+    element.setAttribute(xName, newX.toString());
+    const newY = Number(element.getAttribute(yName)) + ty;
+    element.setAttribute(yName, newY.toString());
+  }
 };
 
 const translateElements = ({

@@ -5,6 +5,7 @@ import {
   mergeWithDefaultOptions,
   dragElementTranslate,
   isPath,
+  translateElement,
 } from './utils/';
 import {
   useBackgroundImageGrid,
@@ -60,6 +61,9 @@ export const SvgEditor = React.forwardRef(
     const [tool, setTool] = React.useState(Tool.NONE);
     const [zoom, setZoom] = React.useState(1);
     const [activeElements, setActiveElements] = React.useState<
+      SVGGraphicsElement[]
+    >([]);
+    const [elementsToCopy, setElementsToCopy] = React.useState<
       SVGGraphicsElement[]
     >([]);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
@@ -120,6 +124,39 @@ export const SvgEditor = React.forwardRef(
       setActiveElements
     );
     useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
+
+    React.useEffect(() => {
+      const handleKeyboard = (event: KeyboardEvent) => {
+        if (event.key === 'Delete') {
+          activeElements.forEach((element) =>
+            element.parentElement?.removeChild(element)
+          );
+          setActiveElements([]);
+        } else if (event.ctrlKey) {
+          if (event.key === 'c') {
+            setElementsToCopy(activeElements);
+          } else if (event.key === 'x') {
+            setElementsToCopy(activeElements);
+            activeElements.forEach((element) =>
+              elementsWrapperRef.current?.removeChild(element)
+            );
+            setActiveElements([]);
+          } else if (event.key === 'v') {
+            setActiveElements([]);
+            const copiedElements = elementsToCopy.map((element) => {
+              const elementCopy = element.cloneNode(true) as SVGGraphicsElement;
+              translateElement(elementCopy, 10, 10);
+              elementsWrapperRef.current?.appendChild(elementCopy);
+              return elementCopy;
+            });
+            setActiveElements(copiedElements);
+            setElementsToCopy(copiedElements);
+          }
+        }
+      };
+      document.addEventListener('keyup', handleKeyboard);
+      return () => document.removeEventListener('keyup', handleKeyboard);
+    }, [activeElements, elementsToCopy]);
 
     return (
       <Droppable
@@ -205,6 +242,7 @@ export const SvgEditor = React.forwardRef(
                 zoom={zoom}
                 disableDrag={activeElementSelecting}
                 tool={tool}
+                elementsWrapper={elementsWrapperRef?.current}
                 setTool={setTool}
                 updatedFromOutside={props.updatedFromOutside}
                 setUpdated={props.setUpdated}
