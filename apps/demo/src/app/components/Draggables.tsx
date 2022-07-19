@@ -27,14 +27,14 @@ export const Draggables = ({
         <svg
           id="add-circle"
           className="draggable__svg"
-          viewBox="-1 -1 41 41"
+          viewBox="-1 -1 42 42"
           width={ADD_ELEMENT_SIZE + 2}
           height={ADD_ELEMENT_SIZE + 2}
         >
           <circle
             cx={ADD_ELEMENT_SIZE / 2}
             cy={ADD_ELEMENT_SIZE / 2}
-            r={ADD_ELEMENT_SIZE / 2 - 0.5}
+            r={ADD_ELEMENT_SIZE / 2}
             stroke="#000000"
             fill="#000000"
             fillOpacity={0}
