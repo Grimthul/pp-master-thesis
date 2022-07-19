@@ -49,7 +49,21 @@ const App = () => {
     [editorBackgroundColor, gridGap, guideLinesColor, visible, zoomOptions]
   );
 
-  const zoomDropdown = [10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500];
+  const zoomDropdown = [
+    Math.round(zoom * 100),
+    10,
+    25,
+    50,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    300,
+    400,
+    500,
+  ];
 
   React.useEffect(() => {
     const rgb = hexToRgb(editorBackgroundColorPicker);
@@ -118,25 +132,29 @@ const App = () => {
         />
       </div> */}
       <div className="editor__zoom-controls">
-        <div className="editor__zoom-value">{Math.round(zoom * 100)}%</div>
+        <select
+          onChange={(event) => {
+            svgEditorRef.current?.zoomableRef?.zoomTo(
+              Number(event.target.value)
+            );
+          }}
+          value={zoom}
+        >
+          {zoomDropdown.map((value, i) => (
+            <option
+              style={i === 0 ? { display: 'none' } : {}}
+              value={value / 100}
+            >
+              {value}%
+            </option>
+          ))}
+        </select>
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
           +
         </button>
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
           -
         </button>
-        <select
-          onChange={(event) =>
-            svgEditorRef.current?.zoomableRef?.zoomTo(
-              Number(event.target.value)
-            )
-          }
-          defaultValue={zoom}
-        >
-          {zoomDropdown.map((value) => (
-            <option value={value / 100}>{value}%</option>
-          ))}
-        </select>
       </div>
       <div className="editor__tools">
         <Draggables dragImageRef={dragImageRef} />

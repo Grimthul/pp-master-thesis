@@ -20,9 +20,14 @@
     & > ul {
       & li {
         padding: 5px 10px;
-
+        display: flex;
+        justify-content: space-between;
         &:hover {
           background: #ccc;
+        }
+
+        & span:last-child {
+          color: #777;
         }
       }
     }

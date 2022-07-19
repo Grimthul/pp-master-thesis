@@ -62,10 +62,12 @@ export const MenuList = ({ svgEditorRef }: Props) => {
             </li>
             <hr />
             <li onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
-              Zoom in
+              <span>Zoom in</span>
+              <span>Mousewheel</span>
             </li>
             <li onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
-              Zoom out
+              <span>Zoom out</span>
+              <span>Mousewheel</span>
             </li>
           </ul>
         </Menu>
