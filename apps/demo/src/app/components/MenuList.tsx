@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 import { Menu } from './Menu';
+import { ModalNew, ModalContact } from './modals/';
 
 import { SvgEditorOptions, SvgEditorRef } from '@pp-master-thesis/types';
 
 import './MenuList.scss';
-import { ModalNew } from './modals/ModalNew';
 
 interface Props {
   svgEditorRef: React.RefObject<SvgEditorRef>;
@@ -16,6 +16,7 @@ export const MenuList = ({ svgEditorRef }: Props) => {
   const listRef = React.useRef<HTMLUListElement>(null);
   const importRef = React.useRef<HTMLInputElement>(null);
   const [showModalNew, setShowModalNew] = React.useState(false);
+  const [showModalContact, setShowModalContact] = React.useState(false);
   const [open, setOpen] = React.useState(-1);
   const commonProps = { open, setOpen };
 
@@ -34,6 +35,9 @@ export const MenuList = ({ svgEditorRef }: Props) => {
           createNewEditor={svgEditorRef.current?.createNewEditor}
           close={() => setShowModalNew(false)}
         />
+      )}
+      {showModalContact && (
+        <ModalContact close={() => setShowModalContact(false)} />
       )}
       <ul ref={listRef} className="editor__menu-list">
         <li className="editor__menu-list-item">
@@ -106,9 +110,7 @@ export const MenuList = ({ svgEditorRef }: Props) => {
         <li className="editor__menu-list-item">
           <Menu title="Help" index={3} {...commonProps}>
             <ul>
-              <li onClick={() => console.log('not yet implemented')}>
-                Contact
-              </li>
+              <li onClick={() => setShowModalContact(true)}>Contact</li>
             </ul>
           </Menu>
         </li>

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import './Modal.scss';
 
 interface Props {
@@ -8,6 +9,17 @@ interface Props {
 }
 
 export const Modal = ({ title, name, children, closeModal }: Props) => {
+  React.useEffect(() => {
+    const closeOnEsc = (event: KeyboardEvent) => {
+      console.log(event);
+
+      if (event.key === 'Escape') closeModal();
+    };
+
+    document.addEventListener('keydown', closeOnEsc);
+    return () => document.removeEventListener('keydown', closeOnEsc);
+  }, [closeModal]);
+
   return (
     <div className="overlay">
       <div className={`modal ${name}`}>
