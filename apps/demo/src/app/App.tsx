@@ -9,6 +9,7 @@ import { ElementMenu } from '@pp-master-thesis/element-menu';
 import type { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './App.scss';
+import { EditorOptions } from './components/EditorOptions';
 
 const App = () => {
   const dragImageRef = React.useRef<HTMLDivElement>(null);
@@ -92,45 +93,6 @@ const App = () => {
       <div className="editor__menu">
         <MenuList svgEditorRef={svgEditorRef} options={editorOptions} />
       </div>
-      {/* <div className="editor__options">
-        <button
-          onClick={() => svgEditorRef.current?.createNewEditor(1200, 800)}
-        >
-          Create new editor with 1200x800 size
-        </button>
-        <button
-          onClick={() => svgEditorRef.current?.changeEditorSize(1200, 800)}
-        >
-          Change editor size to 1200x800
-        </button>
-
-        <span>Grid gap:</span>
-        <input
-          type="number"
-          value={gridGap || ''}
-          min={0}
-          onChange={(e) => setGridGap(Number(e.target.value))}
-        />
-        <input
-          type="color"
-          value={guideLinesColor}
-          onChange={(e) => setGuideLinesColor(e.target.value)}
-        />
-        <input
-          type="color"
-          value={editorBackgroundColorPicker}
-          onChange={(e) => setEditorBackgroundColorPicker(e.target.value)}
-        />
-        <span>Editor background opacity:</span>
-        <input
-          type="number"
-          step="0.1"
-          max="1"
-          min="0"
-          value={backgroundOpacity}
-          onChange={(e) => setBackgroundOpacity(e.target.value)}
-        />
-      </div> */}
       <div className="editor__zoom-controls">
         <select
           onChange={(event) => {
@@ -178,9 +140,18 @@ const App = () => {
           setUpdated={setElementUpdated}
         />
       ) : (
-        <div className="editor__options">
-          Placeholder for editor options (visible when no element is selected)
-        </div>
+        <EditorOptions
+          {...{
+            gridGap,
+            setGridGap,
+            guideLinesColor,
+            setGuideLinesColor,
+            editorBackgroundColorPicker,
+            setEditorBackgroundColorPicker,
+            backgroundOpacity,
+            setBackgroundOpacity,
+          }}
+        />
       )}
     </div>
   );
