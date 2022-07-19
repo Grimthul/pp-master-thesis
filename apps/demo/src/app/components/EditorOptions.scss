@@ -12,6 +12,9 @@
 
     input {
       max-width: 50%;
+      &[type='checkbox'] {
+        margin-left: auto;
+      }
     }
   }
 }
