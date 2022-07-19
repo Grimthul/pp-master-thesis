@@ -55,6 +55,7 @@ export const useRefHandlers = ({
     },
     resetView(): void {
       setMatrix(identity);
+      this.center();
     },
     zoomIn(): void {
       if (!allowZoom) return;
