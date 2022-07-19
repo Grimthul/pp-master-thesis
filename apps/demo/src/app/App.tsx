@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Draggables, Loading } from './components/';
+import { Draggables, Loading, MenuList } from './components/';
 
 import { SvgEditor } from '@pp-master-thesis/svg-editor';
 import { SvgEditorOptions, ZoomOptions } from '@pp-master-thesis/types';
@@ -26,6 +26,7 @@ const App = () => {
   const [editorUpdated, setEditorUpdated] = React.useState(0);
   const [elementUpdated, setElementUpdated] = React.useState(0);
   const [loaded, setLoaded] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
 
   const zoomOptions: ZoomOptions = React.useMemo(
     () => ({
@@ -42,9 +43,10 @@ const App = () => {
         gap: gridGap,
         color: guideLinesColor,
       },
+      visible: visible,
       zoomOptions,
     }),
-    [editorBackgroundColor, gridGap, guideLinesColor, zoomOptions]
+    [editorBackgroundColor, gridGap, guideLinesColor, visible, zoomOptions]
   );
 
   React.useEffect(() => {
@@ -54,11 +56,16 @@ const App = () => {
     );
   }, [editorBackgroundColorPicker, backgroundOpacity]);
 
-  React.useLayoutEffect(() => {
-    if (loaded) svgEditorRef.current?.createNewEditor(800, 600);
+  React.useEffect(() => {
+    if (loaded) {
+      setVisible(true);
+      const svgWidth = 800;
+      const svgHeight = 600;
+      svgEditorRef.current?.createNewEditor(svgWidth, svgHeight);
+    }
   }, [loaded]);
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (!loaded && zoomOptions && editorOptions && backgroundOpacity) {
       setTimeout(() => setLoaded(true), 300);
     }
@@ -66,26 +73,10 @@ const App = () => {
 
   return (
     <div className="editor">
-      <div className="editor__options">
-        <div>{zoom * 100}%</div>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.resetZoom()}>
-          Reset zoom
-        </button>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.resetView()}>
-          Reset view
-        </button>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
-          Zoom in
-        </button>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
-          Zoom out
-        </button>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(2)}>
-          Zoom to 200%
-        </button>
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
-          Zoom to 500%
-        </button>
+      <div className="editor__menu">
+        <MenuList svgEditorRef={svgEditorRef} options={editorOptions} />
+      </div>
+      {/* <div className="editor__options">
         <button
           onClick={() => svgEditorRef.current?.createNewEditor(1200, 800)}
         >
@@ -96,6 +87,7 @@ const App = () => {
         >
           Change editor size to 1200x800
         </button>
+
         <span>Grid gap:</span>
         <input
           type="number"
@@ -103,7 +95,6 @@ const App = () => {
           min={0}
           onChange={(e) => setGridGap(Number(e.target.value))}
         />
-
         <input
           type="color"
           value={guideLinesColor}
@@ -123,40 +114,29 @@ const App = () => {
           value={backgroundOpacity}
           onChange={(e) => setBackgroundOpacity(e.target.value)}
         />
-        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomTo(5)}>
-          Zoom to 500%
+      </div> */}
+      <div className="editor__zoom-controls">
+        <div>{Math.round(zoom * 100)}%</div>
+        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
+          +
         </button>
-        <input
-          onInput={(event) => {
-            svgEditorRef.current?.import(event.currentTarget.files?.[0]);
-            event.currentTarget.value = '';
-          }}
-          type="file"
-          accept=".svg"
-        />
-        <button onClick={() => svgEditorRef.current?.export('svg')}>
-          Export to SVG
-        </button>
-        <button onClick={() => svgEditorRef.current?.export('png')}>
-          Export to PNG
+        <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
+          -
         </button>
       </div>
       <div className="editor__tools">
         <Draggables dragImageRef={dragImageRef} />
       </div>
 
-      {loaded ? (
-        <SvgEditor
-          ref={svgEditorRef}
-          options={editorOptions}
-          dragImageRef={dragImageRef}
-          setActiveElements={setActiveElements}
-          updatedFromOutside={elementUpdated}
-          setUpdated={setEditorUpdated}
-        />
-      ) : (
-        <Loading className="loading--editor" />
-      )}
+      <SvgEditor
+        ref={svgEditorRef}
+        options={editorOptions}
+        dragImageRef={dragImageRef}
+        setActiveElements={setActiveElements}
+        updatedFromOutside={elementUpdated}
+        setUpdated={setEditorUpdated}
+      />
+      {!loaded && <Loading className="loading--editor" />}
 
       <ElementMenu
         elements={activeElements}

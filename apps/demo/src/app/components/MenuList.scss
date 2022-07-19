@@ -1,0 +1,10 @@
+.editor {
+  &__menu-list {
+    display: flex;
+    width: max-content;
+
+    hr {
+      border-top-color: #333;
+    }
+  }
+}

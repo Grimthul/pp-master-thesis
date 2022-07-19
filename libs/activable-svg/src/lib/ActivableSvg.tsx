@@ -9,23 +9,23 @@ import './ActivableSvg.scss';
 
 type Props = React.SVGProps<SVGSVGElement> & {
   activeElements: SVGGraphicsElement[];
+  tool: Tool;
+  zoom: number;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
   setSelecting: React.Dispatch<React.SetStateAction<boolean>>;
   getMousePoint: GetMousePoint | undefined;
-  zoom: number;
-  tool: Tool;
 };
 
 export const ActivableSvg = React.forwardRef(
   (
     {
-      activeElements,
-      setActiveElements,
-      getMousePoint,
       children,
-      zoom,
-      setSelecting,
+      activeElements,
       tool,
+      zoom,
+      setActiveElements,
+      setSelecting,
+      getMousePoint,
       ...props
     }: Props,
     ref: React.ForwardedRef<SVGSVGElement>

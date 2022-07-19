@@ -7,6 +7,7 @@ interface Props {
   onDragEnter?(event: React.DragEvent): void;
   onDragOver?(event: React.DragEvent): void;
   children: React.ReactElement;
+  style?: React.CSSProperties;
 }
 
 export const Droppable = ({
@@ -16,6 +17,7 @@ export const Droppable = ({
   onDragEnter,
   onDragOver,
   children,
+  style,
 }: Props) => {
   const allowDrop = (event: React.DragEvent) => {
     event.preventDefault();
@@ -25,6 +27,7 @@ export const Droppable = ({
   return (
     <div
       id={id}
+      style={style}
       className={'droppable'}
       ref={droppableRef}
       onDrop={onDrop}

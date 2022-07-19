@@ -7,6 +7,7 @@ export type GetMousePoint = (
 export interface ZoomableRef {
   getChild(): HTMLElement | undefined;
   getMousePoint: GetMousePoint;
+  center(): void;
   translate(x: number, y: number): void;
   resetZoom(): void;
   resetView(): void;

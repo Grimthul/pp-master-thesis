@@ -36,6 +36,7 @@ export const mergeWithDefaultOptions = (
 ): SvgEditorOptions => ({
   backgroundColor: '#fff',
   zoomOptions: undefined,
+  visible: true,
   ...options,
   grid: {
     gap: GAP_DEFAULT_SIZE,

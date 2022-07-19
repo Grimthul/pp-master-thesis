@@ -32,9 +32,9 @@ import { ID_DROPPABLE } from '@pp-master-thesis/constants';
 interface Props {
   options?: SvgEditorOptions;
   dragImageRef?: React.RefObject<HTMLDivElement>;
-  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
   updatedFromOutside: number;
   setUpdated: React.Dispatch<React.SetStateAction<number>>;
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
 }
 
 const defaultGuideLines = () => ({
@@ -124,6 +124,7 @@ export const SvgEditor = React.forwardRef(
     return (
       <Droppable
         id={ID_DROPPABLE}
+        style={{ visibility: `${options.visible ? 'visible' : 'hidden'}` }}
         droppableRef={droppableRef}
         onDrop={(event) => {
           onDrop({
@@ -185,7 +186,7 @@ export const SvgEditor = React.forwardRef(
             tool={tool}
           >
             <g ref={elementsWrapperRef} />
-            {activeElements.length === 1 && dragElement && (
+            {activeElements.length <= 1 && dragElement && (
               <GuideLines
                 mouse={guideLines.mouse}
                 guideLines={guideLines.guideLines}

@@ -23,6 +23,7 @@ export const useRefHandlers = (
       setSvgSize(new DOMRectReadOnly(0, 0, width, height));
       elementsWrapperRef.current.innerHTML = '';
       setActiveElements([]);
+      setTimeout(() => zoomableRef?.center(), 10);
     },
     changeEditorSize(width, height) {
       setSvgSize(new DOMRectReadOnly(0, 0, width, height));
