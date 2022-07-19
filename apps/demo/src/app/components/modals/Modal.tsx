@@ -11,8 +11,6 @@ interface Props {
 export const Modal = ({ title, name, children, closeModal }: Props) => {
   React.useEffect(() => {
     const closeOnEsc = (event: KeyboardEvent) => {
-      console.log(event);
-
       if (event.key === 'Escape') closeModal();
     };
 

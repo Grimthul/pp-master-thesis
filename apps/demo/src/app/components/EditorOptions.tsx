@@ -5,6 +5,8 @@ import './EditorOptions.scss';
 interface Props {
   gridGap: number;
   setGridGap: React.Dispatch<React.SetStateAction<number>>;
+  gridHide: boolean;
+  setGridHide: React.Dispatch<React.SetStateAction<boolean>>;
   guideLinesColor: string;
   setGuideLinesColor: React.Dispatch<React.SetStateAction<string>>;
   editorBackgroundColorPicker: string;
@@ -16,6 +18,8 @@ interface Props {
 export const EditorOptions = ({
   gridGap,
   setGridGap,
+  gridHide,
+  setGridHide,
   guideLinesColor,
   setGuideLinesColor,
   editorBackgroundColorPicker,
@@ -27,6 +31,11 @@ export const EditorOptions = ({
     <div className="editor__options">
       <div>
         Grid gap:
+        <input
+          type="checkbox"
+          checked={!gridHide}
+          onChange={() => setGridHide((prev) => !prev)}
+        />
         <input
           type="number"
           value={gridGap || ''}

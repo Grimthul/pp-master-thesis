@@ -28,6 +28,7 @@ const App = () => {
   const [elementUpdated, setElementUpdated] = React.useState(0);
   const [loaded, setLoaded] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
+  const [gridHide, setGridHide] = React.useState(false);
 
   const zoomOptions: ZoomOptions = React.useMemo(
     () => ({
@@ -43,11 +44,19 @@ const App = () => {
       grid: {
         gap: gridGap,
         color: guideLinesColor,
+        hide: gridHide,
       },
       visible: visible,
       zoomOptions,
     }),
-    [editorBackgroundColor, gridGap, guideLinesColor, visible, zoomOptions]
+    [
+      editorBackgroundColor,
+      gridGap,
+      gridHide,
+      guideLinesColor,
+      visible,
+      zoomOptions,
+    ]
   );
 
   const zoomDropdown = [
@@ -91,7 +100,11 @@ const App = () => {
   return (
     <div className="editor">
       <div className="editor__menu">
-        <MenuList svgEditorRef={svgEditorRef} options={editorOptions} />
+        <MenuList
+          svgEditorRef={svgEditorRef}
+          gridHide={gridHide}
+          setGridHide={setGridHide}
+        />
       </div>
       <div className="editor__zoom-controls">
         <select
@@ -144,6 +157,8 @@ const App = () => {
           {...{
             gridGap,
             setGridGap,
+            gridHide,
+            setGridHide,
             guideLinesColor,
             setGuideLinesColor,
             editorBackgroundColorPicker,

@@ -29,7 +29,10 @@ export const useBackgroundImageGrid = (
   }, [zoom]);
 
   React.useEffect(() => {
-    if (hide) return;
+    if (hide) {
+      setBackgroundImage('');
+      return;
+    }
     const svgGrid = `<svg xmlns='http://www.w3.org/2000/svg' width='${gap}' height='${gap}'>
           <rect width='${gap}' height='${gap}' fill='transparent' stroke='${color}' stroke-width='${strokeWidth}'/>
           </svg>`;

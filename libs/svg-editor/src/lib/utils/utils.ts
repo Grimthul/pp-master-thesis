@@ -50,7 +50,7 @@ export const mergeWithDefaultOptions = (
     snap: true,
     snapRadius:
       Math.max(
-        options?.grid?.gap ?? GAP_DEFAULT_SIZE,
+        options?.grid?.hide ? 0 : options?.grid?.gap ?? GAP_DEFAULT_SIZE,
         ELEMENT_SNAP_RADIUS_MIN
       ) / 2,
     ...options?.elements,

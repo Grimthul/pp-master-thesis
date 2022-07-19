@@ -3,16 +3,17 @@ import * as React from 'react';
 import { Menu } from './Menu';
 import { ModalNew, ModalContact } from './modals/';
 
-import { SvgEditorOptions, SvgEditorRef } from '@pp-master-thesis/types';
+import { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './MenuList.scss';
 
 interface Props {
   svgEditorRef: React.RefObject<SvgEditorRef>;
-  options: SvgEditorOptions;
+  gridHide: boolean;
+  setGridHide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const MenuList = ({ svgEditorRef }: Props) => {
+export const MenuList = ({ svgEditorRef, gridHide, setGridHide }: Props) => {
   const listRef = React.useRef<HTMLUListElement>(null);
   const importRef = React.useRef<HTMLInputElement>(null);
   const [showModalNew, setShowModalNew] = React.useState(false);
@@ -98,11 +99,9 @@ export const MenuList = ({ svgEditorRef }: Props) => {
                 Reset view
               </li>
               <hr />
-              <li onClick={() => console.log('not yet implemented')}>
-                Grid toggle
-              </li>
-              <li onClick={() => console.log('not yet implemented')}>
-                Guide lines toggle
+              <li onClick={() => setGridHide((prev) => !prev)}>
+                <span>Grid</span>
+                <span>{!gridHide && <>&#10003;</>}</span>
               </li>
             </ul>
           </Menu>

@@ -178,7 +178,9 @@ export const dragElementTranslate = (
 
   const gap = options.grid?.gap;
   const gridTranslate =
-    options.grid?.snap && gap ? gridSnapTranslate(mouse, gap) : zeroTranslate();
+    !options.grid?.hide && options.grid?.snap && gap
+      ? gridSnapTranslate(mouse, gap)
+      : zeroTranslate();
   return {
     tx: isFinite(elementsTranslate.tx)
       ? elementsTranslate.tx
