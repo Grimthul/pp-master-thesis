@@ -38,8 +38,8 @@ export const useRefHandlers = ({
       return mousePointInElementInverted(event, wrapperRect, matrix, tx, ty);
     },
     center() {
-      setMatrix((matrix) =>
-        matrix.translate(
+      setMatrix(
+        identity().translate(
           ((wrapperRect?.width || 0) - (childRef.current?.clientWidth || 0)) /
             2,
           ((wrapperRect?.height || 0) - (childRef.current?.clientHeight || 0)) /

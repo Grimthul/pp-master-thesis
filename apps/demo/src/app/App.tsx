@@ -142,6 +142,7 @@ const App = () => {
         >
           {zoomDropdown.map((value, i) => (
             <option
+              key={i}
               style={i === 0 ? { display: 'none' } : {}}
               value={value / 100}
             >

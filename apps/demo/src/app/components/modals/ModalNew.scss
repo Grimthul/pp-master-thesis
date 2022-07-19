@@ -1,0 +1,22 @@
+.modal.new {
+  .modal__content {
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    div,
+    input {
+      margin: 2px 5px;
+    }
+
+    input {
+      padding: 2px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin: 0 0 0 auto;
+    }
+  }
+}
