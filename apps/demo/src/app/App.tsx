@@ -49,6 +49,8 @@ const App = () => {
     [editorBackgroundColor, gridGap, guideLinesColor, visible, zoomOptions]
   );
 
+  const zoomDropdown = [10, 25, 50, 75, 100, 125, 150, 175, 200, 300, 400, 500];
+
   React.useEffect(() => {
     const rgb = hexToRgb(editorBackgroundColorPicker);
     setEditorBackgroundColor(
@@ -116,13 +118,25 @@ const App = () => {
         />
       </div> */}
       <div className="editor__zoom-controls">
-        <div>{Math.round(zoom * 100)}%</div>
+        <div className="editor__zoom-value">{Math.round(zoom * 100)}%</div>
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomIn()}>
           +
         </button>
         <button onClick={() => svgEditorRef.current?.zoomableRef?.zoomOut()}>
           -
         </button>
+        <select
+          onChange={(event) =>
+            svgEditorRef.current?.zoomableRef?.zoomTo(
+              Number(event.target.value)
+            )
+          }
+          defaultValue={zoom}
+        >
+          {zoomDropdown.map((value) => (
+            <option value={value / 100}>{value}%</option>
+          ))}
+        </select>
       </div>
       <div className="editor__tools">
         <Draggables dragImageRef={dragImageRef} />
@@ -138,11 +152,17 @@ const App = () => {
       />
       {!loaded && <Loading className="loading--editor" />}
 
-      <ElementMenu
-        elements={activeElements}
-        updatedFromOutside={editorUpdated}
-        setUpdated={setElementUpdated}
-      />
+      {activeElements.length ? (
+        <ElementMenu
+          elements={activeElements}
+          updatedFromOutside={editorUpdated}
+          setUpdated={setElementUpdated}
+        />
+      ) : (
+        <div className="editor__options">
+          Placeholder for editor options (visible when no element is selected)
+        </div>
+      )}
     </div>
   );
 };

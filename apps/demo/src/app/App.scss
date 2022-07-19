@@ -25,7 +25,7 @@ ul {
   grid-template-areas:
     'menu menu menu'
     'zoom-controls tools tools'
-    'editor editor element-menu';
+    'editor editor options';
   grid-template-columns: 1fr 4fr 1.5fr;
   grid-template-rows: 0.3fr 0.5fr 9.2fr;
   width: 100%;
@@ -39,12 +39,18 @@ ul {
     gap: 5px;
     padding: 5px;
   }
-  &__zoom-controls {
-    grid-area: zoom-controls;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
+  &__zoom {
+    &-controls {
+      grid-area: zoom-controls;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+    }
+    &-value {
+      width: 50px;
+      text-align: end;
+    }
   }
   &__tools {
     grid-area: tools;
@@ -83,8 +89,9 @@ ul {
   box-sizing: border-box;
 }
 
-.element-menu {
-  grid-area: element-menu;
+.element-menu,
+.editor__options {
+  grid-area: options;
   padding: 5px;
   width: 80%;
   margin: 0 auto;
