@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {
+  dragElementTranslate,
   isCircular,
   isResizing,
   nodeCoordsInEditor,
@@ -16,6 +17,7 @@ export const ActiveElementResize = ({
   zoomable,
   zoom,
   tool,
+  options,
   setTool,
   setUpdated,
 }: PropsActiveElement) => {
@@ -103,10 +105,16 @@ export const ActiveElementResize = ({
       const ty =
         (modifierY < 0 ? -(end.y - start.y) : end.y - start.y) - tyOffset;
 
+      const { tx: snapTx, ty: snapTy } = dragElementTranslate(
+        new DOMPointReadOnly(x - tx, y - ty),
+        element,
+        options
+      );
+
       const { widthName, heightName } = nodeSizeNames(element);
       const { xName, yName } = nodeCoordsInEditor(element);
-      const newWidth = Math.max(1, width + tx);
-      const newHeight = Math.max(1, height + ty);
+      const newWidth = Math.max(1, width + tx - snapTx);
+      const newHeight = Math.max(1, height + ty - snapTy);
       if (newWidth === 1 || newHeight === 1) {
         // setDirection(oppositeDirection(direction as keyof Controls));
         return;
@@ -117,10 +125,10 @@ export const ActiveElementResize = ({
         element.setAttribute(heightName || widthName, newHeight.toString());
       modifierX < 0 &&
         !circular &&
-        element.setAttribute(xName, (x - tx).toString());
+        element.setAttribute(xName, (x - tx + snapTx).toString());
       modifierY < 0 &&
         !circular &&
-        element.setAttribute(yName, (y - ty).toString());
+        element.setAttribute(yName, (y - ty + snapTy).toString());
       setTranslate(new DOMPointReadOnly(tx, ty));
     };
 
@@ -144,6 +152,7 @@ export const ActiveElementResize = ({
     controls,
     direction,
     element,
+    options,
     setTool,
     setUpdated,
     startBbox,
