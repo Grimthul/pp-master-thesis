@@ -32,6 +32,7 @@ export const getAlignedElements = (
     elementHeight ?? elementWidth,
     snapRadius
   );
+
   return {
     left: isAlignedX(),
     middleX: isAlignedX(dragElementWidth / 2),

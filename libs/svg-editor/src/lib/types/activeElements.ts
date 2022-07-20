@@ -33,10 +33,13 @@ export interface PropsActiveElements extends PropsCommon {
     React.SetStateAction<SVGGraphicsElement | undefined>
   >;
   setGuideLines: React.Dispatch<
-    React.SetStateAction<{
-      mouse: DOMPointReadOnly;
-      guideLines: ElementGuideLines;
-    }>
+    React.SetStateAction<
+      | {
+          mouse: DOMPointReadOnly;
+          guideLines: ElementGuideLines;
+        }
+      | undefined
+    >
   >;
 }
 export interface CoordsModifier {

@@ -33,11 +33,13 @@ export const ActiveElements = (props: PropsActiveElements) => {
   const updateElementsPosition = React.useCallback(
     (mouse?: DOMPointReadOnly, mouseOffsets?: DOMPointReadOnly[]) => {
       if (!mouse || !mouseOffsets || !draggedElement) return;
-
+      const bBox = draggedElement.getBBox();
+      const offsetX = isCircular(draggedElement) ? bBox.width / 2 : 0;
+      const offsetY = isCircular(draggedElement) ? bBox.height / 2 : 0;
       const { tx, ty, guideLines } = dragElementTranslate(
         new DOMPointReadOnly(
-          mouse.x - mouseOffsets[0].x,
-          mouse.y - mouseOffsets[0].y
+          mouse.x - mouseOffsets[0].x - offsetX,
+          mouse.y - mouseOffsets[0].y - offsetY
         ),
         draggedElement,
         options,
@@ -134,6 +136,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
       setMouseOffsets(undefined);
       setTool(Tool.NONE);
       setDraggedElement(undefined);
+      setGuideLines(undefined);
     };
 
     activeElements.forEach((element) =>
@@ -155,6 +158,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     dragged,
     mouseOffsets,
     setDraggedElement,
+    setGuideLines,
     setTool,
     setUpdated,
     startDrag,

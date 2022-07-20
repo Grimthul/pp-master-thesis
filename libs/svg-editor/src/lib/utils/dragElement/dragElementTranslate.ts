@@ -50,6 +50,8 @@ const farthestElementsInAxes = (
     .reduce((acc: ElementGuideLines, element) => {
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
+      console.log(mouse.x, elementX);
+
       const alignedElements = getAlignedElements(
         mouse.x - elementX,
         mouse.y - elementY,
@@ -115,6 +117,8 @@ const elementsSnapTranslate = (
       dragElement,
       elements
     );
+    console.log('farthest', farthestElements);
+
     const farthestElementsKeys = Object.keys(farthestElements) as Array<
       keyof AlignedElement
     >;

@@ -69,10 +69,13 @@ export const SvgEditor = React.forwardRef(
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [activeElementSelecting, setActiveElementSelecting] =
       React.useState(false);
-    const [guideLines, setGuideLines] = React.useState<{
-      mouse: DOMPointReadOnly;
-      guideLines: ElementGuideLines;
-    }>(defaultGuideLines());
+    const [guideLines, setGuideLines] = React.useState<
+      | {
+          mouse: DOMPointReadOnly;
+          guideLines: ElementGuideLines;
+        }
+      | undefined
+    >(defaultGuideLines());
     const propsSetActiveElements = props.setActiveElements;
     const [options, setOptions] = React.useState(() =>
       mergeWithDefaultOptions(props.options)
@@ -223,7 +226,7 @@ export const SvgEditor = React.forwardRef(
             tool={tool}
           >
             <g ref={elementsWrapperRef} />
-            {activeElements.length <= 1 && dragElement && (
+            {activeElements.length <= 1 && dragElement && guideLines && (
               <GuideLines
                 mouse={guideLines.mouse}
                 guideLines={guideLines.guideLines}
