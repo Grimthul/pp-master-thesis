@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { isCircular, keyCoords, roundToMultiple } from '../utils';
+import { keyCoords, roundToMultiple } from '../utils';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 
@@ -115,8 +115,8 @@ export const GuideLines = ({
         return (
           <rect
             key={key}
-            x={isCircular(dragElement) && isX ? x - dragElementWidth / 2 : x}
-            y={isCircular(dragElement) && isY ? y - dragElementHeight / 2 : y}
+            x={x}
+            y={y}
             width={width}
             height={height}
             fill="transparent"

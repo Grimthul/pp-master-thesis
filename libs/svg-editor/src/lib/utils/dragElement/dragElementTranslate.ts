@@ -1,5 +1,4 @@
 import {
-  isCircular,
   keyCoords,
   nodeCoordsInEditor,
   nodeSize,
@@ -38,7 +37,6 @@ const farthestElementsInAxes = (
     dragElement instanceof SVGGraphicsElement
       ? dragElement.getBBox()
       : { width: 0, height: 0 };
-
   const dragElementWidth = dragElement.clientWidth || width;
   const dragElementHeight = dragElement.clientHeight || height;
 
@@ -53,14 +51,8 @@ const farthestElementsInAxes = (
       const { x: elementX, y: elementY } = nodeCoordsInEditor(element);
       const { width: elementWidth, height: elementHeight } = nodeSize(element);
       const alignedElements = getAlignedElements(
-        mouse.x -
-          elementX -
-          (isCircular(dragElement) ? dragElementWidth / 2 : 0),
-        mouse.y -
-          elementY -
-          (isCircular(dragElement)
-            ? (dragElementHeight || dragElementWidth) / 2
-            : 0),
+        mouse.x - elementX,
+        mouse.y - elementY,
         elementWidth,
         elementHeight || elementWidth,
         dragElementWidth,
@@ -70,7 +62,6 @@ const farthestElementsInAxes = (
       const alignedElementsKeys = Object.keys(alignedElements) as Array<
         keyof AlignedElement
       >;
-
       /**
        * Processes alignedElements, for each side of dragElement chooses the farthest one.
        */
@@ -93,7 +84,6 @@ const farthestElementsInAxes = (
                 elementY
               )
             : elementY;
-
           updatedGuideLines[key] = furtherGuideLineCoords(
             acc[key],
             { addHeight, addWidth },

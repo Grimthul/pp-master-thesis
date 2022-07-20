@@ -4,8 +4,6 @@ import React from 'react';
 import { ElementGuideLines } from './dragElement';
 
 export interface PropsCommon {
-  activeElements: SVGGraphicsElement[];
-  elements: SVGGraphicsElement[];
   zoomable: ZoomableRef | null;
   zoom: number;
   tool: Tool;
@@ -13,15 +11,6 @@ export interface PropsCommon {
   options: SvgEditorOptions;
   setTool: React.Dispatch<React.SetStateAction<Tool>>;
   setUpdated: React.Dispatch<React.SetStateAction<number>>;
-  setGuideLines: React.Dispatch<
-    React.SetStateAction<{
-      mouse: DOMPointReadOnly;
-      guideLines: ElementGuideLines;
-    }>
-  >;
-  setDraggedElement: React.Dispatch<
-    React.SetStateAction<SVGGraphicsElement | undefined>
-  >;
 }
 
 export interface ElementPosition {
@@ -35,9 +24,20 @@ export interface PropsActiveElement extends PropsCommon {
 }
 
 export interface PropsActiveElements extends PropsCommon {
+  elements: SVGGraphicsElement[];
+  activeElements: SVGGraphicsElement[];
   disableDrag: boolean;
   draggedElement: SVGGraphicsElement | undefined;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
+  setDraggedElement: React.Dispatch<
+    React.SetStateAction<SVGGraphicsElement | undefined>
+  >;
+  setGuideLines: React.Dispatch<
+    React.SetStateAction<{
+      mouse: DOMPointReadOnly;
+      guideLines: ElementGuideLines;
+    }>
+  >;
 }
 export interface CoordsModifier {
   modifierX: number;

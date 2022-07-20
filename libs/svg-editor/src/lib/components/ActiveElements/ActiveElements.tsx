@@ -16,18 +16,17 @@ import { ActiveElementResize } from './ActiveElementResize';
 import { PathControls } from './PathControls';
 
 export const ActiveElements = (props: PropsActiveElements) => {
-  const { disableDrag, draggedElement, setActiveElements, ...common } = props;
   const {
     activeElements,
-    setTool,
-    zoomable,
-    tool,
-    options,
     elements,
-    setUpdated,
+    disableDrag,
+    draggedElement,
+    setActiveElements,
     setGuideLines,
     setDraggedElement,
-  } = common;
+    ...common
+  } = props;
+  const { setTool, zoomable, tool, options, setUpdated } = common;
   const [mouseOffsets, setMouseOffsets] = React.useState<DOMPointReadOnly[]>();
   const [dragged, setDragged] = React.useState(false);
 
