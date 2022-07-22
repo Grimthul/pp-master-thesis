@@ -19,9 +19,9 @@ export enum ZoomDirection {
 }
 
 export enum GridLinesStyle {
+  // DASHED = 'DASHED',
   DOTTED = 'DOTTED',
   LINES = 'LINES',
-  // DASHED = "DASHED" ??
 }
 
 export enum ElementType {
