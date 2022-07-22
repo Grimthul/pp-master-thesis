@@ -1,6 +1,7 @@
 import * as React from 'react';
+
 import { Attributes } from './Attributes';
-import { ELEMENT_ATTRIBUTES } from './element-attributes';
+import { ELEMENT_ATTRIBUTES } from '../element-attributes';
 
 import './ElementMenu.scss';
 

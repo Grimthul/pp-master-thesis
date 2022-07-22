@@ -1,10 +1,11 @@
 import * as React from 'react';
+
 import {
   COLOR_ATTRIBUTES,
   NUMBER_ATTRIBUTES,
   PERCENT_ATTRIBUTES,
-} from './element-attributes';
-import type { SvgAttributeWithDefault } from './types';
+} from '../element-attributes';
+import type { SvgAttributeWithDefault } from '../types';
 
 interface CommonProps {
   elements: SVGGraphicsElement[];
@@ -19,8 +20,6 @@ interface Props extends CommonProps {
 interface AttributeProps extends CommonProps {
   attributeWithDefault: SvgAttributeWithDefault;
 }
-
-// TODO: attributes default values to prevent warnings for "transparent" colors for example
 
 const Attribute = ({
   attributeWithDefault,

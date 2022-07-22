@@ -1,1 +1,1 @@
-export * from './lib/ElementMenu';
+export * from './lib/components/ElementMenu';
