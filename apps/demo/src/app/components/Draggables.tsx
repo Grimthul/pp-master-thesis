@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import { DraggableSvg } from './DraggableSvg';
 
-import { ID_DROPPABLE } from '@pp-master-thesis/constants';
-
 import './Draggables.scss';
 
 const ELEMENT_SIZE = 40;
@@ -17,11 +15,7 @@ export const Draggables = ({
     children,
   }: {
     children: React.ReactElement;
-  }) => (
-    <DraggableSvg dragImageRef={dragImageRef} onDragOffTargetId={ID_DROPPABLE}>
-      {children}
-    </DraggableSvg>
-  );
+  }) => <DraggableSvg dragImageRef={dragImageRef}>{children}</DraggableSvg>;
 
   return (
     <div className="draggables">

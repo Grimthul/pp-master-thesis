@@ -6,11 +6,9 @@ import { isElementUnderEvent } from '@pp-master-thesis/utils';
 export const DraggableSvg = ({
   children,
   dragImageRef,
-  onDragOffTargetId,
 }: {
   children: React.ReactElement;
   dragImageRef?: React.RefObject<HTMLDivElement>;
-  onDragOffTargetId?: string;
 }) => {
   const dragImageDefaultStyle = React.useMemo<React.CSSProperties>(
     () => ({
@@ -23,9 +21,7 @@ export const DraggableSvg = ({
     }),
     []
   );
-  const onDragOffTarget = onDragOffTargetId
-    ? document.getElementById(onDragOffTargetId)
-    : null;
+  const onDragOffTarget = document.getElementById('droppable');
   const emptyBase64Png = React.useMemo(
     () =>
       'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 interface Props {
-  id?: string;
   droppableRef?: React.RefObject<HTMLDivElement>;
   onDrop(event: React.DragEvent): void;
   onDragEnter?(event: React.DragEvent): void;
@@ -11,7 +10,6 @@ interface Props {
 }
 
 export const Droppable = ({
-  id,
   droppableRef,
   onDrop,
   onDragEnter,
@@ -26,7 +24,7 @@ export const Droppable = ({
 
   return (
     <div
-      id={id}
+      id={'droppable'}
       style={style}
       className={'droppable'}
       ref={droppableRef}

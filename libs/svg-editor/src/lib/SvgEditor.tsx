@@ -17,7 +17,6 @@ import { TOOL_CURSORS } from './constants';
 import { ElementGuideLines } from './types/dragElement';
 
 import { ActivableSvg } from '@pp-master-thesis/activable-svg';
-import { ID_DROPPABLE } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
 import { Tool } from '@pp-master-thesis/enums';
 import { Zoomable } from '@pp-master-thesis/zoomable';
@@ -160,7 +159,6 @@ export const SvgEditor = React.forwardRef(
 
     return (
       <Droppable
-        id={ID_DROPPABLE}
         style={{ visibility: `${options.visible ? 'visible' : 'hidden'}` }}
         droppableRef={droppableRef}
         onDrop={(event) => {

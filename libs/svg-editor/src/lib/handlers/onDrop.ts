@@ -1,11 +1,8 @@
 import * as React from 'react';
-import { resizeSvg, nodeCoords, isPath } from '../utils/';
-import * as Path from '../shapes/path';
 
-import {
-  EDITOR_HEIGHT_ADD,
-  EDITOR_WIDTH_ADD,
-} from '@pp-master-thesis/constants';
+import * as Path from '../shapes/path';
+import { resizeSvg, nodeCoords, isPath } from '../utils/';
+
 import { ZoomableRef } from '@pp-master-thesis/types';
 
 const resizeDimensions = (
@@ -21,8 +18,8 @@ const resizeDimensions = (
       ? Math.ceil((coord - editorSize + addElementSize) / size) * size
       : 0;
   return {
-    width: dimension(x, EDITOR_WIDTH_ADD, svg.width.baseVal.value),
-    height: dimension(y, EDITOR_HEIGHT_ADD, svg.height.baseVal.value),
+    width: dimension(x, 600, svg.width.baseVal.value),
+    height: dimension(y, 600, svg.height.baseVal.value),
   };
 };
 
