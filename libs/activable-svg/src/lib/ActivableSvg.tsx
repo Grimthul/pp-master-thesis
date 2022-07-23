@@ -188,6 +188,7 @@ export const ActivableSvg = React.forwardRef(
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
+        onContextMenu={(event) => event.preventDefault()}
       >
         {children}
         {selectorStartInSvg && mouseDragPosInSvg && (

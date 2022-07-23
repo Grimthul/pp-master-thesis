@@ -3,7 +3,6 @@ import { resizeSvg, nodeCoords, isPath } from '../utils/';
 import * as Path from '../shapes/path';
 
 import {
-  ADD_ELEMENT_SIZE,
   EDITOR_HEIGHT_ADD,
   EDITOR_WIDTH_ADD,
 } from '@pp-master-thesis/constants';
@@ -12,13 +11,14 @@ import { ZoomableRef } from '@pp-master-thesis/types';
 const resizeDimensions = (
   x: number,
   y: number,
-  svg: SVGSVGElement
+  svg: SVGSVGElement,
+  addElementSize: number
 ): { width: number; height: number } => {
   const dimension = (coord: number, size: number, editorSize: number) =>
     coord < 0
       ? Math.floor(coord / size) * size
-      : coord > editorSize - ADD_ELEMENT_SIZE
-      ? Math.ceil((coord - editorSize + ADD_ELEMENT_SIZE) / size) * size
+      : coord > editorSize - addElementSize
+      ? Math.ceil((coord - editorSize + addElementSize) / size) * size
       : 0;
   return {
     width: dimension(x, EDITOR_WIDTH_ADD, svg.width.baseVal.value),
@@ -48,7 +48,7 @@ export const onDrop = ({
   )?.firstElementChild;
   const editor = zoomableRef.current;
   if (!element || !editor || !svg || !elementsWrapper) return;
-  const elementCopy = element.cloneNode(true) as SVGElement;
+  const elementCopy = element.cloneNode(true) as SVGGraphicsElement;
   const { x, y } = editor.getMousePoint(event);
   if (isPath(element)) {
     const d = elementCopy.getAttribute('d') || '';
@@ -66,7 +66,12 @@ export const onDrop = ({
 
   elementsWrapper.appendChild(elementCopy);
 
-  const { width, height } = resizeDimensions(x, y, svg);
+  const { width, height } = resizeDimensions(
+    x,
+    y,
+    svg,
+    elementCopy.getBBox().width
+  );
   resizeSvg({
     zoomableRef,
     elementsWrapper,

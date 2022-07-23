@@ -2,9 +2,11 @@ import * as React from 'react';
 
 import { DraggableSvg } from './DraggableSvg';
 
-import { ADD_ELEMENT_SIZE, ID_DROPPABLE } from '@pp-master-thesis/constants';
+import { ID_DROPPABLE } from '@pp-master-thesis/constants';
 
 import './Draggables.scss';
+
+const ELEMENT_SIZE = 40;
 
 export const Draggables = ({
   dragImageRef,
@@ -28,13 +30,13 @@ export const Draggables = ({
           id="add-circle"
           className="draggable__svg"
           viewBox="-1 -1 42 42"
-          width={ADD_ELEMENT_SIZE + 2}
-          height={ADD_ELEMENT_SIZE + 2}
+          width={ELEMENT_SIZE + 2}
+          height={ELEMENT_SIZE + 2}
         >
           <circle
-            cx={ADD_ELEMENT_SIZE / 2}
-            cy={ADD_ELEMENT_SIZE / 2}
-            r={ADD_ELEMENT_SIZE / 2}
+            cx={ELEMENT_SIZE / 2}
+            cy={ELEMENT_SIZE / 2}
+            r={ELEMENT_SIZE / 2}
             stroke="#000000"
             fill="#000000"
             fillOpacity={0}
@@ -44,8 +46,8 @@ export const Draggables = ({
       <DraggableSvgWithAttrs>
         <svg id="add-rectangle" className="draggable__svg">
           <rect
-            width={ADD_ELEMENT_SIZE}
-            height={ADD_ELEMENT_SIZE}
+            width={ELEMENT_SIZE}
+            height={ELEMENT_SIZE}
             stroke="#000000"
             fill="#000000"
             fillOpacity={0}
@@ -57,14 +59,14 @@ export const Draggables = ({
           id="add-ellipse"
           className="draggable__svg"
           viewBox="-1 -1 41 22"
-          width={ADD_ELEMENT_SIZE + 2}
-          height={ADD_ELEMENT_SIZE / 2 + 2}
+          width={ELEMENT_SIZE + 2}
+          height={ELEMENT_SIZE / 2 + 2}
         >
           <ellipse
-            cx={ADD_ELEMENT_SIZE / 2}
-            cy={ADD_ELEMENT_SIZE / 4}
-            rx={ADD_ELEMENT_SIZE / 2}
-            ry={ADD_ELEMENT_SIZE / 4}
+            cx={ELEMENT_SIZE / 2}
+            cy={ELEMENT_SIZE / 4}
+            rx={ELEMENT_SIZE / 2}
+            ry={ELEMENT_SIZE / 4}
             stroke="#000000"
             fill="#000000"
             fillOpacity={0}
@@ -74,7 +76,7 @@ export const Draggables = ({
       <DraggableSvgWithAttrs>
         <svg id="add-path" className="draggable__svg">
           <path
-            d={`M 0 ${ADD_ELEMENT_SIZE} L ${ADD_ELEMENT_SIZE} 0`}
+            d={`M 0 ${ELEMENT_SIZE} L ${ELEMENT_SIZE} 0`}
             stroke="#000000"
             fill="#000000"
             fillOpacity={0}
