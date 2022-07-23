@@ -3,17 +3,18 @@ import * as React from 'react';
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { PRIMARY_BUTTON } from '@pp-master-thesis/constants';
 import { Tool } from '@pp-master-thesis/enums';
+
 import type { GetMousePoint } from '@pp-master-thesis/types';
 
 import './ActivableSvg.scss';
 
 type Props = React.SVGProps<SVGSVGElement> & {
   activeElements: SVGGraphicsElement[];
-  tool: Tool;
-  zoom: number;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
-  setSelecting: React.Dispatch<React.SetStateAction<boolean>>;
-  getMousePoint: GetMousePoint | undefined;
+  tool: Tool;
+  setTool: React.Dispatch<React.SetStateAction<Tool>>;
+  getMousePoint?: GetMousePoint;
+  zoom: number;
 };
 
 export const ActivableSvg = React.forwardRef(
@@ -21,11 +22,11 @@ export const ActivableSvg = React.forwardRef(
     {
       children,
       activeElements,
-      tool,
-      zoom,
       setActiveElements,
-      setSelecting,
+      tool,
+      setTool,
       getMousePoint,
+      zoom,
       ...props
     }: Props,
     ref: React.ForwardedRef<SVGSVGElement>
@@ -42,9 +43,9 @@ export const ActivableSvg = React.forwardRef(
     const [mouseDragPos, setMouseDragPos] = React.useState<DOMPointReadOnly>();
 
     React.useEffect(() => {
-      if (selectorStart) setSelecting(true);
-      else setSelecting(false);
-    }, [selectorStart, setSelecting]);
+      if (selectorStart) setTool(Tool.SELECTING_ELEMENTS);
+      else setTool(Tool.NONE);
+    }, [selectorStart, setTool]);
 
     const mousePosition = React.useCallback(
       (event: React.MouseEvent) =>

@@ -1,5 +1,5 @@
 export enum Tool {
-  NONE = 'DEFAULT',
+  NONE = 'NONE',
   PAN = 'MOVE',
   ZOOM = 'ZOOM',
   NW_RESIZE = 'NW-RESIZE',
@@ -10,7 +10,8 @@ export enum Tool {
   E_RESIZE = 'E-RESIZE',
   N_RESIZE = 'N-RESIZE',
   S_RESIZE = 'S-RESIZE',
-  PATH_MOVE_POINT = 'CROSSHAIR',
+  PATH_MOVE_POINT = 'PATH_MOVE_POINT',
+  SELECTING_ELEMENTS = 'SELECTING_ELEMENTS',
 }
 
 export enum ZoomDirection {

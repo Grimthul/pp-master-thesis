@@ -26,7 +26,6 @@ export interface PropsActiveElement extends PropsCommon {
 export interface PropsActiveElements extends PropsCommon {
   elements: SVGGraphicsElement[];
   activeElements: SVGGraphicsElement[];
-  disableDrag: boolean;
   draggedElement: SVGGraphicsElement | undefined;
   setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>;
   setDraggedElement: React.Dispatch<

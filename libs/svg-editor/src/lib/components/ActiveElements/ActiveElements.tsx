@@ -6,6 +6,7 @@ import {
   isPathMoving,
   dragElementTranslate,
   isPath,
+  isSelectingElements,
 } from '../../utils';
 import type { PropsActiveElements } from '../../types/activeElements';
 
@@ -19,7 +20,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
   const {
     activeElements,
     elements,
-    disableDrag,
     draggedElement,
     setActiveElements,
     setGuideLines,
@@ -111,7 +111,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
     };
 
     const drag = (event: MouseEvent) => {
-      if (disableDrag || event.ctrlKey) return;
+      if (isSelectingElements(tool) || event.ctrlKey) return;
       // handle drag right away after click
       if (
         !isPanning(tool) &&
@@ -154,7 +154,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
     };
   }, [
     activeElements,
-    disableDrag,
     dragged,
     mouseOffsets,
     setDraggedElement,

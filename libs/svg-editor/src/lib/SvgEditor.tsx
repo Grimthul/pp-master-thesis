@@ -43,7 +43,21 @@ const defaultGuideLines = () => ({
   guideLines: {},
 });
 
-// TODO: Forward ref for zoom with buttons - zoomIn, zoomOut, zoomTo, resetZoom, resetView, newSVG
+const CURSORS = {
+  [Tool.NONE]: 'default',
+  [Tool.PAN]: 'move',
+  [Tool.ZOOM]: 'zoom',
+  [Tool.NW_RESIZE]: 'nw-resize',
+  [Tool.SW_RESIZE]: 'sw-resize',
+  [Tool.NE_RESIZE]: 'ne-resize',
+  [Tool.SE_RESIZE]: 'se-resize',
+  [Tool.W_RESIZE]: 'w-resize',
+  [Tool.E_RESIZE]: 'e-resize',
+  [Tool.N_RESIZE]: 'n-resize',
+  [Tool.S_RESIZE]: 's-resize',
+  [Tool.PATH_MOVE_POINT]: 'crosshair',
+  [Tool.SELECTING_ELEMENTS]: 'crosshair',
+};
 
 export const SvgEditor = React.forwardRef(
   (props: Props, ref: React.ForwardedRef<SvgEditorRef>) => {
@@ -67,8 +81,6 @@ export const SvgEditor = React.forwardRef(
       SVGGraphicsElement[]
     >([]);
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
-    const [activeElementSelecting, setActiveElementSelecting] =
-      React.useState(false);
     const [guideLines, setGuideLines] = React.useState<
       | {
           mouse: DOMPointReadOnly;
@@ -206,7 +218,7 @@ export const SvgEditor = React.forwardRef(
         <Zoomable
           ref={zoomableRef}
           options={zoomOptions}
-          style={{ cursor: tool }}
+          style={{ cursor: CURSORS[tool] }}
         >
           <ActivableSvg
             xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +233,7 @@ export const SvgEditor = React.forwardRef(
             activeElements={activeElements}
             setActiveElements={setActiveElements}
             getMousePoint={zoomableRef.current?.getMousePoint}
-            setSelecting={setActiveElementSelecting}
+            setTool={setTool}
             zoom={zoom}
             tool={tool}
           >
@@ -243,7 +255,6 @@ export const SvgEditor = React.forwardRef(
                 options={options}
                 zoomable={zoomableRef.current}
                 zoom={zoom}
-                disableDrag={activeElementSelecting}
                 tool={tool}
                 setTool={setTool}
                 updatedFromOutside={props.updatedFromOutside}

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import * as Path from '../../shapes/path';
 import type { PropsActiveElement } from '../../types';
-import { dragElementTranslate } from '../../utils';
+import { dragElementTranslate, isPathMoving } from '../../utils';
 
 import { strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { Tool } from '@pp-master-thesis/enums';
@@ -73,7 +73,7 @@ export const PathControls = ({
 
   React.useEffect(() => {
     const onMouseMove = (event: MouseEvent) => {
-      if (!zoomable || pointIndex < 0 || tool !== Tool.PATH_MOVE_POINT) return;
+      if (!zoomable || pointIndex < 0 || !isPathMoving(tool)) return;
       const mouse = zoomable.getMousePoint(event);
       const { tx, ty } = dragElementTranslate(mouse, element, options);
 

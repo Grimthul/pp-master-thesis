@@ -109,3 +109,5 @@ export const keyCoords = (key: string): { isX?: boolean; isY?: boolean } =>
 export const isResizing = (tool: Tool) => tool.includes('-RESIZE');
 export const isPanning = (tool: Tool) => tool === Tool.PAN;
 export const isPathMoving = (tool: Tool) => tool === Tool.PATH_MOVE_POINT;
+export const isSelectingElements = (tool: Tool) =>
+  tool === Tool.SELECTING_ELEMENTS;
