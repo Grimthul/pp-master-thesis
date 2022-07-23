@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { strokeWidthByZoom } from '@pp-master-thesis/utils';
-import { PRIMARY_BUTTON } from '@pp-master-thesis/constants';
+import { isPrimaryButton, strokeWidthByZoom } from '@pp-master-thesis/utils';
 import { Tool } from '@pp-master-thesis/enums';
 
 import type { GetMousePoint } from '@pp-master-thesis/types';
@@ -87,7 +86,7 @@ export const ActivableSvg = React.forwardRef(
 
     const onMouseMove = React.useCallback(
       (event: React.MouseEvent) => {
-        if (event.buttons === PRIMARY_BUTTON) setMoved(true);
+        if (isPrimaryButton(event.button)) setMoved(true);
         if (!event.ctrlKey && selectorStart && getMousePoint) {
           setMouseDragPos(mousePosition(event));
           setMouseDragPosInSvg(getMousePoint(event));

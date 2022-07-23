@@ -1,18 +1,20 @@
 import * as React from 'react';
 
 import {
-  isPanning,
-  isResizing,
-  isPathMoving,
   dragElementTranslate,
+  isCircular,
+  isPanning,
   isPath,
+  isPathMoving,
+  isResizing,
   isSelectingElements,
+  translateElementTo,
 } from '../../utils';
 import type { PropsActiveElements } from '../../types/activeElements';
 
 import { ElementType, Tool } from '@pp-master-thesis/enums';
-import { isCircular, translateElementTo } from '../../utils';
-import { PRIMARY_BUTTON } from '@pp-master-thesis/constants';
+import { isPrimaryButton } from '@pp-master-thesis/utils';
+
 import { ActiveElementResize } from './ActiveElementResize';
 import { PathControls } from './PathControls';
 
@@ -118,7 +120,7 @@ export const ActiveElements = (props: PropsActiveElements) => {
         !isPathMoving(tool) &&
         !isResizing(tool) &&
         activeElements.includes(event.target as SVGGraphicsElement) &&
-        event.buttons === PRIMARY_BUTTON
+        isPrimaryButton(event.button)
       ) {
         startDrag(event);
         setDragged(true);

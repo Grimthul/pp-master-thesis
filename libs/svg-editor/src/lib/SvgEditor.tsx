@@ -1,24 +1,26 @@
 import * as React from 'react';
 
-import { onDragEnter, onDrop } from './handlers';
 import {
   mergeWithDefaultOptions,
   dragElementTranslate,
   isPath,
   translateElement,
 } from './utils/';
+import { onDragEnter, onDrop } from './handlers';
 import {
   useBackgroundImageGrid,
   useDragImageResetOnDragExit,
   useRefHandlers,
 } from './hooks';
 import { ActiveElements, GuideLines } from './components/';
-
+import { TOOL_CURSORS } from './constants';
 import { ElementGuideLines } from './types/dragElement';
+
 import { ActivableSvg } from '@pp-master-thesis/activable-svg';
+import { ID_DROPPABLE } from '@pp-master-thesis/constants';
 import { Droppable } from '@pp-master-thesis/droppable';
-import { Zoomable } from '@pp-master-thesis/zoomable';
 import { Tool } from '@pp-master-thesis/enums';
+import { Zoomable } from '@pp-master-thesis/zoomable';
 
 import type {
   SvgEditorOptions,
@@ -28,8 +30,6 @@ import type {
 } from '@pp-master-thesis/types';
 
 import './SvgEditor.scss';
-import { ID_DROPPABLE } from '@pp-master-thesis/constants';
-import { TOOL_CURSORS } from './constants';
 
 interface Props {
   options?: SvgEditorOptions;
