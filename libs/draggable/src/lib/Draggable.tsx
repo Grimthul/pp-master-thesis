@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 interface Props {
-  dragImage?: Element;
   dragImageStyle?: React.CSSProperties;
   dragImageRef?: React.RefObject<HTMLDivElement>;
   onDragStart?(event: React.DragEvent): void;
@@ -13,7 +12,7 @@ interface Props {
  * Creates a draggable object from children.
  */
 export const Draggable = (props: Props) => {
-  const { dragImage, dragImageStyle, dragImageRef, children } = props;
+  const { dragImageStyle, dragImageRef, children } = props;
   const [showDragImage, setShowDragImage] = React.useState(false);
 
   const onDragStart = (event: React.DragEvent) => {
@@ -26,7 +25,7 @@ export const Draggable = (props: Props) => {
   };
 
   const onDragEnd = () => setShowDragImage(false);
-  const shouldRenderImage = showDragImage && dragImage;
+  const shouldRenderImage = showDragImage;
   return (
     <>
       <div

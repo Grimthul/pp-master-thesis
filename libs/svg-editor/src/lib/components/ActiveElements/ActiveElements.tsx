@@ -115,12 +115,13 @@ export const ActiveElements = (props: PropsActiveElements) => {
     const drag = (event: MouseEvent) => {
       if (isSelectingElements(tool) || event.ctrlKey) return;
       // handle drag right away after click
+
       if (
         !isPanning(tool) &&
         !isPathMoving(tool) &&
         !isResizing(tool) &&
         activeElements.includes(event.target as SVGGraphicsElement) &&
-        isPrimaryButton(event.button)
+        isPrimaryButton(event.buttons)
       ) {
         startDrag(event);
         setDragged(true);

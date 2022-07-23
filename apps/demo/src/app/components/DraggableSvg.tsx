@@ -29,7 +29,6 @@ export const DraggableSvg = ({
   );
   const [dragImageStyle, setDragImageStyle] =
     React.useState<React.CSSProperties>({});
-  const [element, setElement] = React.useState<Element>();
 
   const onDragStart = (event: React.DragEvent) => {
     const element = event.currentTarget.firstElementChild;
@@ -49,7 +48,6 @@ export const DraggableSvg = ({
       height: svgElementRect.height,
       ...dragImageDefaultStyle,
     });
-    setElement(element);
   };
 
   const onDrag = (event: React.DragEvent) => {
@@ -64,7 +62,6 @@ export const DraggableSvg = ({
 
   return (
     <Draggable
-      dragImage={element}
       dragImageStyle={dragImageStyle}
       dragImageRef={dragImageRef}
       onDragStart={onDragStart}
