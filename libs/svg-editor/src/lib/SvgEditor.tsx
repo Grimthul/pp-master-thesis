@@ -208,17 +208,15 @@ export const SvgEditor = React.forwardRef(
             width={svgSize?.width}
             height={svgSize?.height}
             style={{
-              width: svgSize?.width,
-              height: svgSize?.height,
               backgroundImage: backgroundImage,
               backgroundColor: options.backgroundColor,
             }}
             activeElements={activeElements}
             setActiveElements={setActiveElements}
-            getMousePoint={zoomableRef.current?.getMousePoint}
-            setTool={setTool}
-            zoom={zoom}
             tool={tool}
+            setTool={setTool}
+            getMousePoint={zoomableRef.current?.getMousePoint}
+            zoom={zoom}
           >
             <g ref={elementsWrapperRef} />
             {activeElements.length <= 1 && dragElement && guideLines && (

@@ -23,7 +23,6 @@ import type {
 import { ElementType } from '@pp-master-thesis/enums';
 import type { SvgEditorOptions } from '@pp-master-thesis/types';
 
-// TODO: REFACTOR
 /**
  * Returns the farthest elements for each side of given element.
  */
