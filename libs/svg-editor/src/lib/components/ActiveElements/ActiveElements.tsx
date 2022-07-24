@@ -179,13 +179,6 @@ export const ActiveElements = (props: PropsActiveElements) => {
             <ActiveElementResize key={i} element={element} {...common} />
           )
         )}
-      {/* {!dragged && elements.length === 1 && (
-        <ActiveElementRotate
-          element={elements[0]}
-          setResizing={setResizing}
-          {...common}
-        />
-      )} */}
     </>
   );
 };
