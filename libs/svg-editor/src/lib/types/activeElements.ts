@@ -7,7 +7,6 @@ export interface PropsCommon {
   zoomable: ZoomableRef | null;
   zoom: number;
   tool: Tool;
-  updatedFromOutside: number;
   options: SvgEditorOptions;
   setTool: React.Dispatch<React.SetStateAction<Tool>>;
   setUpdated: React.Dispatch<React.SetStateAction<number>>;

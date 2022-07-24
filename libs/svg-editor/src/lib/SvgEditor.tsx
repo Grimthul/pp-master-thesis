@@ -238,7 +238,6 @@ export const SvgEditor = React.forwardRef(
                 zoom={zoom}
                 tool={tool}
                 setTool={setTool}
-                updatedFromOutside={props.updatedFromOutside}
                 setUpdated={props.setUpdated}
                 setActiveElements={setActiveElements}
                 draggedElement={draggedElement}
