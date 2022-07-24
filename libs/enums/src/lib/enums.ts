@@ -21,7 +21,7 @@ export enum ZoomDirection {
 
 export enum GridLinesStyle {
   // DASHED = 'DASHED',
-  DOTTED = 'DOTTED',
+  // DOTTED = 'DOTTED',
   LINES = 'LINES',
 }
 
