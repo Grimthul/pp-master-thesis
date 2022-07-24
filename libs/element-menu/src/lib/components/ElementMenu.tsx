@@ -23,6 +23,7 @@ export const ElementMenu = ({
           <>
             <h2 className="element-menu__title">Attributes:</h2>
             <Attributes
+              elements={elements}
               attributesWithDefault={
                 elements.length > 1
                   ? elements
@@ -34,7 +35,6 @@ export const ElementMenu = ({
                       )
                   : ELEMENT_ATTRIBUTES[elements[0].nodeName]
               }
-              elements={elements}
               updatedFromOutside={updatedFromOutside}
               setUpdated={setUpdated}
             />
