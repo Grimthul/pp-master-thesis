@@ -25,7 +25,6 @@ export const hexToRgb = (hex: string) => {
     : null;
 };
 
-export const strokeWidthByZoom = (zoom: number) =>
-  Math.min(1, Math.max(0.1, 1 / zoom));
+export const strokeWidthByZoom = (zoom: number) => 1;
 
 export const isPrimaryButton = (button: number) => button === 1;

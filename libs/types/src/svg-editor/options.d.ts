@@ -1,5 +1,6 @@
-import { GridLinesStyle, GridLinesStyle } from '@pp-master-thesis/enums';
 import type { ZoomOptions } from '../zoomable';
+
+import { GridLinesStyle, GridLinesStyle } from '@pp-master-thesis/enums';
 
 export interface SvgEditorOptions {
   backgroundColor?: string;
