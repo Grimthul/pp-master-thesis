@@ -11,9 +11,6 @@ import { Tool } from '@pp-master-thesis/enums';
 import type { HandlersCommonProps } from '../lib/Zoomable';
 
 interface ZoomableHandlers {
-  handleTouchStart: () => void;
-  handleTouchMove: () => void;
-  handleTouchEnd: () => void;
   handleMouseDown: (event: React.MouseEvent) => void;
   handleMouseMove: (event: React.MouseEvent) => void;
   handleMouseUp: () => void;
@@ -50,18 +47,6 @@ export const useZoomableHandlers = ({
       clearTimeout(timer.current);
     }
     timer.current = setTimeout(() => setTool(tool), 500);
-  };
-
-  const handleTouchStart = () => {
-    console.log('handleTouchStart');
-  };
-
-  const handleTouchMove = () => {
-    console.log('handleTouchMove');
-  };
-
-  const handleTouchEnd = () => {
-    console.log('handleTouchEnd');
   };
 
   const handleMouseDown = React.useCallback(
@@ -131,9 +116,6 @@ export const useZoomableHandlers = ({
   };
 
   return {
-    handleTouchStart,
-    handleTouchMove,
-    handleTouchEnd,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,

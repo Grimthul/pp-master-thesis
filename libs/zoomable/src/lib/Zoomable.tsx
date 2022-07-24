@@ -63,9 +63,6 @@ export const Zoomable = React.forwardRef(
       <div
         ref={wrapperRef}
         className="zoomable"
-        onTouchStart={handlers.handleTouchStart}
-        onTouchMove={handlers.handleTouchMove}
-        onTouchEnd={handlers.handleTouchEnd}
         onMouseDown={handlers.handleMouseDown}
         onMouseMove={handlers.handleMouseMove}
         onMouseUp={handlers.handleMouseUp}
