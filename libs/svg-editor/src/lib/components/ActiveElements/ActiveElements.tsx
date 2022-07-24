@@ -114,8 +114,8 @@ export const ActiveElements = (props: PropsActiveElements) => {
 
     const drag = (event: MouseEvent) => {
       if (isSelectingElements(tool) || event.ctrlKey) return;
-      // handle drag right away after click
 
+      // handle drag right away after click
       if (
         !isPanning(tool) &&
         !isPathMoving(tool) &&

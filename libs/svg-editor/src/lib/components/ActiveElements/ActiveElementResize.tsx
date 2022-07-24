@@ -86,9 +86,6 @@ export const ActiveElementResize = ({
   };
 
   React.useEffect(() => {
-    // const oppositeDirection = (direction: keyof Controls) =>
-    //   controlsKeys[(controlsKeys.indexOf(direction) + 4) % controlsKeys.length];
-
     const onMouseMove = (event: MouseEvent) => {
       if (!zoomable || !startMouse || !isResizing(tool)) return;
       const { modifierX, modifierY } =
@@ -116,7 +113,6 @@ export const ActiveElementResize = ({
       const newWidth = Math.max(1, width + tx - snapTx);
       const newHeight = Math.max(1, height + ty - snapTy);
       if (newWidth === 1 || newHeight === 1) {
-        // setDirection(oppositeDirection(direction as keyof Controls));
         return;
       }
 
