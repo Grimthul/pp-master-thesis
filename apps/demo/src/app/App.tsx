@@ -33,7 +33,6 @@ const App = () => {
   const zoomOptions: ZoomOptions = React.useMemo(
     () => ({
       onZoomChange: (zoom: number) => setZoom(zoom),
-      // onToolChange: React.useCallback((tool: Tool) => setTool(tool), []),
     }),
     []
   );
