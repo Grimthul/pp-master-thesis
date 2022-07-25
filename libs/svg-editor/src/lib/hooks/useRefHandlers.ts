@@ -1,4 +1,6 @@
 import * as React from 'react';
+import * as ElementsAction from '../utils';
+import { ActiveElementsActionProps } from '../types';
 
 import type { SvgEditorRef, ZoomableRef } from '@pp-master-thesis/types';
 
@@ -14,7 +16,8 @@ export const useRefHandlers = (
   zoomableRef: ZoomableRef | null,
   elementsWrapperRef: React.RefObject<SVGGraphicsElement>,
   setSvgSize: React.Dispatch<React.SetStateAction<DOMRectReadOnly | undefined>>,
-  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>
+  setActiveElements: React.Dispatch<React.SetStateAction<SVGGraphicsElement[]>>,
+  activeElementsActionProps: ActiveElementsActionProps
 ) => {
   React.useImperativeHandle(ref, () => ({
     zoomableRef,
@@ -112,6 +115,21 @@ export const useRefHandlers = (
       } else {
         throw new Error('Unsupported file extension.');
       }
+    },
+    selectAllElements() {
+      ElementsAction.selectAll(activeElementsActionProps);
+    },
+    deleteElements() {
+      ElementsAction.deleteElements(activeElementsActionProps);
+    },
+    copyElements() {
+      ElementsAction.copyElements(activeElementsActionProps);
+    },
+    cutElements() {
+      ElementsAction.cutElements(activeElementsActionProps);
+    },
+    pasteElements() {
+      ElementsAction.pasteElements(activeElementsActionProps);
     },
   }));
 };

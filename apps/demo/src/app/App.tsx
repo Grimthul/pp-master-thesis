@@ -100,6 +100,7 @@ const App = () => {
     <div className="editor">
       <div className="editor__menu">
         <MenuList
+          activeElements={activeElements}
           svgEditorRef={svgEditorRef}
           gridHide={gridHide}
           setGridHide={setGridHide}

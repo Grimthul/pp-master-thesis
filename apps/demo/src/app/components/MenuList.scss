@@ -47,5 +47,19 @@
     hr {
       border-top-color: #333;
     }
+
+    &-item {
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        border: none;
+        background-color: inherit;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: Times, serif;
+      }
+    }
   }
 }

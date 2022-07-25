@@ -55,6 +55,7 @@ export const SvgEditor = React.forwardRef(
     const elements = Array.from(
       elementsWrapperRef.current?.children || []
     ) as SVGGraphicsElement[];
+
     const [backgroundImage, setBackgroundImage] = React.useState('');
     const [dragOffset, setDragOffset] = React.useState({
       tx: 0,
@@ -68,6 +69,17 @@ export const SvgEditor = React.forwardRef(
     const [elementsToCopy, setElementsToCopy] = React.useState<
       SVGGraphicsElement[]
     >([]);
+    const activeElementsActionProps: ActiveElementsActionProps = React.useMemo(
+      () => ({
+        elements,
+        activeElements,
+        elementsWrapperRef,
+        setActiveElements,
+        elementsToCopy,
+        setElementsToCopy,
+      }),
+      [activeElements, elements, elementsToCopy]
+    );
     const svg = zoomableRef.current?.getChild() as unknown as SVGSVGElement;
     const [guideLines, setGuideLines] = React.useState<
       | {
@@ -124,37 +136,30 @@ export const SvgEditor = React.forwardRef(
       zoomableRef.current,
       elementsWrapperRef,
       setSvgSize,
-      setActiveElements
+      setActiveElements,
+      activeElementsActionProps
     );
     useDragImageResetOnDragExit(props.dragImageRef, droppableRef);
 
     React.useEffect(() => {
       const handleKeyboard = (event: KeyboardEvent) => {
-        const props: ActiveElementsActionProps = {
-          elements,
-          activeElements,
-          elementsWrapperRef,
-          setActiveElements,
-          elementsToCopy,
-          setElementsToCopy,
-        };
         if (event.key === 'Delete') {
-          deleteElements(props);
+          deleteElements(activeElementsActionProps);
         } else if (event.ctrlKey) {
           if (event.key === 'c') {
-            copyElements(props);
+            copyElements(activeElementsActionProps);
           } else if (event.key === 'x') {
-            cutElements(props);
+            cutElements(activeElementsActionProps);
           } else if (event.key === 'v') {
-            pasteElements(props);
+            pasteElements(activeElementsActionProps);
           } else if (event.key === 'a') {
-            selectAll(props);
+            selectAll(activeElementsActionProps);
           }
         }
       };
       document.addEventListener('keyup', handleKeyboard);
       return () => document.removeEventListener('keyup', handleKeyboard);
-    }, [activeElements, elements, elementsToCopy]);
+    }, [activeElements, activeElementsActionProps, elements, elementsToCopy]);
 
     return (
       <Droppable

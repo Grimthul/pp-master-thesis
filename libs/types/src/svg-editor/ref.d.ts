@@ -6,4 +6,9 @@ export interface SvgEditorRef {
   changeEditorSize: (width: number, height: number) => void;
   import: (file?: File) => void;
   export: (extension: 'svg' | 'png') => void;
+  selectAllElements: () => void;
+  deleteElements: () => void;
+  copyElements: () => void;
+  cutElements: () => void;
+  pasteElements: () => void;
 }
