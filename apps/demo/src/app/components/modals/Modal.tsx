@@ -2,10 +2,10 @@ import * as React from 'react';
 import './Modal.scss';
 
 interface Props {
-  title?: string;
   name: string;
-  children: React.ReactElement;
+  title?: string;
   closeModal: () => void;
+  children: React.ReactElement;
 }
 
 export const Modal = ({ title, name, children, closeModal }: Props) => {
