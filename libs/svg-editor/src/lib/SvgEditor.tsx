@@ -4,7 +4,11 @@ import {
   mergeWithDefaultOptions,
   dragElementTranslate,
   isPath,
-  translateElement,
+  deleteElements,
+  copyElements,
+  cutElements,
+  pasteElements,
+  selectAll,
 } from './utils/';
 import { onDragEnter, onDrop } from './handlers';
 import {
@@ -14,7 +18,7 @@ import {
 } from './hooks';
 import { ActiveElements, GuideLines } from './components/';
 import { TOOL_CURSORS } from './constants';
-import { ElementGuideLines } from './types/dragElement';
+import { ElementGuideLines, ActiveElementsActionProps } from './types/';
 
 import { ActivableSvg } from '@pp-master-thesis/activable-svg';
 import { Droppable } from '@pp-master-thesis/droppable';
@@ -126,36 +130,31 @@ export const SvgEditor = React.forwardRef(
 
     React.useEffect(() => {
       const handleKeyboard = (event: KeyboardEvent) => {
+        const props: ActiveElementsActionProps = {
+          elements,
+          activeElements,
+          elementsWrapperRef,
+          setActiveElements,
+          elementsToCopy,
+          setElementsToCopy,
+        };
         if (event.key === 'Delete') {
-          activeElements.forEach((element) =>
-            element.parentElement?.removeChild(element)
-          );
-          setActiveElements([]);
+          deleteElements(props);
         } else if (event.ctrlKey) {
           if (event.key === 'c') {
-            setElementsToCopy(activeElements);
+            copyElements(props);
           } else if (event.key === 'x') {
-            setElementsToCopy(activeElements);
-            activeElements.forEach((element) =>
-              elementsWrapperRef.current?.removeChild(element)
-            );
-            setActiveElements([]);
+            cutElements(props);
           } else if (event.key === 'v') {
-            setActiveElements([]);
-            const copiedElements = elementsToCopy.map((element) => {
-              const elementCopy = element.cloneNode(true) as SVGGraphicsElement;
-              translateElement(elementCopy, 10, 10);
-              elementsWrapperRef.current?.appendChild(elementCopy);
-              return elementCopy;
-            });
-            setActiveElements(copiedElements);
-            setElementsToCopy(copiedElements);
+            pasteElements(props);
+          } else if (event.key === 'a') {
+            selectAll(props);
           }
         }
       };
       document.addEventListener('keyup', handleKeyboard);
       return () => document.removeEventListener('keyup', handleKeyboard);
-    }, [activeElements, elementsToCopy]);
+    }, [activeElements, elements, elementsToCopy]);
 
     return (
       <Droppable
