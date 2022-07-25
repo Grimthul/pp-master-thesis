@@ -181,6 +181,10 @@ export const MenuList = ({
         <li className="editor__menu-list-item">
           <Menu title="Help" index={3} {...commonProps}>
             <ul>
+              <li>
+                <span>Version</span>
+                <span>demo</span>
+              </li>
               <li onClick={() => setShowModalContact(true)}>Contact</li>
             </ul>
           </Menu>
