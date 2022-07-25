@@ -8,6 +8,7 @@ export const ModalContact = ({ close }: Props) => {
     <Modal title="Contact" name="contact" closeModal={close}>
       <>
         <div>Support e-mail: </div>
+        <div>Telephone number: </div>
         <div>...</div>
       </>
     </Modal>

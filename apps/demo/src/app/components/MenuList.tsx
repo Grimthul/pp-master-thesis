@@ -1,11 +1,39 @@
 import * as React from 'react';
 
-import { Menu } from './Menu';
 import { ModalNew, ModalContact } from './modals/';
 
 import { SvgEditorRef } from '@pp-master-thesis/types';
 
 import './MenuList.scss';
+
+interface PropsMenu {
+  children: React.ReactElement;
+  title: string;
+  index: number;
+  open: number;
+  setOpen: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Menu = ({ children, title, index, open, setOpen }: PropsMenu) => {
+  const toggleMenu = () => {
+    setOpen((prev) => (prev === index ? -1 : index));
+  };
+
+  const openMenu = () => {
+    setOpen((prev) => (prev !== -1 ? index : prev));
+  };
+
+  return (
+    <div
+      onClick={toggleMenu}
+      onMouseOver={openMenu}
+      className={`menu${open === index ? ' menu--open' : ''}`}
+    >
+      <span>{title}</span>
+      <div className="menu__content">{children}</div>
+    </div>
+  );
+};
 
 interface Props {
   svgEditorRef: React.RefObject<SvgEditorRef>;
